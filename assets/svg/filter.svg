@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26.546" height="23.442" viewBox="0 0 26.546 23.442">
+  <g id="Group_173" data-name="Group 173" transform="translate(0 0.5)">
+    <g id="Group_19" data-name="Group 19" transform="translate(9.631 0)">
+      <line id="Line_22" data-name="Line 22" y2="22.442" transform="translate(3.676)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+      <g id="Ellipse_8" data-name="Ellipse 8" transform="translate(0 10.475)" fill="#3a4754" stroke="#fff" stroke-width="2">
+        <circle cx="3.643" cy="3.643" r="3.643" stroke="none"/>
+        <circle cx="3.643" cy="3.643" r="2.643" fill="none"/>
+      </g>
+    </g>
+    <g id="Group_18" data-name="Group 18" transform="translate(19.261 0)">
+      <path id="Path_5" data-name="Path 5" d="M0,0V22.442" transform="translate(3.676)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+      <g id="Ellipse_11" data-name="Ellipse 11" transform="translate(0 2.771)" fill="#3a4754" stroke="#fff" stroke-width="2">
+        <circle cx="3.643" cy="3.643" r="3.643" stroke="none"/>
+        <circle cx="3.643" cy="3.643" r="2.643" fill="none"/>
+      </g>
+    </g>
+    <g id="Group_20" data-name="Group 20" transform="translate(0 0)">
+      <line id="Line_23" data-name="Line 23" y2="22.442" transform="translate(3.74)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1"/>
+      <g id="Ellipse_10" data-name="Ellipse 10" transform="translate(0 2.771)" fill="#3a4754" stroke="#fff" stroke-width="2">
+        <circle cx="3.643" cy="3.643" r="3.643" stroke="none"/>
+        <circle cx="3.643" cy="3.643" r="2.643" fill="none"/>
+      </g>
+    </g>
+  </g>
+</svg>
