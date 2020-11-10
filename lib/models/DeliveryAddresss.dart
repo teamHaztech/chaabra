@@ -7,7 +7,7 @@ class DeliveryAddress {
   final String address_2;
   final String city;
   final String postcode;
-  final int country_id;
+  final String country_code;
   final int zone_id;
 
   bool selectState;
@@ -18,25 +18,24 @@ class DeliveryAddress {
       this.address_2,
       this.city,
       this.company,
-      this.country_id,
+      this.country_code,
       this.firstname,
       this.lastname,
       this.postcode,
       this.zone_id});
 
-
   factory DeliveryAddress.fromJson(Map<String, dynamic> json){
       return DeliveryAddress(
-          id: json[''],
-          firstname: json[''],
-          lastname: json[''],
-          company: json[''],
-          address_1: json[''],
-          address_2: json[''],
-          city: json[''],
-          postcode: json[''],
-          country_id: int.parse(json['']),
-          zone_id: int.parse(json['']),
+          id: json['address_id'],
+          firstname: json['firstname'],
+          lastname: json['lastname'],
+          company: json['company'],
+          address_1: json['address_1'],
+          address_2: json['address_2'],
+          city: json['city'],
+          postcode: json['postcode'],
+          zone_id: int.parse(json['zone_id']),
       );
   }
 }
+

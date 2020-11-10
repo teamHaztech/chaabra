@@ -141,83 +141,11 @@ class CartPage extends StatelessWidget {
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .spaceBetween,
+                                                        .end,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
                                                 children: [
-                                                  Container(
-                                                    child: Row(
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            cartProvider
-                                                                .decreaseProductQuantity(
-                                                                    cartItem);
-                                                          },
-                                                          child: Container(
-                                                            height: 20,
-                                                            width: 20,
-                                                            decoration: BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .blueAccent),
-                                                                borderRadius:
-                                                                    borderRadius(
-                                                                        radius:
-                                                                            5)),
-                                                            child: Icon(
-                                                              Icons.remove,
-                                                              color: Colors
-                                                                  .blueAccent,
-                                                              size: 10,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      8),
-                                                          child: Text(
-                                                            cartItem.quantity
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
-                                                          ),
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            cartProvider
-                                                                .increaseProductQuantity(
-                                                                    cartItem);
-                                                          },
-                                                          child: Container(
-                                                            height: 20,
-                                                            width: 20,
-                                                            decoration: BoxDecoration(
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .blueAccent),
-                                                                borderRadius:
-                                                                    borderRadius(
-                                                                        radius:
-                                                                            5)),
-                                                            child: Icon(
-                                                              Icons.add,
-                                                              size: 10,
-                                                              color: Colors
-                                                                  .blueAccent,
-                                                            ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
+
                                                   Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.end,

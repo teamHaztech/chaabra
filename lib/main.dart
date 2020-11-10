@@ -3,6 +3,7 @@ import 'package:chaabra/providers/HomePageProvider.dart';
 import 'package:chaabra/providers/LogProvider.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
+import 'package:chaabra/providers/orderProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class Chaabra extends StatelessWidget {
         ChangeNotifierProvider<HomePageProvider>.value(value: HomePageProvider()),
         ChangeNotifierProvider<CategoryProvider>.value(value: CategoryProvider()),
         ChangeNotifierProvider<ProductProvider>.value(value: ProductProvider()),
+        ChangeNotifierProvider<OrderProvider>.value(value: OrderProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

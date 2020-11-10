@@ -24,13 +24,9 @@ class ProductProvider extends ChangeNotifier {
   clearProductData(){
     productOption = null;
     selectedOptionsMap.clear();
-    notifyListeners();
     print(productOption);
     print(selectedOptionsMap);
   }
-
-
-
 
   fetchProductDetails(int productId) async {
     final res = await callApi.get('product/option/$productId');
@@ -56,7 +52,6 @@ class ProductProvider extends ChangeNotifier {
           notifyListeners();
         }
       }
-
       selectedOptionsMap.forEach((key, value) {
         print(value);
       });
@@ -64,10 +59,9 @@ class ProductProvider extends ChangeNotifier {
       navPop(context);
   }
 
-  hasAlreadySelectedThisOPtion(int id){
+  hasAlreadySelectedThisOption(int id){
     return selectedOptionsMap.containsKey(id) ? true :false;
   }
-
 
   showOptionList(context, int optionId) {
     showDialog(

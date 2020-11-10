@@ -3,16 +3,12 @@ import 'dart:convert';
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/Cart.dart';
 import 'package:chaabra/models/DeliveryAddresss.dart';
+import 'package:chaabra/models/ProductOptions.dart';
 import 'package:chaabra/models/userModel.dart';
 import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
-class Country{
-    final int id;
-    final String name;
-    Country({this.id,this.name});
-}
 class CartProvider extends ChangeNotifier {
     
     CartProvider(){
@@ -26,26 +22,23 @@ class CartProvider extends ChangeNotifier {
   final List<Cart> cart = [
   
   ];
-    
-    final addressType = TextEditingController();
-    final postAddress = TextEditingController();
-    final fullName = TextEditingController();
-    final email = TextEditingController();
-    final phone = TextEditingController();
-    final postalCode = TextEditingController();
-    String country;
-    String state;
 
-    int selectedDeliverAddress;
-    
-    addThisAddress(context){
-        final address = DeliveryAddress(
-
-        );
-        deliveryAddress.add(address);
-        navPop(context);
-        notifyListeners();
+    fetchProductOptions(int productId) async {
+      final res = await callApi.get('product/option/$productId');
+      final productJson = jsonDecode(res.body);
+      productOption = ProductOption.fromJson(productJson);
+      print(productOption.option.length);
+      notifyListeners();
     }
+
+
+
+
+
+
+    ProductOption productOption;
+
+
     
     
     List<String> countries = [
@@ -59,52 +52,6 @@ class CartProvider extends ChangeNotifier {
         'Isa town'
     ];
     
-    
-    selectCountry(value){
-        country = value;
-        notifyListeners();
-    }
-
-    selectState(value){
-        state = value;
-        notifyListeners();
-    }
-    
-    selectAddress(DeliveryAddress delAdd){
-        deliveryAddress.forEach((item) {
-            if(item.id == delAdd.id){
-                item.selectState = true;
-                selectedDeliverAddress = item.id;
-            }else{
-                item.selectState = false;
-            }
-            notifyListeners();
-        });
-        print(selectedDeliverAddress);
-    }
-
-
-    final List<DeliveryAddress> deliveryAddress = [];
-    bool isShippingAddressLoading = true;
-    fetchUserShippingAddress(context)async{
-      User user = await User().localUserData();
-      deliveryAddress.length == 0 ? isShippingAddressLoading = true : isShippingAddressLoading = false;
-      notifyListeners();
-      final res = await callApi.getWithConnectionCheck('shipping/address/${user.id}', context);
-      final data = jsonDecode(res.body) as List;
-      if (data.length != deliveryAddress.length) {
-        isShippingAddressLoading = true;
-        deliveryAddress.clear();
-        for (Map i in data) {
-//          deliveryAddress.add();
-        }
-        isShippingAddressLoading = false;
-        notifyListeners();
-      } else {
-        isShippingAddressLoading = false;
-        notifyListeners();
-      }
-    }
 
 
   double total = 0.0;
@@ -148,6 +95,11 @@ class CartProvider extends ChangeNotifier {
       });
       refreshTotal();
   }
+
+
+
+
+
   
   countTotal(Cart cartItem,{bool clearAndCalculate = false}){
      if(cartItem == null){

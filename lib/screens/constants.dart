@@ -538,78 +538,11 @@ cartDrawer(context) {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.end,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            Container(
-                                              child: Row(
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      cartProvider
-                                                          .decreaseProductQuantity(
-                                                              cartItem);
-                                                    },
-                                                    child: Container(
-                                                      height: 20,
-                                                      width: 20,
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .blueAccent),
-                                                          borderRadius:
-                                                              borderRadius(
-                                                                  radius: 5)),
-                                                      child: Icon(
-                                                        Icons.remove,
-                                                        color:
-                                                            Colors.blueAccent,
-                                                        size: 10,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 8),
-                                                    child: Text(
-                                                      cartItem.quantity
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.black54,
-                                                        fontWeight: FontWeight.w600
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      cartProvider
-                                                          .increaseProductQuantity(
-                                                              cartItem);
-                                                    },
-                                                    child: Container(
-                                                      height: 20,
-                                                      width: 20,
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .blueAccent),
-                                                          borderRadius:
-                                                              borderRadius(
-                                                                  radius: 5)),
-                                                      child: Icon(
-                                                        Icons.add,
-                                                        size: 10,
-                                                        color:
-                                                            Colors.blueAccent,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
+
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
@@ -964,5 +897,26 @@ progressIndicator({double height = 50, bool circularLoader = false}) {
                 child: CircularProgressIndicator(strokeWidth: 2,)))),
       );
     },
+  );
+}
+
+
+
+circularProgressIndicator(){
+  return Center(child: CircularProgressIndicator(strokeWidth: 3,));
+}
+
+
+containerLoader({double height = 20, double width = 50, double radius = 10}){
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 3),
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: borderRadius(radius: radius)
+      ),
+      height: height,width: width,child: ClipRRect(
+        borderRadius: borderRadius(radius: radius),
+      child: progressIndicator(),
+    ),),
   );
 }
