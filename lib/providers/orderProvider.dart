@@ -60,7 +60,6 @@ class OrderProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-
   selectCountry(value){
     print(jsonEncode(value.toString()));
     country = value;
