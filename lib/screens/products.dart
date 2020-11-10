@@ -202,6 +202,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                       GestureDetector(
                                         onTap: (){
                                             navPush(context, ProductPage(product: product));
+                                            print(product.id);
                                         },
                                         child: Container(
                                           height: 110,

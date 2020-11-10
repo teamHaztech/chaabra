@@ -39,14 +39,19 @@ class _ProductPageState extends State<ProductPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ProductProvider>(context,listen: false).fetchProductDetails(widget.product.id);
     });
-    print(parse(widget.product.productDetails.description).outerHtml);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Provider.of<ProductProvider>(context,listen: false).clearProductData();
   }
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
-
     final productProvider = Provider.of<ProductProvider>(context);
     final product = productProvider.productOption.product;
     final productOptions = productProvider.productOption.option;
@@ -146,28 +151,31 @@ class _ProductPageState extends State<ProductPage> {
                                   onTap: (){
                                     productProvider.showOptionList(context, i);
                                   },
-                                  child: Container(
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: borderRadius(radius: 5),
-                                      color: Color(0xffF0F2F5),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(14.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            productProvider.selectedOptions.isEmpty ? "Select" : productProvider.selectedOptions[i].name,
-                                            style: TextStyle(
-                                                color: Color(0xff979CA3), fontSize: 16),
-                                          ),
-                                          Icon(
-                                            Icons.keyboard_arrow_down,
-                                            size: 23,
-                                          )
-                                        ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Container(
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        borderRadius: borderRadius(radius: 5),
+                                        color: Color(0xffF0F2F5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(14.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              productProvider.hasAlreadySelectedThisOPtion(i) ? productProvider.selectedOptionsMap[i].toString() : "Select",
+                                              style: TextStyle(
+                                                  color: Color(0xff979CA3), fontSize: 16),
+                                            ),
+                                            Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 23,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -17,7 +17,6 @@ class CartProvider extends ChangeNotifier {
     
     CartProvider(){
         countTotal(null);
-        fetchUserShippingAddress(context);
     }
 
 
@@ -126,7 +125,7 @@ class CartProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   increaseProductQuantity(Cart cartItem){
       cart.forEach((item) {
           if(item.product.id == cartItem.product.id){
@@ -135,6 +134,7 @@ class CartProvider extends ChangeNotifier {
           }
       });
       countTotal(cartItem);
+      User user = User().localUserData();
   }
 
   decreaseProductQuantity(Cart cartItem){

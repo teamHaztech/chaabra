@@ -1,14 +1,14 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/ProductOptions.dart';
-import 'package:chaabra/models/productModel.dart';
 import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
 
 
 class SelectedOption{
-  final int id;
+  int id;
   String name;
   SelectedOption({this.name,this.id});
 }
@@ -18,36 +18,56 @@ class ProductProvider extends ChangeNotifier {
   CallApi callApi = CallApi();
 
   ProductProvider() {
-    fetchProductDetails(50);
+    fetchProductDetails(157);
   }
+
+  clearProductData(){
+    productOption = null;
+    selectedOptionsMap.clear();
+    notifyListeners();
+    print(productOption);
+    print(selectedOptionsMap);
+  }
+
+
+
 
   fetchProductDetails(int productId) async {
     final res = await callApi.get('product/option/$productId');
     final productJson = jsonDecode(res.body);
     productOption = ProductOption.fromJson(productJson);
-    print(productOption.product.productDetails.description);
+    print(productOption.option.length);
     notifyListeners();
   }
 
-
-  List<SelectedOption> selectedOptions = [];
+  var selectedOptionsMap = new LinkedHashMap();
 
   selectProductOption(context,OptionValue value, int id) {
-      if(selectedOptions.isEmpty){
-        selectedOptions.add(SelectedOption(id: id, name: value.name));
+      notifyListeners();
+      if(selectedOptionsMap.isEmpty){
+        selectedOptionsMap[id] = value.name;
+        notifyListeners();
       }else{
-        selectedOptions.forEach((option) {
-          if(option.id == id){
-            option.name = value.name;
-          }else{
-            selectedOptions.add(SelectedOption(id: id, name: value.name));
-          }
-        });
+        if(selectedOptionsMap.containsKey(id)){
+          selectedOptionsMap[id] = value.name;
+          notifyListeners();
+        }else{
+          selectedOptionsMap[id] = value.name;
+          notifyListeners();
+        }
       }
+
+      selectedOptionsMap.forEach((key, value) {
+        print(value);
+      });
       notifyListeners();
       navPop(context);
-      print(selectedOptions.length);
   }
+
+  hasAlreadySelectedThisOPtion(int id){
+    return selectedOptionsMap.containsKey(id) ? true :false;
+  }
+
 
   showOptionList(context, int optionId) {
     showDialog(

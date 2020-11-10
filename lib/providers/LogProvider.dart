@@ -82,7 +82,9 @@ class LogProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   signIn(context) async {
+    print('asdasd');
     if (email.text.isNotEmpty && password.text.isNotEmpty) {
       !isEmail(email.text)
           ? emailError = "Enter valid email address"
@@ -93,6 +95,8 @@ class LogProvider extends ChangeNotifier {
         final data = {"email": email.text, "password": password.text};
         final res = await callApi.postWithConnectionCheck(context,
             apiUrl: 'login', data: data);
+
+        print(res.body);
         final log = jsonDecode(res.body);
         if (log['response'] == "USER_NOT_FOUND") {
           showLogError(context, message: "Please sign up");
