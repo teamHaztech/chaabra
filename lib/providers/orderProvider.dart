@@ -84,7 +84,6 @@ class OrderProvider extends ChangeNotifier{
     print(selectedDeliverAddress);
   }
 
-
   final List<DeliveryAddress> deliveryAddress = [];
 
   bool isShippingAddressLoading = true;
@@ -107,5 +106,4 @@ class OrderProvider extends ChangeNotifier{
       notifyListeners();
     }
   }
-
 }
