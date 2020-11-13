@@ -30,7 +30,6 @@ class Option{
 class OptionValue{
   final String name;
   OptionValue({this.name});
-
   factory OptionValue.fromJson(Map<String, dynamic> json){
     return OptionValue(
       name: json['option_value_description']['name']

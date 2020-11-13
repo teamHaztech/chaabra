@@ -11,13 +11,14 @@ import 'package:validators/validators.dart';
 class LogProvider extends ChangeNotifier {
   final email = TextEditingController(text: "manthansutar99@gmail.com");
   final password = TextEditingController(text: "111111");
-  final confirmPassword = TextEditingController();
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
+  final confirmPassword = TextEditingController(text: "111111");
+  final firstName = TextEditingController(text: "Manthan");
+  final lastName = TextEditingController(text: "Sutar");
+  final phone = TextEditingController(text: "9772342342");
 
   CallApi callApi = CallApi();
   User userData = User();
-  bool isCurrentPageIsSignIn = true;
+  bool isCurrentPageIsSignIn = false;
 
   //validation message providers
   String emailError;
@@ -26,6 +27,7 @@ class LogProvider extends ChangeNotifier {
   String passwordError;
   String confirmPasswordError;
   String logError;
+  String phoneError;
 
   //Shared preference
   SharedPref sharedPref = SharedPref();
@@ -40,6 +42,7 @@ class LogProvider extends ChangeNotifier {
     passwordError = null;
     confirmPasswordError = null;
     logError = null;
+    phoneError = null;
     firstNameError = null;
     lastNameError = null;
     notifyListeners();
@@ -62,6 +65,9 @@ class LogProvider extends ChangeNotifier {
   }
 
   validateEmptyFields() {
+    phone.text.isNotEmpty
+        ? phoneError = null
+        : phoneError = "Phone cannot be empty";
     email.text.isNotEmpty
         ? emailError = null
         : emailError = "Email cannot be empty";
@@ -71,8 +77,12 @@ class LogProvider extends ChangeNotifier {
     confirmPassword.text.isNotEmpty
         ? confirmPasswordError = null
         : confirmPasswordError = "Password cannot be empty";
-    firstName.text.isNotEmpty ? firstNameError = null : firstNameError = "Required";
-    lastName.text.isNotEmpty ? lastNameError = null : lastNameError = "Required";
+    firstName.text.isNotEmpty
+        ? firstNameError = null
+        : firstNameError = "Required";
+    lastName.text.isNotEmpty
+        ? lastNameError = null
+        : lastNameError = "Required";
     notifyListeners();
   }
 
@@ -81,7 +91,6 @@ class LogProvider extends ChangeNotifier {
     navPop(context);
     notifyListeners();
   }
-
 
   signIn(context) async {
     print('asdasd');
@@ -115,6 +124,13 @@ class LogProvider extends ChangeNotifier {
     }
   }
 
+  isPhone(value) {
+    String pattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
+    RegExp regExp = new RegExp(pattern);
+    print(regExp.hasMatch(value));
+    return regExp.hasMatch(value) ? true : false;
+  }
+
   signUp(context) async {
     if (email.text.isNotEmpty &&
         password.text.isNotEmpty &&
@@ -128,13 +144,25 @@ class LogProvider extends ChangeNotifier {
       notifyListeners();
       if (emailError == null &&
           passwordError == null &&
-          confirmPasswordError == null) {
+          confirmPasswordError == null &&
+          phoneError == null) {
         showProgressIndicator(context);
-        final data = {"email": email.text, "password": password.text, "firstname": firstName.text,"lastname": lastName.text};
+
+        final data = {
+          "email": email.text,
+          "password": password.text,
+          "firstname": firstName.text,
+          "lastname": lastName.text,
+          "telephone": phone.text
+        };
+
+        print(data);
         final res = await callApi.postWithConnectionCheck(context,
             apiUrl: 'register', data: data);
+
+        print(res.body);
+
         final log = jsonDecode(res.body);
-        print(log);
         if (log['response'] == "ALREADY_REGISTERED") {
           showLogError(context,
               message: "${email.text} already registered, Please sign in.");

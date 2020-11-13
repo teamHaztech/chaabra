@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 
 class LandingPageProvider extends ChangeNotifier{
     int activePage = 0;
-    
+
+    bool isCustomDialogVisible = false;
+
+    Widget customDialogContent;
+
     List pages = [
         HomePage(),
         WishlistPage(),
@@ -24,6 +28,13 @@ class LandingPageProvider extends ChangeNotifier{
     
     changeNavBarPage(int index){
         activePage = index;
+        notifyListeners();
+    }
+
+
+    closeCustomDialog(){
+        isCustomDialogVisible = false;
+        customDialogContent = null;
         notifyListeners();
     }
 }

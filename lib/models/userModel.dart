@@ -11,6 +11,7 @@ class User {
     final String phone;
     User({this.email,this.id,this.lastName,this.firstName,this.phone});
     SharedPref _sharedPref = SharedPref();
+
     localUserData()async{
         final res = await _sharedPref.read(localUserDataKey);
         if(res != null){

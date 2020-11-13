@@ -19,22 +19,19 @@ class SignIn extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 80.0,
-                      child: Hero(
+                      height: 60.0,child: Hero(
                         tag: 'LOGO',
                         child: Center(
                           child: Image.asset('assets/images/ChabraLogo copy.png'),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
                     log.isCurrentPageIsSignIn == true ? SizedBox() : Row(children: [
                         Expanded(child: input(
                             controller: log.firstName,
                             label: "First name",
                             hint: "First name",
+                            keyboardType: TextInputType.name,
                             errorText: log.firstNameError,
                             onChanged: (e) {
                                 log.validateEmptyFields();
@@ -43,16 +40,27 @@ class SignIn extends StatelessWidget {
                         Expanded(child: input(
                             controller: log.lastName,
                             label: "Last name",
+                            keyboardType: TextInputType.name,
                             hint: "Last name",
                             errorText: log.lastNameError,
                             onChanged: (e) {
                                 log.validateEmptyFields();
                             }),)
                     ],),
+                    log.isCurrentPageIsSignIn == true ? SizedBox() : input(
+                        controller: log.phone,
+                        label: "Phone",
+                        keyboardType: TextInputType.phone,
+                        errorText: log.phoneError,
+                        obscureText: true,
+                        onChanged: (e) {
+                          log.validateEmptyFields();
+                        }),
                     input(
                         controller: log.email,
                         label: "Email",
                         hint: "Email",
+                        keyboardType: TextInputType.emailAddress,
                         errorText: log.emailError,
                         onChanged: (e) {
                           log.validateEmptyFields();
@@ -61,6 +69,7 @@ class SignIn extends StatelessWidget {
                         controller: log.password,
                         label: "Password",
                         hint: "Password",
+                        keyboardType: TextInputType.text,
                         errorText: log.passwordError,
                         obscureText: true,
                         onChanged: (e) {
@@ -71,6 +80,7 @@ class SignIn extends StatelessWidget {
                         : input(
                             controller: log.confirmPassword,
                             label: "Confirm Password",
+                             keyboardType: TextInputType.text,
                             hint: "Confirm Password",
                             errorText: log.confirmPasswordError,
                             obscureText: true,
@@ -125,7 +135,7 @@ class SignIn extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 10,
                     ),
                     log.isCurrentPageIsSignIn == true
                         ? button(
@@ -139,7 +149,7 @@ class SignIn extends StatelessWidget {
                               log.signUp(context);
                             }),
                     SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     log.isCurrentPageIsSignIn == true
                         ? GestureDetector(

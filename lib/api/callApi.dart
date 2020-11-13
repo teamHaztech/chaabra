@@ -20,7 +20,7 @@ class CallApi{
         if (connection.status == "ONLINE") {
             return await http.post(
                 fullUrl,
-                body: jsonEncode(data),
+                body: data,
             );
         } else {
             await Future.delayed(Duration(seconds: 2));

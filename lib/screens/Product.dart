@@ -5,13 +5,11 @@ import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/productProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/html_parser.dart';
-import 'package:flutter_html/style.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:html/parser.dart' show parse;
+import 'package:webview_flutter/webview_flutter.dart';
+
 
 class ProductPage extends StatefulWidget {
   final Product product;
@@ -22,14 +20,9 @@ class ProductPage extends StatefulWidget {
 }
 
 
-
-
 class _ProductPageState extends State<ProductPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-
-
+  WebViewController _controller;
 
   @override
   void initState() {
@@ -189,7 +182,7 @@ class _ProductPageState extends State<ProductPage> {
                                 Expanded(
                                   child: fullWidthButton(context,
                                       title: 'Add to cart', onTap: () {
-                                        cartProvider.addThisProductInCart(Cart(product: widget.product,quantity: 1));
+                                        cartProvider.addThisProductInCart(Cart(product: widget.product));
                                       }),
                                 ),
                                 SizedBox(
@@ -219,56 +212,14 @@ class _ProductPageState extends State<ProductPage> {
                           ],
                         ),
                       ),
-                      label(title: 'Descriptions'),
-                      Html(
-                        data: '${parse(widget.product.productDetails.description).outerHtml}',
-                        //Optional parameters:
-                        style: {
-                          "html": Style(
-                            backgroundColor: Colors.white,
-                          ),
-                          "table": Style(
-                            backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
-                          ),
-                          "tr": Style(
-                            border: Border(bottom: BorderSide(color: Colors.grey)),
-                          ),
-                          "th": Style(
-                            padding: EdgeInsets.all(6),
-                            backgroundColor: Colors.grey,
-                          ),
-                          "td": Style(
-                            padding: EdgeInsets.all(6),
-                          ),
-                          "var": Style(fontFamily: 'serif'),
-                        },
-                        customRender: {
-                          "flutter": (RenderContext context, Widget child, attributes, _) {
-                            return FlutterLogo(
-                              style: (attributes['horizontal'] != null)
-                                  ? FlutterLogoStyle.horizontal
-                                  : FlutterLogoStyle.markOnly,
-                              textColor: context.style.color,
-                              size: context.style.fontSize.size * 5,
-                            );
-                          },
-                        },
-                        onLinkTap: (url) {
-                          print("Opening $url...");
-                        },
-                        onImageTap: (src) {
-                          print(src);
-                        },
-                        onImageError: (exception, stackTrace) {
-                          print(exception);
-                        },
-                      ),
+//                      label(title: 'Descriptions'),
+//                      HtmlViewer(content: product.productDetails.description,)
                     ],
                   ),
                 ),
               ),
               header(context,
-                  key: _scaffoldKey, title: 'Vegetables', popButton: true),
+                  key: _scaffoldKey, title: product == null ? "" : product.model, popButton: true),
             ],
           ),
         ),
@@ -276,3 +227,28 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 }
+
+
+
+// ignore: must_be_immutable
+class HtmlViewer extends StatefulWidget {
+  String content;
+  HtmlViewer({this.content});
+  @override
+  _HtmlViewerState createState() => _HtmlViewerState();
+}
+
+class _HtmlViewerState extends State<HtmlViewer> {
+
+  var HtmlCode = '<h1> h1 Heading Tag</h1>' +
+      '<h2> h2 Heading Tag </h2>' +
+      '<p> Sample Paragraph Tag </p>' +
+      '<img src="https://flutter-examples.com/wp-content/uploads/2019/04/install_thumb.png" alt="Image" width="250" height="150" border="3">' ;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: WebviewScaffold(
+      url: new Uri.dataFromString(widget.content, mimeType: 'text/html').toString(),
+    ),);
+  }
+}
+

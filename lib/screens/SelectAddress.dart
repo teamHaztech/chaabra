@@ -383,102 +383,94 @@ class AddAddress extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 53),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            Padding(
+              padding: const EdgeInsets.only(top: 53),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: input(
-                                    controller: orderProvider.firstName,
-                                    label: "First name",
-                                    hint: "First name"),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: input(
-                                    controller: orderProvider.lastName,
-                                    label: "Last name",
-                                    hint: "Last name"),
-                              ),
-                            ],
+                          Expanded(
+                            child: input(
+                                controller: orderProvider.firstName,
+                                label: "First name",
+                                hint: "First name"),
                           ),
-                          input(
-                              controller: orderProvider.company,
-                              label: "Company",
-                              hint: "Company"),
-                          input(
-                              controller: orderProvider.postAddress,
-                              label: "Postal address",
-                              hint: "Postal address"),
-                          input(
-                              controller: orderProvider.phone,
-                              label: "Phone number",
-                              hint: "Phone number"),
-                          dropDown(
-                            context,
-                            hint: 'Country',
-                            value: orderProvider.country,
-                            width: screenWidth(context),
-                            items:
-                                countries.map((Map<String, dynamic> country) {
-                              return DropdownMenuItem<String>(
-                                value: country.toString(),
-                                child: Center(
-                                  child: Text(
-                                    country['name'],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChange: (value) {
-                              orderProvider.selectCountry(value.toString());
-                              print(value);
-                            },
+                          SizedBox(
+                            width: 10,
                           ),
-                          dropDown(
-                            context,
-                            hint: 'Select a region and state',
-                            value: orderProvider.state,
-                            width: screenWidth(context),
-                            items: cartProvider.states.map((String state) {
-                              return DropdownMenuItem<String>(
-                                value: state,
-                                child: Center(
-                                  child: Text(
-                                    state,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChange: (value) {
-                              orderProvider.selectState(value);
-                            },
+                          Expanded(
+                            child: input(
+                                controller: orderProvider.lastName,
+                                label: "Last name",
+                                hint: "Last name"),
                           ),
-                          input(
-                              controller: orderProvider.postalCode,
-                              label: "Zip/Postal code",
-                              hint: "Zip/Postal code"),
-                          verticalSpace(),
-                          fullWidthButton(context, title: "Add address",
-                              onTap: () {
-                            orderProvider.addThisAddress(context);
-                          }),
                         ],
                       ),
-                    ),
+                      input(
+                          controller: orderProvider.postAddress,
+                          label: "Postal address",
+                          hint: "Postal address"),
+                      input(
+                          controller: orderProvider.phone,
+                          label: "Phone number",
+                          hint: "Phone number"),
+//                      dropDown(
+//                        context,
+//                        hint: 'Country',
+//                        value: orderProvider.country,
+//                        width: screenWidth(context),
+//                        items:
+//                            countries.map((Map<String, dynamic> country) {
+//                          return DropdownMenuItem<String>(
+//                            value: country.toString(),
+//                            child: Center(
+//                              child: Text(
+//                                country['name'],
+//                              ),
+//                            ),
+//                          );
+//                        }).toList(),
+//                        onChange: (value) {
+//                          orderProvider.selectCountry(value.toString());
+//                          print(value);
+//                        },
+//                      ),
+//                      dropDown(
+//                        context,
+//                        hint: 'Select a region and state',
+//                        value: orderProvider.state,
+//                        width: screenWidth(context),
+//                        items: cartProvider.states.map((String state) {
+//                          return DropdownMenuItem<String>(
+//                            value: state,
+//                            child: Center(
+//                              child: Text(
+//                                state,
+//                              ),
+//                            ),
+//                          );
+//                        }).toList(),
+//                        onChange: (value) {
+//                          orderProvider.selectState(value);
+//                        },
+//                      ),
+                      input(
+                          controller: orderProvider.postalCode,
+                          label: "Zip/Postal code",
+                          hint: "Zip/Postal code"),
+                      verticalSpace(),
+                      fullWidthButton(context, title: "Add address",
+                          onTap: () {
+                        orderProvider.addThisAddress(context);
+                      }),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
             header(
               context,

@@ -130,7 +130,7 @@ class WishlistPage extends StatelessWidget {
                                     ),
                                     backgroundColor: Color(0xff0d52d6),
                                     onTap: (){
-                                      cartProvider.addThisProductInCart(Cart(product: product,quantity: 1));
+                                      cartProvider.addThisProductInCart(Cart(product: product));
                                     }
                                 )),
                                 SizedBox(width: screenWidth(context) * 30 / 100,),

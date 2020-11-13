@@ -69,6 +69,10 @@ dependencies:
   simple_animations:
   flutter_widget_from_html_core:
   flutter_html: ^1.0.2
+  country_code_picker: ^1.6.2
+  webview_flutter:
+  flutter_webview_plugin: ^0.3.10+1
+
 
 dev_dependencies:
   flutter_test:

@@ -27,7 +27,6 @@ String assetsPath = "http://chaabra.com/image/";
 final primaryColor = Color(0xff3A4754);
 
 Cart dummyCartData(int index) => Cart(
-  quantity: 1,
   product: Product(
     id: index,
     model: 'Thailand',
@@ -65,6 +64,7 @@ showSnackBar(context,{String message}){
 input(
     {TextEditingController controller,
     String label,
+      TextInputType keyboardType,
     String hint,
       String errorText,
       Function onChanged,
@@ -75,6 +75,7 @@ input(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: TextField(
           onChanged: onChanged,
+          keyboardType: keyboardType,
           style: TextStyle(fontSize: 14),
           controller: controller,
           obscureText: obscureText,
@@ -269,9 +270,9 @@ borderRadiusOn(
       topRight: Radius.circular(topRight));
 }
 
-label({String title, Color color}) {
+label({String title, Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16)}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
+    padding: padding,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
