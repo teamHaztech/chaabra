@@ -22,17 +22,23 @@ class Option{
     var optionValuesList = json['option_values'] as List;
     List<OptionValue> optionValue = optionValuesList != null ? optionValuesList.map((e) => OptionValue.fromJson(e)).toList() : [];
     return Option(
-      optionValue: optionValue
+      optionValue: optionValue,
     );
   }
 }
 
+
 class OptionValue{
   final String name;
-  OptionValue({this.name});
+  final int productOptionId;
+  final int productOptionValueId;
+  OptionValue({this.name,this.productOptionValueId,this.productOptionId});
   factory OptionValue.fromJson(Map<String, dynamic> json){
+    print('{"${json['product_option_id']}":"${json['product_option_value_id']}"}');
     return OptionValue(
-      name: json['option_value_description']['name']
+        productOptionId: int.parse(json['product_option_id']),
+        productOptionValueId: json['product_option_value_id'],
+       name: json['option_value_description']['name']
     );
   }
 }

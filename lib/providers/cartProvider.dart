@@ -3,14 +3,10 @@ import 'dart:convert';
 
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/Cart.dart';
-import 'package:chaabra/models/DeliveryAddresss.dart';
 import 'package:chaabra/models/ProductOptions.dart';
-import 'package:chaabra/models/userModel.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
-import 'package:chaabra/providers/productProvider.dart';
 import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -23,10 +19,7 @@ class CartProvider extends ChangeNotifier {
     CallApi callApi = CallApi();
 
 
-  final List<Cart> cart = [
-  
-  ];
-
+  final List<Cart> cart = [];
     fetchProductOptions(int productId) async {
       final res = await callApi.get('product/option/$productId');
       final productJson = jsonDecode(res.body);
@@ -34,14 +27,11 @@ class CartProvider extends ChangeNotifier {
       print(productOption.option.length);
       notifyListeners();
     }
-
     ProductOption productOption;
-
     List<String> countries = [
         'Bahrain',
         'India'
     ];
-
     List<String> states = [
         'Goa',
         'Manama',
@@ -49,13 +39,9 @@ class CartProvider extends ChangeNotifier {
     ];
 
   double total = 0.0;
-  
   double subTotal = 0.0;
-  
   double delivery = 0.0;
-  
   Cart _cartModel = Cart();
-  
   addThisProductInCart(Cart cartItem) {
     if (_cartModel.cartHasThisProduct(cartItem: cartItem, cartList: cart)) {
       showToast('${cartItem.product.productDetails.name} already added in cart');
@@ -66,6 +52,14 @@ class CartProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+    removeThisProductFromCart(Cart cartItem){
+      cart.removeWhere((element) => element.product.id == cartItem.product.id);
+      showToast('${cartItem.product.productDetails} is removed from cart');
+      refreshTotal();
+      notifyListeners();
+    }
 
 
   countTotal(Cart cartItem,{bool clearAndCalculate = false}){
@@ -90,13 +84,6 @@ class CartProvider extends ChangeNotifier {
           total = double.parse((total + productPrice + (3 * productPrice / 100 )).toStringAsFixed(2));
           subTotal = double.parse(((subTotal + productPrice)).toStringAsFixed(2));
       });
-      notifyListeners();
-  }
-
-  removeThisProductFromCart(Cart cartItem){
-      cart.removeWhere((element) => element.product.id == cartItem.product.id);
-      showToast('${cartItem.product.productDetails} is removed from cart');
-      refreshTotal();
       notifyListeners();
   }
   
@@ -131,7 +118,6 @@ class CartProvider extends ChangeNotifier {
             style: TextStyle(fontSize: 18),
           ),
           Container(
-            color: Colors.amber,
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -196,28 +182,37 @@ class CartProvider extends ChangeNotifier {
     layout.isCustomDialogVisible = true;
     renderSelectedProductOptions(context);
     notifyListeners();
-
   }
 
+  //Map data to display
   var selectedOptionsMap = new LinkedHashMap();
+  //Map data to send
+  var selectedOptionJson = new LinkedHashMap();
+
 
   selectProductOption(context,OptionValue value, int id) {
+    final option = {
+      "${value.productOptionId}": "${value.productOptionValueId}"
+    };
+
     notifyListeners();
     if(selectedOptionsMap.isEmpty){
       selectedOptionsMap[id] = value.name;
+      selectedOptionJson[id] = option;
       notifyListeners();
     }else{
       if(selectedOptionsMap.containsKey(id)){
         selectedOptionsMap[id] = value.name;
+        selectedOptionJson[id] = option;
         notifyListeners();
       }else{
         selectedOptionsMap[id] = value.name;
+        selectedOptionJson[id] = option;
         notifyListeners();
       }
     }
-    selectedOptionsMap.forEach((key, value) {
-      print(value);
-    });
+
+    print(selectedOptionJson);
     notifyListeners();
     renderSelectedProductOptions(context);
     navPop(context);

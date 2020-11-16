@@ -9,17 +9,17 @@ class WishlistProvider extends ChangeNotifier{
     
     addThisProductInWishlist(Wishlist product){
         if(wishlistModel.wishlistHasThisProduct(cartItem: product, cartList: wishlist)){
-            showToast('${product.product.productDetails} is already there in wishlist');
+            showToast('${product.product.productDetails.name} is already there in wishlist');
         }else{
             wishlist.add(product);
-            showToast('${product.product.productDetails} added to wishlist');
+            showToast('${product.product.productDetails.name} added to wishlist');
             notifyListeners();
         }
     }
 
     removeThisProductFromWishlist(Wishlist cartItem){
         wishlist.removeWhere((element) => element.product.id == cartItem.product.id);
-        showToast('${cartItem.product.productDetails} is removed from wishlist');
+        showToast('${cartItem.product.productDetails.name} is removed from wishlist');
         notifyListeners();
     }
 }

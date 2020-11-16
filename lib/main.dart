@@ -22,7 +22,6 @@ class Chaabra extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-
         ChangeNotifierProvider<LogProvider>.value(value: LogProvider()),
         ChangeNotifierProvider<LandingPageProvider>.value(value: LandingPageProvider()),
         ChangeNotifierProvider<CartProvider>.value(value: CartProvider()),
@@ -32,7 +31,6 @@ class Chaabra extends StatelessWidget {
         ChangeNotifierProvider<CategoryProvider>.value(value: CategoryProvider()),
         ChangeNotifierProvider<ProductProvider>.value(value: ProductProvider()),
         ChangeNotifierProvider<OrderProvider>.value(value: OrderProvider()),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
