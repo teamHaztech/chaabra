@@ -32,7 +32,6 @@ class ProductProvider extends ChangeNotifier {
     final res = await callApi.get('product/option/$productId');
     final productJson = jsonDecode(res.body);
     productOption = ProductOption.fromJson(productJson);
-    print(productOption.option.length);
     notifyListeners();
   }
 
@@ -52,9 +51,6 @@ class ProductProvider extends ChangeNotifier {
           notifyListeners();
         }
       }
-      selectedOptionsMap.forEach((key, value) {
-        print(value);
-      });
       notifyListeners();
       navPop(context);
   }

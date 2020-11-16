@@ -48,7 +48,7 @@ class LandingPageLayout extends StatelessWidget {
             Visibility(
               visible: layout.isCustomDialogVisible,
               child: Container(
-                color: Colors.black12,
+                color: Colors.black38,
                 child: Center(
                     child: Material(
                   elevation: 3,
@@ -66,7 +66,9 @@ class LandingPageLayout extends StatelessWidget {
                       layout.customDialogContent == null ? SizedBox() : layout.customDialogContent,
                         Padding(
                           padding: EdgeInsets.all(5),
-                          child: fullWidthButton(context,title: "Add to cart",backgroundColor: Color(0xff0d52d6),),)
+                          child: fullWidthButton(context,title: "Add to cart",backgroundColor: Color(0xff0d52d6),onTap: (){
+                            cart.addProductInCartDb(context);
+                          }),)
                     ],),
                   ),
                 )),

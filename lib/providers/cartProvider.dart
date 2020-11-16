@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/Cart.dart';
 import 'package:chaabra/models/ProductOptions.dart';
+import 'package:chaabra/models/productModel.dart';
+import 'package:chaabra/models/userModel.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +17,36 @@ class CartProvider extends ChangeNotifier {
         countTotal(null);
     }
 
-
     CallApi callApi = CallApi();
-
+    int productIdTemp;
+    addProductInCartDb(context)async{
+      if(selectedOptionJson.isNotEmpty){
+        User user = await User().localUserData();
+        final List<String> options = [];
+        selectedOptionJson.forEach((key, value) {
+          options.add(value);
+        });
+        final data = {
+          "customer_id": user.id.toString(),
+          "product_id": productIdTemp.toString(),
+          "options": jsonEncode(options),
+        };
+        final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "cart");
+        print(res.body);
+        final jsonRes = jsonDecode(res.body);
+        if(jsonRes['response'] == "SUCCESS"){
+          final option = jsonRes["cartData"]['option'];
+          final product = jsonRes["product"];
+          LinkedHashMap mappedOptions = new LinkedHashMap();
+          mappedOptions =
+        }
+        if(jsonRes['response'] == "ALREADY_ADDED"){
+            showToast("Product already added in cart");
+        }
+      }else{
+        showToast("Select Option");
+      }
+    }
 
   final List<Cart> cart = [];
     fetchProductOptions(int productId) async {
@@ -38,9 +67,11 @@ class CartProvider extends ChangeNotifier {
         'Isa town'
     ];
 
+
   double total = 0.0;
   double subTotal = 0.0;
   double delivery = 0.0;
+
   Cart _cartModel = Cart();
   addThisProductInCart(Cart cartItem) {
     if (_cartModel.cartHasThisProduct(cartItem: cartItem, cartList: cart)) {
@@ -53,14 +84,32 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
+  removeThisProductFromCart(Cart cartItem){
+    cart.removeWhere((element) => element.product.id == cartItem.product.id);
+    showToast('${cartItem.product.productDetails} is removed from cart');
+    refreshTotal();
+    notifyListeners();
+  }
 
-    removeThisProductFromCart(Cart cartItem){
-      cart.removeWhere((element) => element.product.id == cartItem.product.id);
-      showToast('${cartItem.product.productDetails} is removed from cart');
-      refreshTotal();
-      notifyListeners();
+
+  getMappedOptions(options){
+    final map = new LinkedHashMap();
+    var json = jsonDecode(options);
+    var temp = json.toString();
+    temp = temp.replaceAll("{", "");
+    temp = temp.replaceAll("}", "");
+    if(temp.contains(",")){
+      final List<String>  split = temp.split(",");
+      int i = 0;
+      split.forEach((value) {
+        map[i] = value;
+        i++;
+      });
+    }else{
+        map[0] = temp;
     }
-
+    return map;
+  }
 
   countTotal(Cart cartItem,{bool clearAndCalculate = false}){
      if(cartItem == null){
@@ -166,10 +215,13 @@ class CartProvider extends ChangeNotifier {
 
   clearSelectedOptionData(){
     selectedOptionsMap.clear();
+    selectedOptionJson.clear();
     notifyListeners();
   }
 
   addCartDialog(context,{int productId})async{
+    productIdTemp = productId;
+    notifyListeners();
     final layout = Provider.of<LandingPageProvider>(context,listen: false);
     showProgressIndicator(context);
     final res = await callApi.get('product/option/$productId');
@@ -190,10 +242,9 @@ class CartProvider extends ChangeNotifier {
   var selectedOptionJson = new LinkedHashMap();
 
 
+
   selectProductOption(context,OptionValue value, int id) {
-    final option = {
-      "${value.productOptionId}": "${value.productOptionValueId}"
-    };
+    final option = "${value.productOptionId}"":""${value.productOptionValueId}";
 
     notifyListeners();
     if(selectedOptionsMap.isEmpty){
@@ -211,8 +262,6 @@ class CartProvider extends ChangeNotifier {
         notifyListeners();
       }
     }
-
-    print(selectedOptionJson);
     notifyListeners();
     renderSelectedProductOptions(context);
     navPop(context);

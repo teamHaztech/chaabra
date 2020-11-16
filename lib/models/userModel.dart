@@ -10,6 +10,7 @@ class User {
     final String lastName;
     final String phone;
     User({this.email,this.id,this.lastName,this.firstName,this.phone});
+
     SharedPref _sharedPref = SharedPref();
 
     localUserData()async{
@@ -17,7 +18,7 @@ class User {
         if(res != null){
             final user = jsonDecode(res);
             return User(
-                id: user['id'],
+                id: user['customer_id'],
                 email: user['email'],
                 firstName: user['firstname'],
                 lastName: user['lastname'],

@@ -34,7 +34,6 @@ class OptionValue{
   final int productOptionValueId;
   OptionValue({this.name,this.productOptionValueId,this.productOptionId});
   factory OptionValue.fromJson(Map<String, dynamic> json){
-    print('{"${json['product_option_id']}":"${json['product_option_value_id']}"}');
     return OptionValue(
         productOptionId: int.parse(json['product_option_id']),
         productOptionValueId: json['product_option_value_id'],

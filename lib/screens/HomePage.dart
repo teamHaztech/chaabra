@@ -574,8 +574,11 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               GestureDetector(
                                                   onTap: () {
-                                                      cartProvider.addCartDialog(context,productId: product.id);
+                                                  cartProvider.addCartDialog(context,productId: product.id);
+//                                                  cartProvider.addThisProductInCart(Cart(product: product));
+//                                                  cartProvider.addProductInCartDb(context,product);
                                                   },
+
                                                   child: Container(
                                                       width: screenWidth(context) * 60 / 100,
                                                       height: 35.0,
