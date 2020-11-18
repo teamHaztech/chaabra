@@ -2,6 +2,7 @@ import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:provider/provider.dart';
 import '../screens/constants.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -14,10 +15,10 @@ class LandingPageLayout extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         Future.value(false);
-        if(layout.isCustomDialogVisible == true){
-            layout.closeCustomDialog();
-            cart.clearSelectedOptionData();
-        }else{
+        if (layout.isCustomDialogVisible == true) {
+          layout.closeCustomDialog();
+          cart.clearSelectedOptionData();
+        } else {
           exitDialog(context);
         }
         return;
@@ -35,7 +36,8 @@ class LandingPageLayout extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 53),
                     child: AbsorbPointer(
-                      absorbing: layout.isCustomDialogVisible == true ? true : false,
+                      absorbing:
+                          layout.isCustomDialogVisible == true ? true : false,
                       child: SingleChildScrollView(
                         child: layout.pages[layout.activePage],
                       ),
@@ -47,31 +49,72 @@ class LandingPageLayout extends StatelessWidget {
             ),
             Visibility(
               visible: layout.isCustomDialogVisible,
-              child: Container(
-                color: Colors.black38,
-                child: Center(
-                    child: Material(
-                  elevation: 3,
-                  borderRadius: borderRadius(radius: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: borderRadius(radius: 10),
-                      color: Colors.white,
+              child: Stack(
+                children: [
+                  BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                      child: Container(
+                        color: Colors.transparent,
+                      )),
+                  Center(
+                      child: Material(
+                    elevation: 3,
+                    borderRadius: borderRadius(radius: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadius(radius: 10),
+                        color: Colors.white,
+                      ),
+                      height: 50 * screenHeight(context) / 100,
+                      width: 80 * screenWidth(context) / 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          layout.customDialogContent == null
+                              ? SizedBox()
+                              : layout.customDialogContent,
+                          Padding(
+                            padding: EdgeInsets.all(14),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: fullWidthButton(
+                                    context,
+                                    title: "Add to cart",
+                                    backgroundColor: Color(0xff0d52d6),
+                                    onTap: () {
+                                      cart.addProductInCartDb(context);
+                                    },
+                                  ),
+                                ),
+                                SizedBox(width: 14,),
+                                GestureDetector(
+                                  onTap: () {
+//                                    wishlistProvider.addThisProductInWishlist(Wishlist(product: widget.product));
+                                  },
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      color: const Color(0xffE96631),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    height: 50 * screenHeight(context) / 100,
-                    width: 80 * screenWidth(context) / 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                      layout.customDialogContent == null ? SizedBox() : layout.customDialogContent,
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child: fullWidthButton(context,title: "Add to cart",backgroundColor: Color(0xff0d52d6),onTap: (){
-                            cart.addProductInCartDb(context);
-                          }),)
-                    ],),
-                  ),
-                )),
+                  )),
+                ],
               ),
             )
           ],

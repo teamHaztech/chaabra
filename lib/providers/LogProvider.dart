@@ -10,15 +10,15 @@ import 'package:validators/validators.dart';
 
 class LogProvider extends ChangeNotifier {
   final email = TextEditingController(text: "manthansutar99@gmail.com");
-  final password = TextEditingController(text: "111111");
-  final confirmPassword = TextEditingController(text: "111111");
-  final firstName = TextEditingController(text: "Manthan");
-  final lastName = TextEditingController(text: "Sutar");
-  final phone = TextEditingController(text: "9772342342");
+  final password = TextEditingController(text: "12345678");
+  final confirmPassword = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final phone = TextEditingController();
 
   CallApi callApi = CallApi();
   User userData = User();
-  bool isCurrentPageIsSignIn = false;
+  bool isCurrentPageIsSignIn = true;
 
   //validation message providers
   String emailError;

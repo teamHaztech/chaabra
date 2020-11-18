@@ -6,7 +6,6 @@ import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:chaabra/providers/orderProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/SignIn.dart';
-import 'package:chaabra/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/productProvider.dart';
@@ -39,7 +38,7 @@ class Chaabra extends StatelessWidget {
           fontFamily: 'Roboto',
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SplashScreen(),
+        home: SignIn(),
       ),
     );
   }

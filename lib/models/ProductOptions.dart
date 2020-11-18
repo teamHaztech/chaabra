@@ -14,6 +14,9 @@ class ProductOption{
   }
 }
 
+
+
+
 class Option{
   final int optionId;
   final List<OptionValue> optionValue;
@@ -37,7 +40,7 @@ class OptionValue{
     return OptionValue(
         productOptionId: int.parse(json['product_option_id']),
         productOptionValueId: json['product_option_value_id'],
-       name: json['option_value_description']['name']
+        name: json['option_value_description']['name']
     );
   }
 }

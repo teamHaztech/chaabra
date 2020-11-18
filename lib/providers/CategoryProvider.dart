@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/CategoryModel.dart';
+import 'package:chaabra/providers/cartProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoryProvider extends ChangeNotifier{
   final List<CategoryModel> categories = [];

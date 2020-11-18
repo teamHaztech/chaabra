@@ -1,3 +1,3 @@
-final String serverIp = 'chaabra.com/app/';
+final String serverIp = 'allottery.co/chaabra/app/';
 
 

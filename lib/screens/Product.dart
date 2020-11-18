@@ -30,7 +30,8 @@ class _ProductPageState extends State<ProductPage> {
     super.initState();
     print(widget.product.id);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ProductProvider>(context,listen: false).fetchProductDetails(widget.product.id);
+      Provider.of<CartProvider>(context,listen: false).fetchProductOptions(widget.product.id);
+      Provider.of<CartProvider>(context,listen: false).setTempProductId(widget.product.id);
     });
   }
 
@@ -38,13 +39,12 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
-    final productProvider = Provider.of<ProductProvider>(context);
-    final product = productProvider.productOption == null ? null : productProvider.productOption.product;
-    final productOptions = productProvider.productOption == null ? null : productProvider.productOption.option;
+    final product = cartProvider.productOption == null ? null : cartProvider.productOption.product;
+    final productOptions = cartProvider.productOption == null ? null : cartProvider.productOption.option;
     return WillPopScope(
       onWillPop: (){
         Future.value(true);
-        Provider.of<ProductProvider>(context,listen: false).clearProductData();
+        Provider.of<CartProvider>(context,listen: false).clearProductData();
         navPop(context);
         return;
       },
@@ -57,7 +57,7 @@ class _ProductPageState extends State<ProductPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 53),
-                child: productProvider.productOption == null ? circularProgressIndicator() : SingleChildScrollView(
+                child: cartProvider.productOption == null ? circularProgressIndicator() : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -142,7 +142,7 @@ class _ProductPageState extends State<ProductPage> {
                                 itemBuilder: (context,i){
                                   return GestureDetector(
                                     onTap: (){
-                                      productProvider.showOptionList(context, i);
+                                      cartProvider.showOptionList(context, i);
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
@@ -159,7 +159,7 @@ class _ProductPageState extends State<ProductPage> {
                                             MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                productProvider.hasAlreadySelectedThisOption(i) ? productProvider.selectedOptionsMap[i].toString() : "Select",
+                                                cartProvider.hasAlreadySelectedThisOption(i) ? cartProvider.selectedOptionsMap[i].toString() : "Select",
                                                 style: TextStyle(
                                                     color: Color(0xff979CA3), fontSize: 16),
                                               ),
@@ -182,7 +182,7 @@ class _ProductPageState extends State<ProductPage> {
                                 Expanded(
                                   child: fullWidthButton(context,
                                       title: 'Add to cart', onTap: () {
-                                        cartProvider.addThisProductInCart(Cart(product: widget.product));
+                                        cartProvider.addProductInCartDb(context);
                                       }),
                                 ),
                                 SizedBox(
@@ -193,8 +193,8 @@ class _ProductPageState extends State<ProductPage> {
                                     wishlistProvider.addThisProductInWishlist(Wishlist(product: widget.product));
                                   },
                                   child: Container(
-                                    width: 47.0,
-                                    height: 47.0,
+                                    width: 40.0,
+                                    height: 40.0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5.0),
                                       color: const Color(0xffE96631),

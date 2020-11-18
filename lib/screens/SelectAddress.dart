@@ -411,13 +411,15 @@ class AddAddress extends StatelessWidget {
                         ],
                       ),
                       input(
-                          controller: orderProvider.postAddress,
-                          label: "Postal address",
-                          hint: "Postal address"),
+                        controller: orderProvider.postAddress,
+                        label: "Postal address",
+                        hint: "Postal address",
+                      ),
                       input(
-                          controller: orderProvider.phone,
-                          label: "Phone number",
-                          hint: "Phone number"),
+                        controller: orderProvider.phone,
+                        label: "Phone number",
+                        hint: "Phone number",
+                      ),
 //                      dropDown(
 //                        context,
 //                        hint: 'Country',
@@ -463,8 +465,7 @@ class AddAddress extends StatelessWidget {
                           label: "Zip/Postal code",
                           hint: "Zip/Postal code"),
                       verticalSpace(),
-                      fullWidthButton(context, title: "Add address",
-                          onTap: () {
+                      fullWidthButton(context, title: "Add address", onTap: () {
                         orderProvider.addThisAddress(context);
                       }),
                     ],

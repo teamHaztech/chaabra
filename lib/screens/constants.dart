@@ -221,6 +221,22 @@ fullWidthButton(context,
   );
 }
 
+showCircularProgressIndicator(context){
+  showDialog(
+      barrierColor: Colors.black12,
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return Center(
+          child: Material(
+
+              borderRadius: borderRadius(radius: 10),
+              color: Colors.transparent,
+              child: CircularProgressIndicator(strokeWidth: 2,)),
+        );
+      });
+}
+
 navButton(context,
     {Function onTap, String label, String assetName, Color activeColor}) {
   return GestureDetector(
@@ -548,12 +564,12 @@ cartDrawer(context) {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                Text(product.price.toString(),
+                                                Text("${cartProvider.getProductTotalInCart(product.id)} BD",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.normal)),
-                                                Text('Per Kg',
+                                                Text('Unit Total',
                                                     style: TextStyle(
                                                         fontSize: 12,
                                                         color: Colors.black38,
