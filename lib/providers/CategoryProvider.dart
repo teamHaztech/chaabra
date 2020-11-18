@@ -16,7 +16,6 @@ class CategoryProvider extends ChangeNotifier{
     categories.length == 0 ? isCategoriesLoading = true : isCategoriesLoading = false;
     notifyListeners();
     final res = await callApi.get('categories');
-    print(res.body);
     final data = jsonDecode(res.body) as List;
     if (data.length != categories.length) {
       isCategoriesLoading = true;

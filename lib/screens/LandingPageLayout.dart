@@ -83,7 +83,7 @@ class LandingPageLayout extends StatelessWidget {
                                     title: "Add to cart",
                                     backgroundColor: Color(0xff0d52d6),
                                     onTap: () {
-                                      cart.addProductInCartDb(context);
+                                      cart.addThisProductInServerCart(context);
                                     },
                                   ),
                                 ),

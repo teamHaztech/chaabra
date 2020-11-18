@@ -81,19 +81,19 @@ class OrderProvider extends ChangeNotifier{
       }
       notifyListeners();
     });
-    print(selectedDeliverAddress);
   }
 
   final List<DeliveryAddress> deliveryAddress = [];
 
-  bool isShippingAddressLoading = true;
+  bool isShippingAddressLoading = false;
   fetchUserShippingAddress(context)async{
     User user = await User().localUserData();
     deliveryAddress.length == 0 ? isShippingAddressLoading = true : isShippingAddressLoading = false;
     notifyListeners();
     final res = await callApi.getWithConnectionCheck('shipping/address/${user.id}', context);
     final data = jsonDecode(res.body) as List;
-    if (data.length != deliveryAddress.length) {
+    print(data);
+    if (data.length != deliveryAddress.length && data.isEmpty) {
       isShippingAddressLoading = true;
       deliveryAddress.clear();
       for (Map i in data) {

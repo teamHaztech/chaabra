@@ -22,46 +22,10 @@ class CartProvider extends ChangeNotifier {
     clearProductData(){
       productOption = null;
       selectedOptionsMap.clear();
-      print(productOption);
-      print(selectedOptionsMap);
     }
 
     CallApi callApi = CallApi();
     int productIdTemp;
-
-    addProductInCartDb(context)async{
-      final layout = Provider.of<LandingPageProvider>(context,listen: false);
-      if(selectedOptionJson.isNotEmpty){
-        User user = await User().localUserData();
-        final List<String> options = [];
-        selectedOptionJson.forEach((key, value) {
-          options.add(value);
-        });
-        final data = {
-          "customer_id": user.id.toString(),
-          "product_id": productIdTemp.toString(),
-          "options": jsonEncode(options),
-        };
-        showCircularProgressIndicator(context);
-        final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "cart");
-        print(res.body);
-        final jsonRes = jsonDecode(res.body);
-        if(jsonRes['response'] == "SUCCESS"){
-          final cartData = jsonRes["cartData"];
-          addThisProductInCart(Cart.fromJson(cartData));
-          layout.closeCustomDialog();
-          navPop(context);
-          notifyListeners();
-        }
-        if(jsonRes['response'] == "ALREADY_ADDED"){
-            layout.closeCustomDialog();
-            showToast("Product already added in cart");
-            navPop(context);
-        }
-      }else{
-        showToast("Select Option");
-      }
-    }
 
 
 
@@ -69,10 +33,10 @@ class CartProvider extends ChangeNotifier {
       double total = 0;
       cart.forEach((cartItem) {
         if(cartItem.product.id == productId){
-          var productPrice;
+          var productPrice = 0.0;
           int i = 0;
           cartItem.selectedOption.forEach((e) {
-            productPrice  = (i == 0 ? cartItem.product.price : 0) + e.price;
+            productPrice  += (i == 0 ? cartItem.product.price : 0) + e.price;
             i++;
           });
           total = double.parse((total + productPrice).toStringAsFixed(2));
@@ -106,6 +70,14 @@ class CartProvider extends ChangeNotifier {
     }
     final List<Cart> cart = [];
 
+    deletingCartItemIndicator(Cart cartItem){
+      cart.forEach((element) {
+        element.id == cartItem.id ? element.isRemoving = true : element.isRemoving = false;
+        notifyListeners();
+      });
+    }
+
+
     fetchProductOptions(int productId) async {
       final res = await callApi.get('product/option/$productId');
       final productJson = jsonDecode(res.body);
@@ -132,7 +104,54 @@ class CartProvider extends ChangeNotifier {
 
     Cart _cartModel = Cart();
 
-    addThisProductInCart(Cart cartItem) {
+
+    addThisProductInServerCart(context)async{
+      final layout = Provider.of<LandingPageProvider>(context,listen: false);
+      if(selectedOptionJson.isNotEmpty){
+        User user = await User().localUserData();
+        final List<String> options = [];
+        selectedOptionJson.forEach((key, value) {
+          options.add(value);
+        });
+        final data = {
+          "customer_id": user.id.toString(),
+          "product_id": productIdTemp.toString(),
+          "options": jsonEncode(options),
+        };
+        showCircularProgressIndicator(context);
+        final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "cart");
+        final jsonRes = jsonDecode(res.body);
+        if(jsonRes['response'] == "SUCCESS"){
+          final cartData = jsonRes["cartData"];
+          addThisProductInCartLocally(Cart.fromJson(cartData));
+          layout.closeCustomDialog();
+          navPop(context);
+          notifyListeners();
+        }
+        if(jsonRes['response'] == "ALREADY_ADDED"){
+          layout.closeCustomDialog();
+          showToast("Product already added in cart");
+          navPop(context);
+        }
+      }else{
+        showToast("Select Option");
+      }
+    }
+
+
+    removeThisProductFromServerCart(context,Cart cartItem)async{
+      deletingCartItemIndicator(cartItem);
+      final data = {
+        "cart_id": cartItem.id.toString(),
+      };
+      final res = await callApi.postWithConnectionCheck(context,apiUrl: "cart/remove",data: data);
+      final jsonRes = jsonDecode(res.body);
+      if(jsonRes['response'] == "SUCCESS"){
+        removeThisProductFromCartLocally(cartItem);
+      }
+    }
+
+    addThisProductInCartLocally(Cart cartItem) {
       if (_cartModel.cartHasThisProduct(cartItem: cartItem, cartList: cart)) {
         showToast('${cartItem.product.productDetails.name} already added in cart');
       } else {
@@ -143,13 +162,12 @@ class CartProvider extends ChangeNotifier {
       }
     }
 
-    removeThisProductFromCart(Cart cartItem){
+    removeThisProductFromCartLocally(Cart cartItem){
       cart.removeWhere((element) => element.product.id == cartItem.product.id);
       showToast('${cartItem.product.productDetails} is removed from cart');
       refreshTotal();
       notifyListeners();
     }
-
 
     getMappedOptions(options){
       final map = new LinkedHashMap();
@@ -197,14 +215,14 @@ class CartProvider extends ChangeNotifier {
         subTotal = 0.0;
         total = 0.0;
         cart.forEach((element) {
-            var productPrice;
+          var productPrice = 0.0;
             int i = 0;
             element.selectedOption.forEach((e) {
-              productPrice  = (i == 0 ? element.product.price : 0) + e.price;
+              productPrice += (i == 0 ? element.product.price : 0) + e.price;
               i++;
             });
-            total = double.parse((total + productPrice).toStringAsFixed(2));
-            subTotal = double.parse(((subTotal + productPrice)).toStringAsFixed(2));
+            total = double.parse((total + productPrice).toStringAsFixed(3));
+            subTotal = double.parse(((subTotal + productPrice)).toStringAsFixed(3));
         });
         notifyListeners();
     }

@@ -66,7 +66,7 @@ class CartPage extends StatelessWidget {
                                         child: ClipRRect(
                                           borderRadius: borderRadius(radius: 5),
                                           child: Image.network(
-                                            product.image,
+                                            '$assetsPath${product.image}',
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -124,15 +124,16 @@ class CartPage extends StatelessWidget {
                                                                       .normal)),
                                                     ],
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      cartProvider
-                                                          .removeThisProductFromCart(
-                                                              cartItem);
+                                                  cartItem.isRemoving == true ? SizedBox(
+                                                      height: 18,
+                                                      width: 18,
+                                                      child: CircularProgressIndicator(strokeWidth: 2,)) : GestureDetector(
+                                                    onTap: (){
+                                                      cartProvider.removeThisProductFromServerCart(context,cartItem);
                                                     },
                                                     child: Icon(
                                                       Icons.close,
-                                                      size: 15,
+                                                      size: 18,
                                                       color: Color(0xffE96631),
                                                     ),
                                                   )

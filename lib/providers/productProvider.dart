@@ -20,7 +20,7 @@ class ProductProvider extends ChangeNotifier {
 
   addThisProductCart(context){
     final cart = Provider.of<CartProvider>(context,listen: false);
-    cart.addProductInCartDb(context);
+    cart.addThisProductInServerCart(context);
   }
 
 }

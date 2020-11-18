@@ -182,7 +182,7 @@ class _ProductPageState extends State<ProductPage> {
                                 Expanded(
                                   child: fullWidthButton(context,
                                       title: 'Add to cart', onTap: () {
-                                        cartProvider.addProductInCartDb(context);
+                                        cartProvider.addThisProductInServerCart(context);
                                       }),
                                 ),
                                 SizedBox(

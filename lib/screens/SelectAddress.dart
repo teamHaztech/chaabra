@@ -8,14 +8,17 @@ import 'package:provider/provider.dart';
 
 import '../staticData.dart';
 
-class SelectAddressPage extends StatelessWidget {
+class SelectAddressPage extends StatefulWidget {
+  @override
+  _SelectAddressPageState createState() => _SelectAddressPageState();
+}
+
+class _SelectAddressPageState extends State<SelectAddressPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-
     final orderProvider = Provider.of<OrderProvider>(context);
-
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: cartDrawer(context),
@@ -64,6 +67,8 @@ class SelectAddressPage extends StatelessWidget {
                             width: screenWidth(context),
                             color: Color(0xffE7E7E7),
                           ),
+
+
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 16),
                             child: Column(

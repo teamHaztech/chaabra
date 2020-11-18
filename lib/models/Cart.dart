@@ -5,16 +5,18 @@ import 'package:chaabra/models/productModel.dart';
 import 'ProductOptions.dart';
 
 class Cart {
+    final int id;
+    bool isRemoving;
     final Product  product;
     final List<CartOption> selectedOption;
     final double kg;
-    Cart({this.product,this.selectedOption,this.kg});
+    Cart({this.id,this.product,this.selectedOption,this.kg, this.isRemoving = false});
 
     factory Cart.fromJson(Map<String, dynamic> json){
         var optionList = json['option'] as List;
         List<CartOption> options = optionList != null ? optionList.map((e) => CartOption.fromJson(e)).toList() : [];
-        print(json);
         return Cart(
+            id: json['cart_id'],
             product: Product.fromJson(json["product"]),
             selectedOption: options,
         );
@@ -29,8 +31,8 @@ class Cart {
         }
         return isThere;
     }
-}
 
+}
 
 class CartOption{
     final String weight;

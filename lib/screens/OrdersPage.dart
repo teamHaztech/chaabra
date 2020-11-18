@@ -129,7 +129,7 @@ class OrdersPage extends StatelessWidget {
                                                   GestureDetector(
                                                     onTap: () {
                                                       cartProvider
-                                                          .removeThisProductFromCart(
+                                                          .removeThisProductFromCartLocally(
                                                               cartItem);
                                                     },
                                                     child: Icon(

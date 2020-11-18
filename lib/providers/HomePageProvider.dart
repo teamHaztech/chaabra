@@ -107,7 +107,6 @@ class HomePageProvider extends ChangeNotifier{
         notifyListeners();
         final res = await callApi.get('products/most-viewed');
         final data = jsonDecode(res.body) as List;
-        print(data);
         if (data.length != mostViewed.length) {
             isMostViewedLoading = true;
             mostViewed.clear();

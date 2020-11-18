@@ -541,13 +541,16 @@ cartDrawer(context) {
                                                             FontWeight.normal)),
                                               ],
                                             ),
-                                            GestureDetector(
+                                            cartItem.isRemoving == true ? SizedBox(
+                                                height: 18,
+                                                width: 18,
+                                                child: CircularProgressIndicator(strokeWidth: 2)) : GestureDetector(
                                               onTap: (){
-                                                cartProvider.removeThisProductFromCart(cartItem);
+                                                cartProvider.removeThisProductFromServerCart(context,cartItem);
                                               },
                                               child: Icon(
                                                 Icons.close,
-                                                size: 15,
+                                                size: 18,
                                                 color: Color(0xffE96631),
                                               ),
                                             )
