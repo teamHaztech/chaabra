@@ -16,6 +16,15 @@ class Product {
             productDetails: ProductDetails.fromJson(json['details'])
         );
     }
+
+    Map<String, dynamic> toJson(Product product) => {
+        'product_id': product.id,
+        'image': product.image,
+        "model": product.model,
+        "price": product.price.toString(),
+        "details": ProductDetails().toJson(product.productDetails)
+    };
+
 }
 
 
@@ -23,12 +32,18 @@ class ProductDetails{
     final String name;
     final String description;
     ProductDetails({this.name,this.description});
+
     factory ProductDetails.fromJson(Map<String, dynamic>json){
         return ProductDetails(
           name: json['name'],
           description: json['description']
         );
     }
+
+    Map<String, dynamic> toJson(ProductDetails productDetails) => {
+        'name': productDetails.name,
+        'description': productDetails.description,
+    };
 }
 
 

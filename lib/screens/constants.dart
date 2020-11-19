@@ -229,10 +229,12 @@ showCircularProgressIndicator(context){
       builder: (context) {
         return Center(
           child: Material(
-
               borderRadius: borderRadius(radius: 10),
               color: Colors.transparent,
-              child: CircularProgressIndicator(strokeWidth: 2,)),
+              child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(strokeWidth: 1.5,))),
         );
       });
 }

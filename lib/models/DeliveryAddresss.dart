@@ -1,40 +1,42 @@
 class DeliveryAddress {
   final int id;
-  final String firstname;
-  final String lastname;
+  final String firstName;
+  final String lastName;
   final String company;
-  final String address_1;
-  final String address_2;
+  final String address1;
+  final String address2;
   final String city;
   final String postcode;
-  final String country_code;
-  final int zone_id;
+  final int countryCode;
+  final int zoneId;
 
   bool selectState;
 
   DeliveryAddress(
-      {this.id,
-      this.address_1,
-      this.address_2,
+      {
+      this.id,
+      this.address1,
+      this.address2,
       this.city,
       this.company,
-      this.country_code,
-      this.firstname,
-      this.lastname,
+      this.countryCode = 17,
+      this.firstName,
+      this.lastName,
       this.postcode,
-      this.zone_id});
+      this.zoneId,
+      });
 
   factory DeliveryAddress.fromJson(Map<String, dynamic> json){
       return DeliveryAddress(
           id: json['address_id'],
-          firstname: json['firstname'],
-          lastname: json['lastname'],
+          firstName: json['firstname'],
+          lastName: json['lastname'],
           company: json['company'],
-          address_1: json['address_1'],
-          address_2: json['address_2'],
+          address1: json['address_1'],
+          address2: json['address_2'],
           city: json['city'],
           postcode: json['postcode'],
-          zone_id: int.parse(json['zone_id']),
+          zoneId: int.parse(json['zone_id']),
       );
   }
 }

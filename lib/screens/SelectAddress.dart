@@ -67,8 +67,6 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                             width: screenWidth(context),
                             color: Color(0xffE7E7E7),
                           ),
-
-
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 16),
                             child: Column(
@@ -86,7 +84,7 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                   ),
                                 ),
                                 verticalSpace(),
-                                orderProvider.deliveryAddress.isEmpty
+                                orderProvider.isShippingAddressLoading == true
                                     ? ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
@@ -130,10 +128,10 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                           );
                                         })
                                     : ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
                                         itemCount: orderProvider
                                             .deliveryAddress.length,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
                                         itemBuilder: (context, i) {
                                           final deliveryAddress =
                                               orderProvider.deliveryAddress[i];
@@ -145,90 +143,121 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   top: 8, left: 8, bottom: 0),
-                                              child: Material(
-                                                borderRadius: borderRadiusOn(
-                                                    topLeft: 8, bottomLeft: 8),
-                                                elevation: deliveryAddress
-                                                            .selectState ==
-                                                        true
-                                                    ? 3
-                                                    : 0,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
+                                              child: Stack(
+                                                children: [
+                                                  Material(
                                                     borderRadius:
                                                         borderRadiusOn(
                                                             topLeft: 8,
                                                             bottomLeft: 8),
-                                                  ),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 16),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(
-                                                              deliveryAddress
-                                                                  .company,
-                                                              style: TextStyle(
-                                                                  color: Color(
-                                                                      0xff3A4754),
-                                                                  fontSize: 14),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(
-                                                                deliveryAddress
-                                                                    .address_1,
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xffC6C6C6),
-                                                                    fontSize:
-                                                                        14)),
-                                                            SizedBox(
-                                                              height: 3,
-                                                            ),
-                                                            Text(
-                                                                deliveryAddress
-                                                                    .address_2,
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xffC6C6C6),
-                                                                    fontSize:
-                                                                        14)),
-                                                            SizedBox(
-                                                              height: 8,
-                                                            ),
-                                                          ],
-                                                        ),
+                                                    elevation: deliveryAddress
+                                                                .selectState ==
+                                                            true
+                                                        ? 3
+                                                        : 0,
+                                                    child: Container(
+                                                      width:
+                                                          screenWidth(context),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            borderRadiusOn(
+                                                                topLeft: 8,
+                                                                bottomLeft: 8),
                                                       ),
-                                                      deliveryAddress
-                                                                  .selectState ==
-                                                              true
-                                                          ? SizedBox()
-                                                          : Container(
-                                                              height: 1,
-                                                              width:
-                                                                  screenWidth(
-                                                                      context),
-                                                              color: Color(
-                                                                  0xffE7E7E7),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        16),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                  "${deliveryAddress.firstName} ${deliveryAddress.lastName}",
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          0xff3A4754),
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Text(
+                                                                    deliveryAddress
+                                                                        .address1,
+                                                                    style: TextStyle(
+                                                                        color: Color(
+                                                                            0xffC6C6C6),
+                                                                        fontSize:
+                                                                            14)),
+                                                                SizedBox(
+                                                                  height: 3,
+                                                                ),
+                                                                Text(
+                                                                    deliveryAddress
+                                                                        .address2,
+                                                                    style: TextStyle(
+                                                                        color: Color(
+                                                                            0xffC6C6C6),
+                                                                        fontSize:
+                                                                            14)),
+                                                                SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                              ],
                                                             ),
-                                                    ],
+                                                          ),
+                                                          deliveryAddress
+                                                                      .selectState ==
+                                                                  true
+                                                              ? SizedBox()
+                                                              : Container(
+                                                                  height: 1,
+                                                                  width: screenWidth(
+                                                                      context),
+                                                                  color: Color(
+                                                                      0xffE7E7E7),
+                                                                ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 8, right: 8),
+                                                      child: GestureDetector(
+                                                        child: Icon(
+                                                          Icons.delete,
+                                                          color:
+                                                              Colors.redAccent,
+                                                        ),
+                                                        onTap: () {
+                                                          orderProvider
+                                                              .deleteAddress(
+                                                                  context,
+                                                                  deliveryAddress
+                                                                      .id);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                             ),
                                           );
@@ -347,7 +376,7 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                         title: "Check out",
                                         backgroundColor: Color(0xff90C042),
                                         onTap: () {
-                                      navPush(context, OrderPlacedPage());
+                                      orderProvider.order(context);
                                     }),
                                   ),
                                 ],
@@ -421,54 +450,10 @@ class AddAddress extends StatelessWidget {
                         hint: "Postal address",
                       ),
                       input(
-                        controller: orderProvider.phone,
-                        label: "Phone number",
-                        hint: "Phone number",
+                        controller: orderProvider.postalCode,
+                        label: "Zip/Postal code",
+                        hint: "Zip/Postal code",
                       ),
-//                      dropDown(
-//                        context,
-//                        hint: 'Country',
-//                        value: orderProvider.country,
-//                        width: screenWidth(context),
-//                        items:
-//                            countries.map((Map<String, dynamic> country) {
-//                          return DropdownMenuItem<String>(
-//                            value: country.toString(),
-//                            child: Center(
-//                              child: Text(
-//                                country['name'],
-//                              ),
-//                            ),
-//                          );
-//                        }).toList(),
-//                        onChange: (value) {
-//                          orderProvider.selectCountry(value.toString());
-//                          print(value);
-//                        },
-//                      ),
-//                      dropDown(
-//                        context,
-//                        hint: 'Select a region and state',
-//                        value: orderProvider.state,
-//                        width: screenWidth(context),
-//                        items: cartProvider.states.map((String state) {
-//                          return DropdownMenuItem<String>(
-//                            value: state,
-//                            child: Center(
-//                              child: Text(
-//                                state,
-//                              ),
-//                            ),
-//                          );
-//                        }).toList(),
-//                        onChange: (value) {
-//                          orderProvider.selectState(value);
-//                        },
-//                      ),
-                      input(
-                          controller: orderProvider.postalCode,
-                          label: "Zip/Postal code",
-                          hint: "Zip/Postal code"),
                       verticalSpace(),
                       fullWidthButton(context, title: "Add address", onTap: () {
                         orderProvider.addThisAddress(context);

@@ -22,6 +22,11 @@ class Cart {
         );
     }
 
+    Map<String, dynamic> toJson(Cart cart) => {
+        'cart_id': cart.id,
+        'product': Product().toJson(cart.product)
+    };
+
     cartHasThisProduct({Cart cartItem, List<Cart> cartList}) {
         bool isThere = false;
         for (var i in cartList) {
@@ -31,7 +36,6 @@ class Cart {
         }
         return isThere;
     }
-
 }
 
 class CartOption{
@@ -39,11 +43,17 @@ class CartOption{
     final double price;
     CartOption({this.weight,this.price
     });
+
     factory CartOption.fromJson(Map<String, dynamic>json){
         return CartOption(
             weight: json['option_value_description']['name'],
-            price: double.parse(json['price'])
+            price: double.parse(json['price']),
         );
     }
+
+    Map<String, dynamic> toJson(CartOption cartOption) => {
+        'weight': cartOption.weight,
+        'price': cartOption.price
+    };
 }
 

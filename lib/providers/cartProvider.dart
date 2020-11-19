@@ -68,6 +68,7 @@ class CartProvider extends ChangeNotifier {
       }
       refreshTotal();
     }
+
     final List<Cart> cart = [];
 
     deletingCartItemIndicator(Cart cartItem){
@@ -318,6 +319,7 @@ class CartProvider extends ChangeNotifier {
 
 
     addCartDialog(context,{int productId,bool showLoader = false})async{
+      print(productId);
       setTempProductId(productId);
       final layout = Provider.of<LandingPageProvider>(context,listen: false);
       showProgressIndicator(context);
