@@ -404,8 +404,23 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
   }
 }
 
-class AddAddress extends StatelessWidget {
+class AddAddress extends StatefulWidget {
+  @override
+  _AddAddressState createState() => _AddAddressState();
+}
+
+class _AddAddressState extends State<AddAddress> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<OrderProvider>(context,listen: false).getZones();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -449,10 +464,55 @@ class AddAddress extends StatelessWidget {
                         label: "Postal address",
                         hint: "Postal address",
                       ),
-                      input(
-                        controller: orderProvider.postalCode,
-                        label: "Zip/Postal code",
-                        hint: "Zip/Postal code",
+                      orderProvider.isZoneLoading == true ? GestureDetector(
+                        onTap: (){
+                          orderProvider.showZoneList(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: borderRadius(radius: 8),
+                              border: Border.all(color: Colors.black12),
+                              color: Colors.white,
+                            ),
+                            child: Opacity(opacity: 0.5,child: progressIndicator(),),
+                          ),
+                        ),
+                      )
+                      : GestureDetector(
+                        onTap: (){
+                          orderProvider.showZoneList(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: borderRadius(radius: 8),
+                              border: Border.all(color: Colors.black12),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 14),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    orderProvider.zone == null ? "zone/state" : orderProvider.zone.name,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size: 23,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       verticalSpace(),
                       fullWidthButton(context, title: "Add address", onTap: () {

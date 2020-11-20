@@ -41,3 +41,29 @@ class DeliveryAddress {
   }
 }
 
+class Zone{
+  final int zoneId;
+  final int countryId;
+  final String name;
+  final String code;
+  Zone({this.name,this.code,this.countryId,this.zoneId});
+
+  factory Zone.fromJson(Map<String, dynamic> json){
+    return Zone(
+      zoneId: int.parse(json['zone_id']),
+      countryId: int.parse(json['country_id']),
+      code: json['code'],
+      name: json['name'],
+    );
+  }
+
+
+  Map<String, dynamic> toJson(Zone zone){
+    return {
+      "zone_id": zone.zoneId.toString(),
+      "country_id" : "17",
+      "zone_name" : zone.name,
+      "zone_code": zone.code
+    };
+  }
+}

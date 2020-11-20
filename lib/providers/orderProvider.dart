@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chaabra/screens/OrderPlacedPage.dart';
 import 'package:provider/provider.dart';
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/DeliveryAddresss.dart';
@@ -29,6 +30,7 @@ class OrderProvider extends ChangeNotifier{
   OrderProvider(){
     fetchUserShippingAddress(context);
     setNameInAddressForm();
+    getZones();
   }
 
   CallApi callApi = CallApi();
@@ -53,7 +55,7 @@ class OrderProvider extends ChangeNotifier{
     lastName = TextEditingController(text: user == null ? "" : user.lastName);
   }
 
-  int selectedDeliverAddress;
+  int selectedAddressId;
 
   addThisAddress(context)async{
     User user = await User().localUserData();
@@ -63,9 +65,14 @@ class OrderProvider extends ChangeNotifier{
       "lastname": lastName.text,
       "address_1" : postAddress.text,
       "country_id" : "17",
-      "zone_id": "316"
+      "zone_id" : zone.zoneId.toString(),
     };
+
+
+    print(data);
+
     showCircularProgressIndicator(context);
+
    final res = await callApi.postWithConnectionCheck(context,apiUrl: "shipping/address",data: data);
    final jsonRes = jsonDecode(res.body);
    if(jsonRes['response'] == "success"){
@@ -89,9 +96,10 @@ class OrderProvider extends ChangeNotifier{
 
   selectAddress(DeliveryAddress delAdd){
     deliveryAddress.forEach((item) {
+      print(item.id);
       if(item.id == delAdd.id){
         item.selectState = true;
-        selectedDeliverAddress = item.id;
+        selectedAddressId = item.id;
       }else{
         item.selectState = false;
       }
@@ -126,7 +134,37 @@ class OrderProvider extends ChangeNotifier{
     }
   }
 
-  
+  List<Zone> zones = [];
+
+  Zone zone;
+
+  bool isZoneLoading = true;
+
+  getZones()async{
+    zones.length == 0 ? isZoneLoading = true : isZoneLoading = false;
+    final res = await callApi.get("zones");
+    final data = jsonDecode(res.body) as List;
+    if (data.length != zones.length) {
+      isZoneLoading = true;
+      zones.clear();
+      for (Map i in data) {
+        zones.add(Zone.fromJson(i));
+      }
+      isZoneLoading = false;
+      notifyListeners();
+    } else {
+      isZoneLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  onChangeZone(context,Zone zoneItem){
+    zone = zoneItem;
+    notifyListeners();
+    navPop(context);
+  }
+
   deleteAddress(context,int addressId)async{
     showCircularProgressIndicator(context);
     final res = await callApi.getWithConnectionCheck("shipping/address/remove/$addressId", context);
@@ -139,23 +177,72 @@ class OrderProvider extends ChangeNotifier{
     }
   }
 
+
+
+  showZoneList(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius(
+                      radius: 15,
+                    ),
+                    color: Colors.white,
+                  ),
+                  height: screenHeight(context) * 50 / 100,
+                  width: screenWidth(context),
+                  child: ClipRRect(
+                    borderRadius: borderRadius(
+                      radius: 15,
+                    ),
+                    child: ListView.builder(
+                        itemCount: zones.length,
+                        itemBuilder: (context, i) {
+                          final zoneItem = zones[i];
+                          return ListTile(
+                            onTap: (){
+                              onChangeZone(context,zoneItem);
+                            },
+                            title: Text(
+                              zoneItem.name,
+                              style: TextStyle(
+                                  color: Color(0xff979CA3), fontSize: 16),
+                            ),
+                          );
+                        }),
+                  ))
+            ],
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          );
+        });
+  }
+
   order(context)async{
+    showCircularProgressIndicator(context);
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
     User user = await User().localUserData();
 
     List<Map<String, dynamic>> cartJson = [];
     cartProvider.cart.forEach((element) {
-      cartJson.add(Cart().toJson(element));
+      cartJson.add(Cart().toJson(context,element));
     });
 
     final data = {
       "customer_id": user.id.toString(),
       "cart": json.encode(cartJson),
-      "total" : cartProvider.total.toString()
+      "total" : cartProvider.total.toString(),
+      "address_id" : selectedAddressId == null ? "" : selectedAddressId.toString(),
     };
-
     final res = await callApi.postWithConnectionCheck(context,apiUrl: "order", data: data);
-    print(res.body);
-
+    final jsonRes = jsonDecode(res.body);
+    if(jsonRes['response'] == "success"){
+      cartProvider.clearCart();
+      navPop(context);
+      navPush(context, OrderPlacedPage());
+    }
   }
 }

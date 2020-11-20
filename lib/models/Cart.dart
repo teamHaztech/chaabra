@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:chaabra/models/productModel.dart';
+import 'package:chaabra/providers/cartProvider.dart';
+import 'package:provider/provider.dart';
 
 import 'ProductOptions.dart';
 
@@ -22,8 +24,9 @@ class Cart {
         );
     }
 
-    Map<String, dynamic> toJson(Cart cart) => {
+    Map<String, dynamic> toJson(context,Cart cart) => {
         'cart_id': cart.id,
+        "price" : Provider.of<CartProvider>(context,listen: false).getProductTotalInCart(cart.product.id),
         'product': Product().toJson(cart.product)
     };
 

@@ -45,7 +45,6 @@ class CartProvider extends ChangeNotifier {
       return total.toString();
     }
 
-
     bool isCartLoading = false;
 
     fetchCartData(context)async{
@@ -78,6 +77,11 @@ class CartProvider extends ChangeNotifier {
       });
     }
 
+    clearCart(){
+          cart.clear();
+          notifyListeners();
+    }
+
 
     fetchProductOptions(int productId) async {
       final res = await callApi.get('product/option/$productId');
@@ -92,6 +96,7 @@ class CartProvider extends ChangeNotifier {
         'Bahrain',
         'India'
     ];
+
     List<String> states = [
         'Goa',
         'Manama',
@@ -104,7 +109,6 @@ class CartProvider extends ChangeNotifier {
     double delivery = 0.0;
 
     Cart _cartModel = Cart();
-
 
     addThisProductInServerCart(context)async{
       final layout = Provider.of<LandingPageProvider>(context,listen: false);
@@ -339,8 +343,6 @@ class CartProvider extends ChangeNotifier {
     var selectedOptionsMap = new LinkedHashMap();
     //Map data to send
     var selectedOptionJson = new LinkedHashMap();
-
-
 
     selectProductOption(context,OptionValue value, int id) {
       final option = "${value.productOptionId}"":""${value.productOptionValueId}";
