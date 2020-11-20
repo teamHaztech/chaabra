@@ -79,6 +79,8 @@ class CartProvider extends ChangeNotifier {
 
     clearCart(){
           cart.clear();
+          total = 0.0;
+          subTotal = 0.0;
           notifyListeners();
     }
 

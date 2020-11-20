@@ -222,7 +222,7 @@ class OrderProvider extends ChangeNotifier{
   }
 
   order(context)async{
-    showCircularProgressIndicator(context);
+    showProgressIndicator(context,loadingText: "Placing order..");
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
     User user = await User().localUserData();
 

@@ -103,7 +103,7 @@ input(
   );
 }
 
-showProgressIndicator(context){
+showProgressIndicator(context,{String loadingText = "Loading.."}){
   showDialog(
     barrierColor: Colors.black12,
       barrierDismissible: false,
@@ -116,7 +116,7 @@ showProgressIndicator(context){
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
-                child: JumpingText('Loading..',style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black54,fontSize: 15,letterSpacing: 1),),
+                child: JumpingText(loadingText,style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black54,fontSize: 15,letterSpacing: 1),),
               )),
         );
       });

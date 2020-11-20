@@ -32,7 +32,7 @@ class OrderPlacedPage extends StatelessWidget {
                     verticalSpace(),
                     verticalSpace(),
                     Text(
-                      'Out for delivery',
+                      'Your order has been placed!!',
                       style: TextStyle(fontSize: 32, color: primaryColor),
                     ),
                     verticalSpace(),
@@ -41,7 +41,7 @@ class OrderPlacedPage extends StatelessWidget {
                       width: screenWidth(context),
                       child: Center(
                         child: Text(
-                          'Delivery may take 20-30 minutes depending on your story distance',
+                          'Delivery may take 20-30 minutes depending on your store distance',
                           style: TextStyle(
                             fontSize: 20,
                             color: Color(0xffC6C6C6),
