@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'cartProvider.dart';
 import 'package:chaabra/models/Cart.dart';
+import 'package:chaabra/models/order.dart';
 
 class Country {
   final String dialCode;
@@ -31,6 +32,7 @@ class OrderProvider extends ChangeNotifier{
     fetchUserShippingAddress(context);
     setNameInAddressForm();
     getZones();
+    fetchOrderHistory(context);
   }
 
   CallApi callApi = CallApi();
@@ -73,14 +75,14 @@ class OrderProvider extends ChangeNotifier{
 
     showCircularProgressIndicator(context);
 
-   final res = await callApi.postWithConnectionCheck(context,apiUrl: "shipping/address",data: data);
-   final jsonRes = jsonDecode(res.body);
-   if(jsonRes['response'] == "success"){
+    final res = await callApi.postWithConnectionCheck(context,apiUrl: "shipping/address",data: data);
+    final jsonRes = jsonDecode(res.body);
+    if(jsonRes['response'] == "success"){
       deliveryAddress.add(DeliveryAddress.fromJson(jsonRes['address']));
       notifyListeners();
       navPop(context);
       navPop(context);
-   }
+    }
   }
 
   selectCountry(value){
@@ -121,7 +123,7 @@ class OrderProvider extends ChangeNotifier{
       isShippingAddressLoading = true;
       deliveryAddress.clear();
       for (Map i in data) {
-          deliveryAddress.add(DeliveryAddress.fromJson(i));
+        deliveryAddress.add(DeliveryAddress.fromJson(i));
       }
       if(pop == true){
         navPop(context);
@@ -245,4 +247,33 @@ class OrderProvider extends ChangeNotifier{
       navPush(context, OrderPlacedPage());
     }
   }
+
+
+  final List<Order> orders = [];
+
+  bool isOrderHistoryLoading = false;
+
+  fetchOrderHistory(context,{bool pop = false})async{
+    User user = await User().localUserData();
+    orders.length == 0 ? isOrderHistoryLoading = true : isOrderHistoryLoading = false;
+    notifyListeners();
+    final res = await callApi.getWithConnectionCheck('orders', context);
+    final data = jsonDecode(res.body) as List;
+    if (data.length != orders.length) {
+      isOrderHistoryLoading = true;
+      orders.clear();
+      for (Map i in data) {
+        orders.add(Order.fromJson(i));
+      }
+      if(pop == true){
+        navPop(context);
+      }
+      isOrderHistoryLoading = false;
+      notifyListeners();
+    } else {
+      isOrderHistoryLoading = false;
+      notifyListeners();
+    }
+  }
+
 }
