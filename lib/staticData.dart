@@ -285,3 +285,86 @@ final countries = [
   {"name": "Zimbabwe", "dial_code": "+263", "code": "ZW"},
   {"name": "Åland Islands", "dial_code": "+358", "code": "AX"}
 ];
+
+
+final orderData = [
+  {
+    "order_id": 8,
+    "customer_id": "20",
+    "order_status_id": "1",
+    "date_added": "2020-11-19 21:52:59",
+    "order_charges": {
+      "total": "67.0000",
+      "shipping": "1.5000",
+      "sub_total": "65.5000"
+    },
+    "status": {
+      "name": "Pending",
+      "order_status_id": 1
+    },
+    "ordered_products": [
+      {
+        "order_product_id": 68,
+        "order_id": "8",
+        "price": "1.5000",
+        "total": "1.5000",
+        "product_id": "99",
+        "product": {
+          "product_id": 99,
+          "image": "catalog/fish list /EHyB5XoWwAErg4i.jpg",
+          "details": {
+            "product_id": 99,
+            "name": " Halfbeak"
+          }
+        }
+      },
+      {
+        "order_product_id": 67,
+        "order_id": "8",
+        "price": "64.0000",
+        "total": "64.0000",
+        "product_id": "50",
+        "product": {
+          "product_id": 50,
+          "image": "catalog/fish list /-300x261.png",
+          "details": {
+            "product_id": 50,
+            "name": "Bale fish"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "order_id": 39,
+    "customer_id": "20",
+    "order_status_id": "1",
+    "date_added": "2020-11-20 06:09:22",
+    "order_charges": {
+      "total": "11.0000",
+      "shipping": "1.5000",
+      "sub_total": "9.5000"
+    },
+    "status": {
+      "name": "Pending",
+      "order_status_id": 1
+    },
+    "ordered_products": [
+      {
+        "order_product_id": 91,
+        "order_id": "39",
+        "price": "9.5000",
+        "total": "9.5000",
+        "product_id": "160",
+        "product": {
+          "product_id": 160,
+          "image": "catalog/Veg/kiwifruit.jpg",
+          "details": {
+            "product_id": 160,
+            "name": "Kiwi fruit"
+          }
+        }
+      }
+    ]
+  }
+];

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chaabra/screens/OrderPlacedPage.dart';
+import 'package:chaabra/staticData.dart';
 import 'package:provider/provider.dart';
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/DeliveryAddresss.dart';
@@ -224,11 +225,13 @@ class OrderProvider extends ChangeNotifier{
   }
 
   order(context)async{
-    showProgressIndicator(context,loadingText: "Placing order..");
+    // showProgressIndicator(context,loadingText: "Placing order..");
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
     User user = await User().localUserData();
 
     List<Map<String, dynamic>> cartJson = [];
+
+
     cartProvider.cart.forEach((element) {
       cartJson.add(Cart().toJson(context,element));
     });
@@ -239,7 +242,9 @@ class OrderProvider extends ChangeNotifier{
       "total" : cartProvider.total.toString(),
       "address_id" : selectedAddressId == null ? "" : selectedAddressId.toString(),
     };
+
     final res = await callApi.postWithConnectionCheck(context,apiUrl: "order", data: data);
+    print(res.body);
     final jsonRes = jsonDecode(res.body);
     if(jsonRes['response'] == "success"){
       cartProvider.clearCart();
@@ -259,7 +264,6 @@ class OrderProvider extends ChangeNotifier{
     notifyListeners();
     final res = await callApi.getWithConnectionCheck('orders', context);
     final data = jsonDecode(res.body) as List;
-    print(data);
     if (data.length != orders.length) {
       isOrderHistoryLoading = true;
       orders.clear();

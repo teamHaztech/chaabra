@@ -4,6 +4,7 @@ import 'package:chaabra/models/productModel.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:chaabra/screens/CartPage.dart';
+import 'package:chaabra/screens/OrdersPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:intl/intl.dart';
 
 import '../config.dart';
 
@@ -317,20 +319,26 @@ label({String title, Color color, EdgeInsets padding = const EdgeInsets.symmetri
   );
 }
 
-verticalSpace() {
+verticalSpace({double height = 15}) {
   return SizedBox(
-    height: 15,
+    height: height,
   );
 }
 
-drawerTile({String title, Color color = Colors.white}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-    child: Text(
-      title,
-      style: TextStyle(
-        color: color,
-        fontSize: 18,
+drawerTile({String title, Color color = Colors.white,Function onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: color,
+            fontSize: 18,
+          ),
+        ),
       ),
     ),
   );
@@ -768,7 +776,9 @@ drawer(context) {
                         height: 10,
                       ),
                       drawerTile(title: "My account"),
-                      drawerTile(title: "Order history"),
+                      drawerTile(title: "Order history",onTap: (){
+                        navPush(context, OrdersPage());
+                      }),
                       drawerTile(title: "About us"),
                       drawerTile(title: "Returns"),
                       drawerTile(title: "Contact"),
@@ -923,10 +933,20 @@ progressIndicator({double height = 50, bool circularLoader = false}) {
   );
 }
 
-
+String daynameMonthDayYear(DateTime date) {
+  var formatter = new DateFormat("yMMMMEEEEd");
+  String formatted = formatter.format(date);
+  return formatted;
+}
 
 circularProgressIndicator(){
-  return Center(child: CircularProgressIndicator(strokeWidth: 3,));
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Center(child: SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(strokeWidth: 1,))),
+  );
 }
 
 
@@ -941,5 +961,24 @@ containerLoader({double height = 20, double width = 50, double radius = 10}){
         borderRadius: borderRadius(radius: radius),
       child: progressIndicator(),
     ),),
+  );
+}
+
+
+labeledTitle({CrossAxisAlignment crossAxisAlignment,String title, String label}){
+  return Column(
+    crossAxisAlignment: crossAxisAlignment,
+    children: [
+      Text(title,
+          style: TextStyle(
+              color: primaryColor,
+              fontSize: 14,
+              fontWeight: FontWeight.normal)),
+      Text(label,
+          style: TextStyle(
+              fontSize: 12,
+              color: Colors.black38,
+              fontWeight: FontWeight.normal)),
+    ],
   );
 }

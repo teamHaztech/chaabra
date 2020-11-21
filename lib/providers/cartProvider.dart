@@ -116,7 +116,9 @@ class CartProvider extends ChangeNotifier {
       final layout = Provider.of<LandingPageProvider>(context,listen: false);
       if(selectedOptionJson.isNotEmpty){
         User user = await User().localUserData();
+
         final List<String> options = [];
+
         selectedOptionJson.forEach((key, value) {
           options.add(value);
         });
