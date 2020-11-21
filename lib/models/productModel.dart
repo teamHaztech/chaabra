@@ -9,10 +9,10 @@ class Product {
     
     factory Product.fromJson(Map<String , dynamic>json){
         return Product(
-            id: json['product_id'],
+            id: int.parse(json['product_id'].toString()),
             image: json['image'],
             model: json['model'],
-            price: double.parse(json['price']),
+            price: json['price'] == null ? 0.0 : double.parse(json['price']),
             productDetails: ProductDetails.fromJson(json['details'])
         );
     }

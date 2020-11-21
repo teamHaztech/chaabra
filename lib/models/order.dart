@@ -3,20 +3,35 @@ import 'package:chaabra/models/productModel.dart';
 class Order{
   final int id;
   final OrderStatus status;
-  final List<Product> products;
+  final List<OrderedProduct> orderedProducts;
 
-  Order({this.id,this.products,this.status});
+  Order({this.id,this.orderedProducts,this.status});
 
   factory Order.fromJson(Map<String, dynamic>json){
     var productList = json['ordered_products'] as List;
-    List<Product> products = productList != null ? productList.map((e) => Product.fromJson(e)).toList() : [];
+    List<OrderedProduct> products = productList != null ? productList.map((e) => OrderedProduct.fromJson(e)).toList() : [];
     return Order(
-        id: int.parse(json['order']),
-        products: products,
+        id: json['order_id'],
+        orderedProducts: products,
         status: OrderStatus.fromJson(json['status'])
     );
   }
 }
+
+
+
+class OrderedProduct{
+  final double totalPrice;
+  final Product product;
+  OrderedProduct({this.product,this.totalPrice});
+  factory OrderedProduct.fromJson(Map<String, dynamic>json){
+    return OrderedProduct(
+      totalPrice: double.parse(json['total']),
+      product: Product.fromJson(json['product'])
+    );
+  }
+}
+
 
 class OrderStatus{
   final int id;
@@ -24,7 +39,7 @@ class OrderStatus{
   OrderStatus({this.id,this.name});
   factory OrderStatus.fromJson(Map<String, dynamic>json){
     return OrderStatus(
-        id: int.parse(json['order_status_id']),
+        id: json['order_status_id'],
         name: json['name']
     );
   }
