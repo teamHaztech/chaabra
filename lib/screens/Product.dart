@@ -49,6 +49,7 @@ class _ProductPageState extends State<ProductPage> {
         return;
       },
       child: Scaffold(
+        endDrawer: cartDrawer(context),
         key: _scaffoldKey,
         body: SafeArea(
           child: Stack(

@@ -1,7 +1,6 @@
 import 'package:chaabra/models/CategoryModel.dart';
 import 'package:chaabra/models/WishList.dart';
 import 'package:chaabra/providers/CategoryProvider.dart';
-import 'package:chaabra/providers/productsProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/HomePage.dart';
 import 'package:flutter/material.dart';

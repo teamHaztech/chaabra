@@ -129,9 +129,18 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                 style: TextStyle(fontSize: 17),
                               ),
                               verticalSpace(height: 5),
-                              Text(order.paymentDetails.address,style: addressStyle,),
-                              Text(order.paymentDetails.zone,style: addressStyle,),
-                              Text(order.paymentDetails.country,style: addressStyle,),
+                              Text(
+                                order.paymentDetails.address,
+                                style: addressStyle,
+                              ),
+                              Text(
+                                order.paymentDetails.zone,
+                                style: addressStyle,
+                              ),
+                              Text(
+                                order.paymentDetails.country,
+                                style: addressStyle,
+                              ),
                             ],
                           )),
                     ),
@@ -206,9 +215,8 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                                   padding: EdgeInsets.all(0),
                                                 ),
                                                 Material(
-                                                    borderRadius:
-                                                    borderRadius(
-                                                        radius: 5),
+                                                  borderRadius:
+                                                      borderRadius(radius: 5),
                                                   elevation: 1,
                                                   child: Container(
                                                       height: 45,
@@ -239,9 +247,10 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                               children: [
                                                 labeledTitle(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .end,
-                                                    title: order.orderedProducts[i].option,
+                                                        CrossAxisAlignment.end,
+                                                    title: order
+                                                        .orderedProducts[i]
+                                                        .option,
                                                     label: "Net Wt."),
                                                 labeledTitle(
                                                     crossAxisAlignment:
@@ -255,6 +264,23 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                         )),
                                   );
                                 },
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  linearLabeledTitle(
+                                      label: "Sub total",
+                                      title: order.orderCharges.subTotal
+                                          .toString()),
+                                  linearLabeledTitle(
+                                      label: "Flat Shipping Rate",
+                                      title: order.orderCharges.shipping
+                                          .toString()),
+                                  linearLabeledTitle(
+                                      label: "Total",
+                                      title: order.orderCharges.total
+                                          .toString()),
+                                ],
                               )
                             ],
                           )),
@@ -270,6 +296,41 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                 leadingButtonsHidden: true),
           ],
         ),
+      ),
+    );
+  }
+
+  linearLabeledTitle({String label, String title}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4,right: 4,left: 4,bottom: 1),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "BHD $title",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

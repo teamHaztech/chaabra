@@ -43,6 +43,7 @@ dependencies:
   webview_flutter:
   flutter_webview_plugin: ^0.3.10+1
   intl: ^0.16.1
+  stream_transform: ^0.0.19
 
 
 dev_dependencies:

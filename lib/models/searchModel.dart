@@ -1,17 +1,13 @@
+import 'package:chaabra/models/productModel.dart';
+
 class SearchData{
-    final int productId;
-    final String name;
-    final String image;
-    final String price;
+    final Product product;
     
-    SearchData({this.image,this.name,this.productId,this.price});
+    SearchData({this.product});
     
     factory SearchData.fromJson(Map<String, dynamic>json){
         return SearchData(
-            productId: json['product_id'],
-            name: json['details']['name'],
-            image: json['image'],
-            price: json['price']
+            product: Product.fromJson(json)
         );
     }
 }

@@ -245,6 +245,7 @@ class OrderProvider extends ChangeNotifier{
     if(jsonRes['response'] == "success"){
       cartProvider.clearCart();
       navPop(context);
+      fetchOrderHistory(context);
       navPush(context, OrderPlacedPage());
     }
   }
@@ -258,7 +259,7 @@ class OrderProvider extends ChangeNotifier{
     User user = await User().localUserData();
     orders.length == 0 ? isOrderHistoryLoading = true : isOrderHistoryLoading = false;
     notifyListeners();
-    final res = await callApi.getWithConnectionCheck('orders', context);
+    final res = await callApi.getWithConnectionCheck('orders/${user.id}', context);
     final data = jsonDecode(res.body) as List;
     if (data.length != orders.length) {
       isOrderHistoryLoading = true;
