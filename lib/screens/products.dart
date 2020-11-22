@@ -212,7 +212,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             tag: 'productImage${product.id}',
                                             child: ClipRRect(
                                               borderRadius: borderRadius(radius: 3),
-                                              child: Image.network('$assetsPath${product.image}',fit: BoxFit.cover,),
+                                              child: product.image == null ? Image.asset('assets/images/no-image.jpg',fit: BoxFit.cover,) : Image.network('$assetsPath${product.image}',fit: BoxFit.cover,),
                                             ),
                                           ),
                                         ),

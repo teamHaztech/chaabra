@@ -180,10 +180,7 @@ class OrderProvider extends ChangeNotifier{
     }
   }
   
-  searchProducts()async{
-  
-  }
-  
+
   showZoneList(context) {
     showDialog(
         context: context,

@@ -5,6 +5,7 @@ import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:chaabra/screens/CartPage.dart';
 import 'package:chaabra/screens/OrdersPage.dart';
+import 'package:chaabra/screens/Search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -406,7 +407,9 @@ header(context,
             child: leadingButtonsHidden == true ? SizedBox() : Row(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    navPush(context, SearchPage());
+                  },
                   child: SvgPicture.asset(
                     'assets/svg/search.svg',
                     height: 23,
