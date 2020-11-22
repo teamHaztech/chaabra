@@ -16,8 +16,6 @@ class CartPage extends StatelessWidget {
     final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: cartDrawer(context),
-      drawer: drawer(context),
       body: SafeArea(
         child: Stack(
           children: [

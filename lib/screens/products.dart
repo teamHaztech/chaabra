@@ -37,8 +37,6 @@ class _ProductsPageState extends State<ProductsPage> {
       final categoryProvider = Provider.of<CategoryProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: cartDrawer(context),
-      drawer: drawer(context),
       body: SafeArea(
         child: Stack(
           children: [

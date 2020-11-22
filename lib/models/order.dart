@@ -27,11 +27,13 @@ class Order{
 class OrderedProduct{
   final double totalPrice;
   final Product product;
-  OrderedProduct({this.product,this.totalPrice});
+  final String option;
+  OrderedProduct({this.product,this.totalPrice,this.option});
   factory OrderedProduct.fromJson(Map<String, dynamic>json){
     return OrderedProduct(
       totalPrice: double.parse(json['total']),
-      product: Product.fromJson(json['product'])
+      product: Product.fromJson(json['product']),
+      option: json['product_option'][0]['value']
     );
   }
 }

@@ -291,7 +291,7 @@ borderRadiusOn(
       topRight: Radius.circular(topRight));
 }
 
-label({String title, Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16)}) {
+label({String title,bool disableUnderline = false,Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16)}) {
   return Padding(
     padding: padding,
     child: Column(
@@ -305,15 +305,21 @@ label({String title, Color color, EdgeInsets padding = const EdgeInsets.symmetri
               color: color == null ? primaryColor : color,
               fontWeight: FontWeight.w400),
         ),
-        SizedBox(
-          height: 5,
-        ),
-        Container(
-          height: 2,
-          width: 40,
-          decoration: BoxDecoration(
-              color: orangeC, borderRadius: borderRadius(radius: 10)),
-        )
+       disableUnderline == false ? Column(
+         mainAxisAlignment: MainAxisAlignment.start,
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: [
+           SizedBox(
+             height: 5,
+           ),
+           Container(
+             height: 2,
+             width: 40,
+             decoration: BoxDecoration(
+                 color: orangeC, borderRadius: borderRadius(radius: 10)),
+           )
+         ],)
+           : SizedBox()
       ],
     ),
   );

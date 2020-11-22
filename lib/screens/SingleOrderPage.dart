@@ -20,18 +20,19 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<OrderProvider>(context, listen: false).fetchOrderHistory(context);
+      Provider.of<OrderProvider>(context, listen: false)
+          .fetchOrderHistory(context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final orderProvider = Provider.of<OrderProvider>(context);
     final order = widget.order;
+    var addressStyle = TextStyle(color: Colors.black54);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: cartDrawer(context),
-      drawer: drawer(context),
       body: SafeArea(
         child: Stack(
           children: [
@@ -41,7 +42,8 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
                       child: Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
@@ -56,61 +58,47 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                           ),
                           height: 85,
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  label(title: "Order id #${order.id}",padding: EdgeInsets.all(0)),
-                                  labeledTitle(crossAxisAlignment: CrossAxisAlignment.start,title: daynameMonthDayYear(order.dateAdded),label: "Ordered on"),
-                                ],),
+                                  label(
+                                      title: "Order id #${order.id}",
+                                      padding: EdgeInsets.all(0)),
+                                  labeledTitle(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      title:
+                                          daynameMonthDayYear(order.dateAdded),
+                                      label: "Ordered on"),
+                                ],
+                              ),
                               Column(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  labeledTitle(crossAxisAlignment: CrossAxisAlignment.end,title: order.paymentDetails.method,label: "Payment method"),
-                                  labeledTitle(crossAxisAlignment: CrossAxisAlignment.end,title: order.status.name,label: "Order status"),
-                                ],)
-                            ],)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-                      child: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: Offset(0, 0),
-                                  color: Colors.black12,
-                                  blurRadius: 1),
-                            ],
-                            color: Colors.white,
-                            borderRadius: borderRadius(radius: 5),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  label(title: "Payment address",padding: EdgeInsets.all(0)),
-                                ],),
-                              verticalSpace(height: 8),
-                              Text(order.paymentDetails.name,style: TextStyle(fontSize: 17),),
-                              Text(order.paymentDetails.address),
-                              Text(order.paymentDetails.zone),
-                              Text(order.paymentDetails.country),
+                                  labeledTitle(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      title: order.paymentDetails.method,
+                                      label: "Payment method"),
+                                  labeledTitle(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      title: order.status.name,
+                                      label: "Order status"),
+                                ],
+                              )
                             ],
                           )),
                     ),
-
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
                       child: Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
@@ -128,21 +116,67 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  label(title: "Products",padding: EdgeInsets.all(0)),
-                                ],),
+                                  label(
+                                      title: "Payment address",
+                                      padding: EdgeInsets.all(0)),
+                                ],
+                              ),
+                              verticalSpace(height: 8),
+                              Text(
+                                order.paymentDetails.name,
+                                style: TextStyle(fontSize: 17),
+                              ),
+                              verticalSpace(height: 5),
+                              Text(order.paymentDetails.address,style: addressStyle,),
+                              Text(order.paymentDetails.zone,style: addressStyle,),
+                              Text(order.paymentDetails.country,style: addressStyle,),
+                            ],
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 0),
+                                  color: Colors.black12,
+                                  blurRadius: 1),
+                            ],
+                            color: Colors.white,
+                            borderRadius: borderRadius(radius: 5),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  label(
+                                      title: "Products",
+                                      padding: EdgeInsets.all(0)),
+                                ],
+                              ),
                               verticalSpace(height: 8),
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: order.orderedProducts.length,
                                 itemBuilder: (context, i) {
-                                  final product = order.orderedProducts[i].product;
-                                  final totalPrice = order.orderedProducts[i].totalPrice;
+                                  final product =
+                                      order.orderedProducts[i].product;
+                                  final totalPrice =
+                                      order.orderedProducts[i].totalPrice;
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Container(
+                                        height: 88,
                                         padding: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                           boxShadow: [
@@ -154,41 +188,71 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                           color: Colors.white,
                                           borderRadius: borderRadius(radius: 5),
                                         ),
-                                        height: 85,
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                label(title: "${product.productDetails.name}",padding: EdgeInsets.all(0)),
-                                                labeledTitle(crossAxisAlignment: CrossAxisAlignment.start,title: daynameMonthDayYear(order.dateAdded),label: "Ordered on"),
-                                              ],),
-                                            Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: (){
-                                                    navPush(context, SingleOrdersPage(order: order,));
-                                                  },
+                                                label(
+                                                  disableUnderline: true,
+                                                  title:
+                                                      "${product.productDetails.name}",
+                                                  padding: EdgeInsets.all(0),
+                                                ),
+                                                Material(
+                                                    borderRadius:
+                                                    borderRadius(
+                                                        radius: 5),
+                                                  elevation: 1,
                                                   child: Container(
+                                                      height: 45,
+                                                      width: 65,
                                                       decoration: BoxDecoration(
                                                           color: Colors.black12,
-                                                          borderRadius: borderRadius(radius: 5)
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                                                        child: Icon(Icons.remove_red_eye,color: Colors.black45,),
+                                                          borderRadius:
+                                                              borderRadius(
+                                                                  radius: 5)),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            borderRadius(
+                                                                radius: 5),
+                                                        child: Image.network(
+                                                          "$assetsPath${product.image}",
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       )),
                                                 ),
-                                                labeledTitle(crossAxisAlignment: CrossAxisAlignment.end,title: 'BHD ${totalPrice.toString()}',label: "Price"),
-                                              ],)
-                                          ],)),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                labeledTitle(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .end,
+                                                    title: order.orderedProducts[i].option,
+                                                    label: "Net Wt."),
+                                                labeledTitle(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    title:
+                                                        'BHD ${totalPrice.toString()}',
+                                                    label: "Total"),
+                                              ],
+                                            )
+                                          ],
+                                        )),
                                   );
                                 },
                               )

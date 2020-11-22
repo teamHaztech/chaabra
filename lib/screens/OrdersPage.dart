@@ -30,8 +30,6 @@ class _OrdersPageState extends State<OrdersPage> {
     final orderProvider = Provider.of<OrderProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: cartDrawer(context),
-      drawer: drawer(context),
       body: SafeArea(
         child: Stack(
           children: [

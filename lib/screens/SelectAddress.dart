@@ -21,8 +21,6 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
     final orderProvider = Provider.of<OrderProvider>(context);
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: cartDrawer(context),
-      drawer: drawer(context),
       body: SafeArea(
         child: Stack(
           children: [

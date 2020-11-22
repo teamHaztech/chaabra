@@ -179,9 +179,11 @@ class OrderProvider extends ChangeNotifier{
       navPop(context);
     }
   }
-
-
-
+  
+  searchProducts()async{
+  
+  }
+  
   showZoneList(context) {
     showDialog(
         context: context,
@@ -223,26 +225,23 @@ class OrderProvider extends ChangeNotifier{
           );
         });
   }
-
+  
+  
+  
   order(context)async{
-    // showProgressIndicator(context,loadingText: "Placing order..");
+    showProgressIndicator(context,loadingText: "Placing order..");
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
     User user = await User().localUserData();
-
     List<Map<String, dynamic>> cartJson = [];
-
-
     cartProvider.cart.forEach((element) {
       cartJson.add(Cart().toJson(context,element));
     });
-
     final data = {
       "customer_id": user.id.toString(),
       "cart": json.encode(cartJson),
       "total" : cartProvider.total.toString(),
       "address_id" : selectedAddressId == null ? "" : selectedAddressId.toString(),
     };
-
     final res = await callApi.postWithConnectionCheck(context,apiUrl: "order", data: data);
     print(res.body);
     final jsonRes = jsonDecode(res.body);
