@@ -1,7 +1,6 @@
 import 'package:chaabra/models/productModel.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/orderProvider.dart';
-import 'package:chaabra/screens/SelectAddress.dart';
 import 'package:chaabra/screens/SingleOrderPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
