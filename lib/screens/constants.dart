@@ -49,6 +49,7 @@ navPop(BuildContext context) {
 }
 
 final orangeC = Color(0xffE96631);
+final blueC = Color(0xff0d52d6);
 
 screenHeight(context) {
   return MediaQuery.of(context).size.height;
@@ -139,7 +140,7 @@ button({Function onTap, String title}) {
       height: 47.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: const Color(0xff0d52d6),
+        color: blueC,
       ),
       child: Center(
         child: Text(
@@ -714,7 +715,7 @@ cartDrawer(context) {
                             Expanded(
                               child: fullWidthButton(context,
                                   title: "View cart",
-                                  backgroundColor: Color(0xff0D52D6),
+                                  backgroundColor: blueC,
                                   onTap: (){
                                     navPush(context, CartPage());
                                   }

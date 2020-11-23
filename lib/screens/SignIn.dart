@@ -162,7 +162,7 @@ class SignIn extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 14,
-                                color: const Color(0xff0d52d6),
+                                color: blueC,
                                 fontWeight: FontWeight.w500,
                               ),
                               textAlign: TextAlign.left,
@@ -177,7 +177,7 @@ class SignIn extends StatelessWidget {
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 14,
-                                color: const Color(0xff0d52d6),
+                                color: blueC,
                                 fontWeight: FontWeight.w500,
                               ),
                               textAlign: TextAlign.left,

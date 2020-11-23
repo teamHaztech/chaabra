@@ -58,7 +58,7 @@ class OrderPlacedPage extends StatelessWidget {
                                 navPush(context, OrdersPage());
                             }),
                             verticalSpace(),
-                            fullWidthButton(context,title: 'Continue shopping',backgroundColor: Color(0xff0d52d6),onTap: (){
+                            fullWidthButton(context,title: 'Continue shopping',backgroundColor: blueC,onTap: (){
                                 popOutMultipleTimes(context, numberOfTimes: 4);
                             }),
                         ],),),

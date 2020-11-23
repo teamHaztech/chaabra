@@ -128,7 +128,7 @@ class WishlistPage extends StatelessWidget {
                                       fontSize: 8,
                                       color: Colors.white,
                                     ),
-                                    backgroundColor: Color(0xff0d52d6),
+                                    backgroundColor: blueC,
                                     onTap: (){
                                       cartProvider.addThisProductInCartLocally(Cart(product: product,));
                                     }
