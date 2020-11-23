@@ -59,10 +59,14 @@ class CategoryProvider extends ChangeNotifier {
 
   double rangeMin = 0;
   double rangeMax = 3;
+
   double selectedRangeMin = 1;
   double selectedRangeMax = 3;
 
-  double animatedContainerHeight = 0;
+  bool isFilterShow = true;
+
+
+  double animatedContainerHeight = 135;
 
   onChangePriceRange(min,max){
     selectedRangeMax = max;
@@ -71,9 +75,37 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   showFilters(){
-    animatedContainerHeight == 0 ? animatedContainerHeight = 135 : animatedContainerHeight = 0;
+    if(isFilterShow == true){
+      animatedContainerHeight = 0;
+      isFilterShow = false;
+    }else{
+      isFilterShow = true;
+      animatedContainerHeight = 135;
+    }
     notifyListeners();
   }
+
+  applyFilter(context, int categoryId)async{
+    final minPrice = selectedRangeMin.round();
+    final maxPrice = selectedRangeMax.round();
+    final data = {
+      "minPrice": minPrice.toString(),
+      "maxPrice": maxPrice.toString(),
+      "categoryId": categoryId.toString()
+    };
+    isCategoryProductsLoading = true;
+    notifyListeners();
+    final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "products/filter");
+    final json = jsonDecode(res.body) as List;
+    categoryProducts.clear();
+    notifyListeners();
+    for (Map i in json) {
+      categoryProducts.add(CategoryProduct.fromJson(i));
+    }
+    isCategoryProductsLoading = false;
+    notifyListeners();
+  }
+
 }
 
 class Price{
@@ -94,10 +126,4 @@ class Price{
     price.sort();
     return price.first;
   }
-
-  applyFilter(){
-
-  }
-
-
 }

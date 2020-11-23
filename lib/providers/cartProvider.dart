@@ -16,7 +16,6 @@ class CartProvider extends ChangeNotifier {
     CartProvider(){
         countTotal(null);
         fetchCartData(context);
-        fetchProductOptions(157);
     }
 
     clearProductData(){

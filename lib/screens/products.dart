@@ -70,7 +70,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               frs.RangeSlider(
                                 lowerValue: categoryProvider.selectedRangeMin,
                                 upperValue: categoryProvider.selectedRangeMax,
-                                min: categoryProvider.categoryProductsTemp.isEmpty ? 0 : Price().getMinPrice(categoryProvider.categoryProductsTemp) - 1,
+                                min: categoryProvider.categoryProductsTemp.isEmpty ? 0 : Price().getMinPrice(categoryProvider.categoryProductsTemp),
                                 max: categoryProvider.categoryProductsTemp.isEmpty ? 10 : Price().getMaxPrice(categoryProvider.categoryProductsTemp),
                                 onChanged: (min, max) {
                                     categoryProvider.onChangePriceRange(min, max);
@@ -79,10 +79,10 @@ class _ProductsPageState extends State<ProductsPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("BHD ${categoryProvider.selectedRangeMin.toInt().toDouble().toString()}",style: TextStyle(
+                                  Text("BHD ${categoryProvider.selectedRangeMin.toStringAsFixed(2)}",style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),),
-                                  Text("BHD ${categoryProvider.selectedRangeMax.toInt().toDouble().toString()}",style: TextStyle(
+                                  Text("BHD ${categoryProvider.selectedRangeMax.toStringAsFixed(2)}",style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold))
                                 ],
@@ -102,7 +102,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               children: [
                                 SvgPicture.asset(
                                   'assets/svg/sort.svg',
-                                  height: 18,
+                                  height: 16,
                                 ),
                                 SizedBox(
                                   width: 8,
@@ -110,7 +110,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 Text(
                                   'Sort',
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize: 18, color: Colors.white),
                                 )
                               ],
                             ),
@@ -122,18 +122,18 @@ class _ProductsPageState extends State<ProductsPage> {
                             color: Colors.white,
                         ),
                         Expanded(
-                          child: GestureDetector(
+                          child: categoryProvider.isFilterShow == false ? GestureDetector(
                             onTap: (){
-                            categoryProvider.showFilters();
+                              categoryProvider.showFilters();
                             },
-                            child: categoryProvider.animatedContainerHeight == 0 ? Container(
+                            child: Container(
                               color: Color(0xff3A4754),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
                                     'assets/svg/filter.svg',
-                                    height: 18,
+                                    height: 16,
                                   ),
                                   SizedBox(
                                     width: 8,
@@ -141,32 +141,54 @@ class _ProductsPageState extends State<ProductsPage> {
                                   Text(
                                     'Filter',
                                     style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
+                                        fontSize: 18, color: Colors.white),
                                   )
                                 ],
                               ),
                               height: 43,
-                            ):Container(
-                              color: blueC,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svg/filter.svg',
-                                    height: 18,
+                            ),
+                          ):Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    categoryProvider.applyFilter(context, widget.category.id);
+                                  },
+                                  child: Container(
+                                    color: blueC,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svg/filter.svg',
+                                          height: 16,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          'Apply Filter',
+                                          style: TextStyle(
+                                              fontSize: 18, color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                    height: 43,
                                   ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    'Apply Filter',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  )
-                                ],
+                                ),
                               ),
-                              height: 43,
-                            )
+                              SizedBox(width: 2,),
+                              GestureDetector(
+                                onTap: (){
+                                  categoryProvider.showFilters();
+                                },
+                                child: Container(
+                                  color: blueC,
+                                  child: Icon(Icons.keyboard_arrow_up,color: Colors.white,size: 16,),
+                                  height: 43,width: 43,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
