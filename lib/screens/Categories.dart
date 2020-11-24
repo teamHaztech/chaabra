@@ -86,7 +86,7 @@ categoryItem(context,
         Positioned(
           top: -5,
           right: right,
-          child: Image.network(
+          child: image == null ? SizedBox() : Image.network(
             image,
             height: 114,
           ),

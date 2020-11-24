@@ -63,28 +63,26 @@ class CategoryProvider extends ChangeNotifier {
   double selectedRangeMin = 1;
   double selectedRangeMax = 3;
 
-  bool isFilterShow = true;
-
-
-  double animatedContainerHeight = 135;
-
+  bool isFilterShow = false;
+  
   onChangePriceRange(min,max){
     selectedRangeMax = max;
     selectedRangeMin = min;
     notifyListeners();
   }
 
-  showFilters(){
+  toggleFilter(){
+    print("toggled");
     if(isFilterShow == true){
-      animatedContainerHeight = 0;
       isFilterShow = false;
     }else{
       isFilterShow = true;
-      animatedContainerHeight = 135;
     }
     notifyListeners();
   }
 
+  
+  
   applyFilter(context, int categoryId)async{
     final minPrice = selectedRangeMin.round();
     final maxPrice = selectedRangeMax.round();

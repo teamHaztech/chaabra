@@ -33,7 +33,6 @@ class OrderProvider extends ChangeNotifier{
     fetchUserShippingAddress(context);
     setNameInAddressForm();
     getZones();
-    fetchOrderHistory(context);
   }
 
   CallApi callApi = CallApi();

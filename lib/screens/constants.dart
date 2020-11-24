@@ -362,8 +362,10 @@ showToast(message) {
       fontSize: 12.0);
 }
 
+
+
 header(context,
-    {GlobalKey<ScaffoldState> key, bool popButton = false, String title = '', leadingButtonsHidden = false}) {
+    {GlobalKey<ScaffoldState> key, bool popButton = false, String title = '', leadingButtonsHidden = false,Function onPop}) {
   final _scaffoldKey = key;
   final cartProvider = Provider.of<CartProvider>(context);
   return Material(
@@ -382,9 +384,9 @@ header(context,
               children: [
                 popButton == true
                     ? GestureDetector(
-                        onTap: () {
+                        onTap: onPop == null ? (){
                           navPop(context);
-                        },
+                        } : onPop,
                         child: Icon(
                           Icons.arrow_back_ios,
                           size: 23,
