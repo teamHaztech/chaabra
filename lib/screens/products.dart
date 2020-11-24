@@ -22,14 +22,6 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final GlobalKey containerKey = GlobalKey();
-
-
-
-  getSizeAndPosition() {
-    RenderBox _cardBox = containerKey.currentContext.findRenderObject();
-    print(_cardBox.size);
-  }
 
   @override
   void initState() {
@@ -38,8 +30,6 @@ class _ProductsPageState extends State<ProductsPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<CategoryProvider>(context, listen: false)
           .fetchCategoryProduct(widget.category);
-      
-      getSizeAndPosition();
     });
   }
 
@@ -489,7 +479,6 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget filterContainer(CategoryProvider categoryProvider) {
     return AnimatedContainer(
-      key: containerKey,
       height: categoryProvider.isFilterShown == true ? 211 : 0,
       curve: Curves.easeIn,
       duration: Duration(milliseconds: 500),
