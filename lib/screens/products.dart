@@ -5,6 +5,7 @@ import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'Product.dart';
 import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
@@ -55,7 +56,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AnimatedContainer(
-                        height: categoryProvider.isFilterShow == true ? 135 : 0,
+                        height: categoryProvider.isFilterShow == true ? null : 0,
                         curve: Curves.easeIn,
                         padding: EdgeInsets.all(14),
                         duration: Duration(milliseconds: 500),
@@ -65,35 +66,20 @@ class _ProductsPageState extends State<ProductsPage> {
                           children: [
                             label(title: "Filter", padding: EdgeInsets.all(0)),
                             verticalSpace(height: 12),
-                            Text(
-                              "Price",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: blueC,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Column(
+                            filterLabel("Price"),
+                            priceRangeWidget(categoryProvider),
+                            verticalSpace(),
+                            filterLabel("Availability"),
+                            verticalSpace(height: 5),
+                            Row(
                               children: [
-                                frs.RangeSlider(
-                                  lowerValue: categoryProvider.selectedRangeMin,
-                                  upperValue: categoryProvider.selectedRangeMax,
-                                  min: categoryProvider.categoryProductsTemp.isEmpty ? 0 : Price().getMinPrice(categoryProvider.categoryProductsTemp),
-                                  max: categoryProvider.categoryProductsTemp.isEmpty ? 10 : Price().getMaxPrice(categoryProvider.categoryProductsTemp),
-                                  onChanged: (min, max) {
-                                      categoryProvider.onChangePriceRange(min, max);
-                                  },
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("BHD ${categoryProvider.selectedRangeMin.toStringAsFixed(2)}",style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),),
-                                    Text("BHD ${categoryProvider.selectedRangeMax.toStringAsFixed(2)}",style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold))
-                                  ],
-                                )
+                                Checkbox(
+                                    value: categoryProvider.isInStock, onChanged: (value){
+                                  categoryProvider.toggleAvailability(value);
+                                }),
+                                Text("In Stock",style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),)
                               ],
                             )
                           ],
@@ -173,6 +159,10 @@ class _ProductsPageState extends State<ProductsPage> {
                                           SizedBox(
                                             width: 8,
                                           ),
+                                          categoryProvider.isCategoryProductsLoading == true ?
+                                          JumpingText("Apply Filter",style: TextStyle(
+                                              fontSize: 18, color: Colors.white),)
+                                          :
                                           Text(
                                             'Apply Filter',
                                             style: TextStyle(
@@ -377,6 +367,43 @@ class _ProductsPageState extends State<ProductsPage> {
         ),
       ),
     );
+  }
+
+  Column priceRangeWidget(CategoryProvider categoryProvider) {
+    return Column(
+                            children: [
+                              frs.RangeSlider(
+                                lowerValue: categoryProvider.selectedRangeMin,
+                                upperValue: categoryProvider.selectedRangeMax,
+                                min: categoryProvider.categoryProductsTemp.isEmpty ? 0 : Price().getMinPrice(categoryProvider.categoryProductsTemp),
+                                max: categoryProvider.categoryProductsTemp.isEmpty ? 10 : Price().getMaxPrice(categoryProvider.categoryProductsTemp),
+                                onChanged: (min, max) {
+                                    categoryProvider.onChangePriceRange(min, max);
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("BHD ${categoryProvider.selectedRangeMin.toStringAsFixed(2)}",style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),),
+                                  Text("BHD ${categoryProvider.selectedRangeMax.toStringAsFixed(2)}",style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold))
+                                ],
+                              )
+                            ],
+                          );
+  }
+
+  Text filterLabel(String text) {
+    return Text(
+        text,
+        style: TextStyle(
+            fontSize: 16,
+            color: blueC,
+            fontWeight: FontWeight.bold),
+      );
   }
 }
 

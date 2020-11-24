@@ -35,7 +35,7 @@ class CategoryProvider extends ChangeNotifier {
 
   List<CategoryProduct> categoryProducts = [];
   List<CategoryProduct> categoryProductsTemp = [];
-  bool isCategoryProductsLoading = true;
+  bool isCategoryProductsLoading = false;
   fetchCategoryProduct(CategoryModel category) async {
     categoryProducts.clear();
     notifyListeners();
@@ -63,14 +63,14 @@ class CategoryProvider extends ChangeNotifier {
   double selectedRangeMin = 1;
   double selectedRangeMax = 3;
 
-  bool isFilterShow = false;
+  bool isFilterShow = true;
   
   onChangePriceRange(min,max){
     selectedRangeMax = max;
     selectedRangeMin = min;
     notifyListeners();
   }
-
+  
   toggleFilter(){
     print("toggled");
     if(isFilterShow == true){
@@ -86,14 +86,18 @@ class CategoryProvider extends ChangeNotifier {
   applyFilter(context, int categoryId)async{
     final minPrice = selectedRangeMin.round();
     final maxPrice = selectedRangeMax.round();
+    final priceRange = {"minPrice": minPrice.toString(),"maxPrice": maxPrice.toString()};
+    
     final data = {
-      "minPrice": minPrice.toString(),
-      "maxPrice": maxPrice.toString(),
-      "categoryId": categoryId.toString()
+      "priceRange": jsonEncode(priceRange),
+      "sort": "",
+      "categoryId": categoryId.toString(),
+      "isInStock": isInStock.toString(),
     };
     isCategoryProductsLoading = true;
     notifyListeners();
     final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "products/filter");
+    print(res.body);
     final json = jsonDecode(res.body) as List;
     categoryProducts.clear();
     notifyListeners();
@@ -103,7 +107,13 @@ class CategoryProvider extends ChangeNotifier {
     isCategoryProductsLoading = false;
     notifyListeners();
   }
-
+  
+  bool isInStock = false;
+  
+  toggleAvailability(value){
+    isInStock == true ? isInStock = false : isInStock = true;
+    notifyListeners();
+  }
 }
 
 class Price{
@@ -115,7 +125,7 @@ class Price{
     price.sort();
     return price.last;
   }
-
+  
   getMinPrice(List<CategoryProduct> categoryProducts){
     List<double> price = [];
     categoryProducts.forEach((element) {
