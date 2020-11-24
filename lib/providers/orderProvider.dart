@@ -223,8 +223,6 @@ class OrderProvider extends ChangeNotifier{
         });
   }
   
-  
-  
   order(context)async{
     showProgressIndicator(context,loadingText: "Placing order..");
     final cartProvider = Provider.of<CartProvider>(context,listen: false);
@@ -252,8 +250,7 @@ class OrderProvider extends ChangeNotifier{
       navPush(context, OrderPlacedPage());
     }
   }
-
-
+  
   final List<Order> orders = [];
 
   bool isOrderHistoryLoading = false;
