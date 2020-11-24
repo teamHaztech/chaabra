@@ -5,7 +5,8 @@ class Product {
     final ProductDetails productDetails;
     final double price;
     final String model;
-    Product({this.id, this.image, this.price, this.productDetails, this.model,this.type});
+    final int rating;
+    Product({this.id,this.rating,this.image, this.price, this.productDetails, this.model,this.type});
     
     factory Product.fromJson(Map<String , dynamic>json){
         return Product(
@@ -13,7 +14,8 @@ class Product {
             image: json['image'],
             model: json['model'],
             price: json['price'] == null ? 0.0 : double.parse(json['price']),
-            productDetails: ProductDetails.fromJson(json['details'])
+            productDetails: ProductDetails.fromJson(json['details']),
+            rating: json['review_count'] == null ? null : int.parse(json['review_count'])
         );
     }
 

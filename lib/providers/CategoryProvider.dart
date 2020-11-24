@@ -6,9 +6,78 @@ import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
 
 
+
+class SortType{
+  final int id;
+  final String name;
+  SortType({this.id,this.name});
+}
+
 class CategoryProvider extends ChangeNotifier {
   final List<CategoryModel> categories = [];
 
+  
+  
+  SortType selectedSortType;
+  
+  List<SortType> sortTypes = [
+    SortType(id: 0,name: "Default"),
+    SortType(id: 1,name: "Name (A-Z)"),
+    SortType(id: 2,name: "Name (Z-A)"),
+    SortType(id: 3,name: "Price (Low > High)"),
+    SortType(id: 4,name: "Price (High > Low)"),
+    SortType(id: 5,name: "Rating (Highest)"),
+    SortType(id: 6,name: "Rating (Lowest)"),
+  ];
+  
+  onChangeSort(context,SortType sort){
+    selectedSortType = sort;
+    notifyListeners();
+    navPop(context);
+  }
+  
+  showSortDropdown(context){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius(
+                      radius: 15,
+                    ),
+                    color: Colors.white,
+                  ),
+                  height: screenHeight(context) * 50 / 100,
+                  width: screenWidth(context),
+                  child: ClipRRect(
+                    borderRadius: borderRadius(
+                      radius: 15,
+                    ),
+                    child: ListView.builder(
+                        itemCount: sortTypes.length,
+                        itemBuilder: (context, i) {
+                          final sort = sortTypes[i];
+                          return ListTile(
+                            onTap: (){
+                              onChangeSort(context,sort);
+                            },
+                            title: Text(
+                              sort.name,
+                              style: TextStyle(
+                                  color: Color(0xff979CA3), fontSize: 16),
+                            ),
+                          );
+                        }),
+                  ))
+            ],
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          );
+        });
+  }
+  
   CallApi callApi = CallApi();
 
   bool isCategoriesLoading = true;
@@ -36,6 +105,50 @@ class CategoryProvider extends ChangeNotifier {
   List<CategoryProduct> categoryProducts = [];
   List<CategoryProduct> categoryProductsTemp = [];
   bool isCategoryProductsLoading = false;
+  
+  
+  SortProduct sortProduct = SortProduct.getInstance();
+  
+  sortProducts(sortId){
+    switch(sortId){
+      case 1 : {
+        sortProduct.aToZ(categoryProducts);
+        notifyListeners();
+      }
+      break;
+      case 2 : {
+        sortProduct.zToA(categoryProducts);
+        notifyListeners();
+      }
+      break;
+      case 3 : {
+        sortProduct.lowToHighPrice(categoryProducts);
+        notifyListeners();
+      }
+      break;
+      case 4 : {
+        sortProduct.highToLowPrice(categoryProducts);
+        notifyListeners();
+      }
+      break;
+  
+      case 5 : {
+        sortProduct.highToLowRating(categoryProducts);
+        notifyListeners();
+      }
+      break;
+  
+      case 6 : {
+        sortProduct.highToLowRating(categoryProducts);
+        notifyListeners();
+      }
+      break;
+    }
+  }
+  
+  
+  
+  
   fetchCategoryProduct(CategoryModel category) async {
     categoryProducts.clear();
     notifyListeners();
@@ -50,6 +163,11 @@ class CategoryProvider extends ChangeNotifier {
         categoryProductsTemp.add(CategoryProduct.fromJson(i));
       }
       isCategoryProductsLoading = false;
+      selectedRangeMin = Price().getMinPrice(categoryProductsTemp);
+      selectedRangeMax = Price().getMaxPrice(categoryProductsTemp);
+      if(selectedSortType != null){
+        sortProducts(selectedSortType.id);
+      }
       notifyListeners();
     } else {
       isCategoryProductsLoading = false;
@@ -63,7 +181,8 @@ class CategoryProvider extends ChangeNotifier {
   double selectedRangeMin = 1;
   double selectedRangeMax = 3;
 
-  bool isFilterShow = true;
+  bool isFilterShown = false;
+  bool isSortShown = false;
   
   onChangePriceRange(min,max){
     selectedRangeMax = max;
@@ -71,16 +190,60 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
   
-  toggleFilter(){
-    print("toggled");
-    if(isFilterShow == true){
-      isFilterShow = false;
-    }else{
-      isFilterShow = true;
-    }
+  Color colors = Colors.white;
+  
+  
+  
+  hideFilterAndSort(){
+    isFilterShown = false;
+    isSortShown = false;
+    notifyListeners();
+  }
+  
+  showFilter(){
+    isFilterShown = true;
+    isSortShown = false;
+    notifyListeners();
+  }
+  
+  hideFilter(){
+    isFilterShown = false;
+    isSortShown = true;
     notifyListeners();
   }
 
+  hideSort(){
+    isFilterShown = true;
+    isSortShown = false;
+    notifyListeners();
+  }
+
+  showSort(){
+    isFilterShown = false;
+    isSortShown = true;
+    notifyListeners();
+  }
+  
+  toggleSortAndFilter(){
+    if(isSortShown == true){
+      showFilter();
+      hideSort();
+    }else{
+      showSort();
+      hideFilter();
+    }
+  }
+  
+  toggleFilter(){
+    print("toggled");
+    if(isFilterShown == true){
+      isFilterShown = false;
+    }else{
+      isFilterShown = true;
+    }
+    notifyListeners();
+  }
+  
   
   
   applyFilter(context, int categoryId)async{
@@ -90,7 +253,7 @@ class CategoryProvider extends ChangeNotifier {
     
     final data = {
       "priceRange": jsonEncode(priceRange),
-      "sort": "",
+      "sort": selectedSortType == null ? "0" : selectedSortType.id.toString(),
       "categoryId": categoryId.toString(),
       "isInStock": isInStock.toString(),
     };
@@ -104,13 +267,16 @@ class CategoryProvider extends ChangeNotifier {
     for (Map i in json) {
       categoryProducts.add(CategoryProduct.fromJson(i));
     }
+    if(selectedSortType != null){
+      sortProducts(selectedSortType.id);
+    }
     isCategoryProductsLoading = false;
     notifyListeners();
   }
   
   bool isInStock = false;
   
-  toggleAvailability(value){
+  toggleAvailability(){
     isInStock == true ? isInStock = false : isInStock = true;
     notifyListeners();
   }
@@ -119,7 +285,7 @@ class CategoryProvider extends ChangeNotifier {
 class Price{
   getMaxPrice(List<CategoryProduct> categoryProducts){
     List<double> price = [];
-    categoryProducts.forEach((element) { 
+    categoryProducts.forEach((element) {
       price.add(element.product.price);
     });
     price.sort();
@@ -133,5 +299,35 @@ class Price{
     });
     price.sort();
     return price.first;
+  }
+}
+
+
+class SortProduct{
+  static SortProduct _instance;
+  static SortProduct getInstance() => _instance ??= SortProduct();
+  
+  aToZ(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => a.product.productDetails.name.toString().compareTo(b.product.productDetails.name.toString()));
+  }
+  
+  zToA(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => b.product.productDetails.name.toString().compareTo(a.product.productDetails.name.toString()));
+  }
+  
+  lowToHighPrice(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => a.product.price.compareTo(b.product.price));
+  }
+  
+  highToLowPrice(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => b.product.price.compareTo(a.product.price));
+  }
+
+  lowToHighRating(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => a.product.rating.compareTo(b.product.rating));
+  }
+
+  highToLowRating(List<CategoryProduct> sortingList){
+    sortingList.sort((a, b) => b.product.rating.compareTo(a.product.rating));
   }
 }

@@ -51,6 +51,22 @@ navPop(BuildContext context) {
 final orangeC = Color(0xffE96631);
 final blueC = Color(0xff0d52d6);
 
+
+Map<int, Color> colorCodesBlueC = {
+  50: Color.fromRGBO(13, 82, 214, .1),
+  100: Color.fromRGBO(13, 82, 214, .2),
+  200: Color.fromRGBO(13, 82, 214, .3),
+  300: Color.fromRGBO(13, 82, 214, .4),
+  400: Color.fromRGBO(13, 82, 214, .5),
+  500: Color.fromRGBO(13, 82, 214, .6),
+  600: Color.fromRGBO(13, 82, 214, .7),
+  700: Color.fromRGBO(13, 82, 214, .8),
+  800: Color.fromRGBO(13, 82, 214, .9),
+  900: Color.fromRGBO(13, 82, 214, 1),
+};
+// Green color code: FF93cd48
+MaterialColor materialBlue = MaterialColor(0xFF0d50d0, colorCodesBlueC);
+
 screenHeight(context) {
   return MediaQuery.of(context).size.height;
 }

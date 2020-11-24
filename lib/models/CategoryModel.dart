@@ -23,7 +23,7 @@ class CategoryProduct {
 
   factory CategoryProduct.fromJson(Map<String, dynamic> json){
     return CategoryProduct(
-        product : Product.fromJson(json['product'])
+        product : Product.fromJson(json['product']),
     );
   }
 }
