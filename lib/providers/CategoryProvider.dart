@@ -2,18 +2,20 @@ import 'dart:convert';
 
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/CategoryModel.dart';
-import 'package:chaabra/providers/cartProvider.dart';
+import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class CategoryProvider extends ChangeNotifier{
+
+class CategoryProvider extends ChangeNotifier {
   final List<CategoryModel> categories = [];
 
   CallApi callApi = CallApi();
 
   bool isCategoriesLoading = true;
   fetchCategories() async {
-    categories.length == 0 ? isCategoriesLoading = true : isCategoriesLoading = false;
+    categories.length == 0
+        ? isCategoriesLoading = true
+        : isCategoriesLoading = false;
     notifyListeners();
     final res = await callApi.get('categories');
     final data = jsonDecode(res.body) as List;
@@ -32,8 +34,9 @@ class CategoryProvider extends ChangeNotifier{
   }
 
   List<CategoryProduct> categoryProducts = [];
+  List<CategoryProduct> categoryProductsTemp = [];
   bool isCategoryProductsLoading = true;
-  fetchCategoryProduct(CategoryModel category)async{
+  fetchCategoryProduct(CategoryModel category) async {
     categoryProducts.clear();
     notifyListeners();
     isCategoryProductsLoading = true;
@@ -44,6 +47,7 @@ class CategoryProvider extends ChangeNotifier{
       categoryProducts.clear();
       for (Map i in data) {
         categoryProducts.add(CategoryProduct.fromJson(i));
+        categoryProductsTemp.add(CategoryProduct.fromJson(i));
       }
       isCategoryProductsLoading = false;
       notifyListeners();
@@ -53,4 +57,73 @@ class CategoryProvider extends ChangeNotifier{
     }
   }
 
+  double rangeMin = 0;
+  double rangeMax = 3;
+
+  double selectedRangeMin = 1;
+  double selectedRangeMax = 3;
+
+  bool isFilterShow = true;
+
+
+  double animatedContainerHeight = 135;
+
+  onChangePriceRange(min,max){
+    selectedRangeMax = max;
+    selectedRangeMin = min;
+    notifyListeners();
+  }
+
+  showFilters(){
+    if(isFilterShow == true){
+      animatedContainerHeight = 0;
+      isFilterShow = false;
+    }else{
+      isFilterShow = true;
+      animatedContainerHeight = 135;
+    }
+    notifyListeners();
+  }
+
+  applyFilter(context, int categoryId)async{
+    final minPrice = selectedRangeMin.round();
+    final maxPrice = selectedRangeMax.round();
+    final data = {
+      "minPrice": minPrice.toString(),
+      "maxPrice": maxPrice.toString(),
+      "categoryId": categoryId.toString()
+    };
+    isCategoryProductsLoading = true;
+    notifyListeners();
+    final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "products/filter");
+    final json = jsonDecode(res.body) as List;
+    categoryProducts.clear();
+    notifyListeners();
+    for (Map i in json) {
+      categoryProducts.add(CategoryProduct.fromJson(i));
+    }
+    isCategoryProductsLoading = false;
+    notifyListeners();
+  }
+
+}
+
+class Price{
+  getMaxPrice(List<CategoryProduct> categoryProducts){
+    List<double> price = [];
+    categoryProducts.forEach((element) { 
+      price.add(element.product.price);
+    });
+    price.sort();
+    return price.last;
+  }
+
+  getMinPrice(List<CategoryProduct> categoryProducts){
+    List<double> price = [];
+    categoryProducts.forEach((element) {
+      price.add(element.product.price);
+    });
+    price.sort();
+    return price.first;
+  }
 }

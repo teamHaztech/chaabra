@@ -203,7 +203,7 @@ class CartPage extends StatelessWidget {
                                               SizedBox(width: 8),
                                               Text('Select your promo code',style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Color(0xff0D52D6)
+                                                  color: blueC
                                               ),)
                                           ],
                                         ),

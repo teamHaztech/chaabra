@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'Product.dart';
+import 'package:flutter_range_slider/flutter_range_slider.dart' as frs;
 import 'constants.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
       final wishlistProvider = Provider.of<WishlistProvider>(context);
       final categoryProvider = Provider.of<CategoryProvider>(context);
+      final height = categoryProvider.animatedContainerHeight;
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -45,6 +47,51 @@ class _ProductsPageState extends State<ProductsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    AnimatedContainer(
+                      height: categoryProvider.animatedContainerHeight,
+                      curve: Curves.easeIn,
+                      padding: EdgeInsets.all(14),
+                      duration: Duration(milliseconds: 200),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          label(title: "Filter", padding: EdgeInsets.all(0)),
+                          verticalSpace(height: 12),
+                          Text(
+                            "Price",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: blueC,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Column(
+                            children: [
+                              frs.RangeSlider(
+                                lowerValue: categoryProvider.selectedRangeMin,
+                                upperValue: categoryProvider.selectedRangeMax,
+                                min: categoryProvider.categoryProductsTemp.isEmpty ? 0 : Price().getMinPrice(categoryProvider.categoryProductsTemp),
+                                max: categoryProvider.categoryProductsTemp.isEmpty ? 10 : Price().getMaxPrice(categoryProvider.categoryProductsTemp),
+                                onChanged: (min, max) {
+                                    categoryProvider.onChangePriceRange(min, max);
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("BHD ${categoryProvider.selectedRangeMin.toStringAsFixed(2)}",style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),),
+                                  Text("BHD ${categoryProvider.selectedRangeMax.toStringAsFixed(2)}",style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold))
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                     Row(
                       children: [
                         Expanded(
@@ -55,7 +102,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               children: [
                                 SvgPicture.asset(
                                   'assets/svg/sort.svg',
-                                  height: 18,
+                                  height: 16,
                                 ),
                                 SizedBox(
                                   width: 8,
@@ -63,7 +110,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 Text(
                                   'Sort',
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize: 18, color: Colors.white),
                                 )
                               ],
                             ),
@@ -75,26 +122,73 @@ class _ProductsPageState extends State<ProductsPage> {
                             color: Colors.white,
                         ),
                         Expanded(
-                          child: Container(
-                            color: Color(0xff3A4754),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/svg/filter.svg',
-                                  height: 18,
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  'Filter',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                )
-                              ],
-                            ),
+                          child: categoryProvider.isFilterShow == false ? GestureDetector(
+                            onTap: (){
+                              categoryProvider.showFilters();
+                            },
+                            child: Container(
+                              color: Color(0xff3A4754),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svg/filter.svg',
+                                    height: 16,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    'Filter',
+                                    style: TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  )
+                                ],
+                              ),
                               height: 43,
+                            ),
+                          ):Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    categoryProvider.applyFilter(context, widget.category.id);
+                                  },
+                                  child: Container(
+                                    color: blueC,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svg/filter.svg',
+                                          height: 16,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          'Apply Filter',
+                                          style: TextStyle(
+                                              fontSize: 18, color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                    height: 43,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 2,),
+                              GestureDetector(
+                                onTap: (){
+                                  categoryProvider.showFilters();
+                                },
+                                child: Container(
+                                  color: blueC,
+                                  child: Icon(Icons.keyboard_arrow_up,color: Colors.white,size: 16,),
+                                  height: 43,width: 43,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -132,30 +226,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                         child: ClipRRect(
                                           borderRadius: borderRadius(radius: 3),
                                           child: progressIndicator(),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 5,
-                                        top: 5,
-                                        child: GestureDetector(
-                                          onTap: () {
-
-                                          },
-                                          child: Container(
-                                            width: 30.0,
-                                            height: 30.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5.0),
-                                              color: const Color(0xffE96631),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
                                         ),
                                       ),
                                     ],

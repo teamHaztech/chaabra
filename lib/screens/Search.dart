@@ -66,30 +66,6 @@ class SearchPage extends StatelessWidget {
                                           child: progressIndicator(),
                                         ),
                                       ),
-                                      Positioned(
-                                        right: 5,
-                                        top: 5,
-                                        child: GestureDetector(
-                                          onTap: () {
-                        
-                                          },
-                                          child: Container(
-                                            width: 30.0,
-                                            height: 30.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5.0),
-                                              color: const Color(0xffE96631),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -287,7 +263,7 @@ class SearchPage extends StatelessWidget {
                             width: 50,
                             height: 48,
                             decoration: BoxDecoration(
-                                color: Color(0xff0d52d6),
+                                color: blueC,
                                 borderRadius: borderRadiusOn(
                                     topRight: 8, bottomRight: 8)),
                             child: Padding(

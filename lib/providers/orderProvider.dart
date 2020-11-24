@@ -260,6 +260,8 @@ class OrderProvider extends ChangeNotifier{
     orders.length == 0 ? isOrderHistoryLoading = true : isOrderHistoryLoading = false;
     notifyListeners();
     final res = await callApi.getWithConnectionCheck('orders/${user.id}', context);
+
+    print(res.body);
     final data = jsonDecode(res.body) as List;
     if (data.length != orders.length) {
       isOrderHistoryLoading = true;

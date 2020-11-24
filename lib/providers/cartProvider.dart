@@ -16,7 +16,6 @@ class CartProvider extends ChangeNotifier {
     CartProvider(){
         countTotal(null);
         fetchCartData(context);
-        fetchProductOptions(157);
     }
 
     clearProductData(){
@@ -24,6 +23,7 @@ class CartProvider extends ChangeNotifier {
       selectedOptionsMap.clear();
     }
 
+    //asdasd
     CallApi callApi = CallApi();
     int productIdTemp;
 
