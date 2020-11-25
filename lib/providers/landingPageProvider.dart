@@ -31,10 +31,10 @@ class LandingPageProvider extends ChangeNotifier{
         notifyListeners();
     }
 
-
     closeCustomDialog(){
         isCustomDialogVisible = false;
         customDialogContent = null;
         notifyListeners();
     }
+
 }

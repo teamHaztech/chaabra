@@ -90,7 +90,13 @@ class _OrdersPageState extends State<OrdersPage> {
                                                     ),
                                                     child: Padding(
                                                       padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                                                      child: Icon(Icons.remove_red_eye,color: Colors.black45,),
+                                                      child: Row(
+                                                        children: [
+                                                          Text("View",style: TextStyle(fontSize: 16,color: Colors.black45),),
+                                                          SizedBox(width: 5,),
+                                                          Icon(Icons.remove_red_eye,color: Colors.black45,),
+                                                        ],
+                                                      ),
                                                     )),
                                               ),
                                               labeledTitle(crossAxisAlignment: CrossAxisAlignment.end,title: order.status.name,label: "Order status"),

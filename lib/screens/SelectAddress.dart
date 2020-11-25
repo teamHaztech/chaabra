@@ -143,93 +143,73 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                                   top: 8, left: 8, bottom: 0),
                                               child: Stack(
                                                 children: [
-                                                  Material(
-                                                    borderRadius:
-                                                        borderRadiusOn(
-                                                            topLeft: 8,
-                                                            bottomLeft: 8),
-                                                    elevation: deliveryAddress
-                                                                .selectState ==
-                                                            true
-                                                        ? 3
-                                                        : 0,
-                                                    child: Container(
-                                                      width:
-                                                          screenWidth(context),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            borderRadiusOn(
-                                                                topLeft: 8,
-                                                                bottomLeft: 8),
-                                                      ),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        16),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Text(
-                                                                  "${deliveryAddress.firstName} ${deliveryAddress.lastName}",
+                                                  Container(
+                                                    width:
+                                                        screenWidth(context),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      border: deliveryAddress.selectState == true ? Border.all(width: 1,color: Colors.black12) : Border.all(width: 1,color: Colors.transparent),
+                                                      borderRadius:
+                                                          borderRadiusOn(
+                                                              topLeft: 8,
+                                                              bottomLeft: 8),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      16),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                "${deliveryAddress.firstName} ${deliveryAddress.lastName}",
+                                                                style: TextStyle(
+                                                                    color: Color(
+                                                                        0xff3A4754),
+                                                                    fontSize:
+                                                                        14),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                  deliveryAddress
+                                                                      .address1,
                                                                   style: TextStyle(
                                                                       color: Color(
-                                                                          0xff3A4754),
+                                                                          0xffC6C6C6),
                                                                       fontSize:
-                                                                          14),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Text(
-                                                                    deliveryAddress
-                                                                        .address1,
-                                                                    style: TextStyle(
-                                                                        color: Color(
-                                                                            0xffC6C6C6),
-                                                                        fontSize:
-                                                                            14)),
-                                                                SizedBox(
-                                                                  height: 3,
-                                                                ),
-                                                                Text(
-                                                                    deliveryAddress
-                                                                        .address2,
-                                                                    style: TextStyle(
-                                                                        color: Color(
-                                                                            0xffC6C6C6),
-                                                                        fontSize:
-                                                                            14)),
-                                                                SizedBox(
-                                                                  height: 8,
-                                                                ),
-                                                              ],
-                                                            ),
+                                                                          14)),
+                                                              SizedBox(
+                                                                height: 3,
+                                                              ),
+                                                              Text(
+                                                                  deliveryAddress
+                                                                      .address2,
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          0xffC6C6C6),
+                                                                      fontSize:
+                                                                          14)),
+                                                              SizedBox(
+                                                                height: 8,
+                                                              ),
+                                                            ],
                                                           ),
-                                                          deliveryAddress
-                                                                      .selectState ==
-                                                                  true
-                                                              ? SizedBox()
-                                                              : Container(
-                                                                  height: 1,
-                                                                  width: screenWidth(
-                                                                      context),
-                                                                  color: Color(
-                                                                      0xffE7E7E7),
-                                                                ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                   Align(
