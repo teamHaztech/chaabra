@@ -72,7 +72,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                           label(title: "Order id #${order.id}",padding: EdgeInsets.all(0)),
-                                            labeledTitle(crossAxisAlignment: CrossAxisAlignment.start,title: daynameMonthDayYear(order.dateAdded),label: "Ordered on"),
+                                            labeledTitle(crossAxisAlignment: CrossAxisAlignment.start,title: daynameMonthDayYear(order.dateAdded),label: "Ordered on",fontWeight: FontWeight.w600),
                                         ],),
                                           Column(
                                             mainAxisAlignment:

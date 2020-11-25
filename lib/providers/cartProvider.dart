@@ -49,7 +49,7 @@ class CartProvider extends ChangeNotifier {
 
     fetchCartData(context)async{
       User user = await User().localUserData();
-      cart.length == 0 ? isCartLoading = true : isCartLoading = false;
+    cart.length == 0 ? isCartLoading = true : isCartLoading = false;
       notifyListeners();
       final res = await callApi.getWithConnectionCheck("cart/${user.id}", context);
       final data = jsonDecode(res.body) as List;
@@ -91,7 +91,6 @@ class CartProvider extends ChangeNotifier {
       productOption = ProductOption.fromJson(productJson);
       notifyListeners();
     }
-
 
     ProductOption productOption;
     List<String> countries = [

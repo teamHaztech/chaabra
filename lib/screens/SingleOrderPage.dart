@@ -73,7 +73,7 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                           CrossAxisAlignment.start,
                                       title:
                                           daynameMonthDayYear(order.dateAdded),
-                                      label: "Ordered on"),
+                                      label: "Ordered on",fontWeight: FontWeight.w600),
                                 ],
                               ),
                               Column(
@@ -197,71 +197,7 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                           color: Colors.white,
                                           borderRadius: borderRadius(radius: 5),
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                label(
-                                                  disableUnderline: true,
-                                                  title:
-                                                      "${product.productDetails.name}",
-                                                  padding: EdgeInsets.all(0),
-                                                ),
-                                                Material(
-                                                  borderRadius:
-                                                      borderRadius(radius: 5),
-                                                  elevation: 1,
-                                                  child: Container(
-                                                      height: 45,
-                                                      width: 65,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black12,
-                                                          borderRadius:
-                                                              borderRadius(
-                                                                  radius: 5)),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            borderRadius(
-                                                                radius: 5),
-                                                        child: Image.network(
-                                                          "$assetsPath${product.image}",
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                labeledTitle(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    title: order
-                                                        .orderedProducts[i]
-                                                        .option,
-                                                    label: "Net Wt."),
-                                                labeledTitle(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    title:
-                                                        'BHD ${totalPrice.toString()}',
-                                                    label: "Total"),
-                                              ],
-                                            )
-                                          ],
-                                        )),
+                                    ),
                                   );
                                 },
                               ),

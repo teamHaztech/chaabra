@@ -309,7 +309,7 @@ borderRadiusOn(
       topRight: Radius.circular(topRight));
 }
 
-label({String title,bool disableUnderline = false,Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16)}) {
+label({String title,bool disableUnderline = false,Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16),double fontSize = 20}) {
   return Padding(
     padding: padding,
     child: Column(
@@ -319,7 +319,7 @@ label({String title,bool disableUnderline = false,Color color, EdgeInsets paddin
         Text(
           title,
           style: TextStyle(
-              fontSize: 20,
+              fontSize: fontSize,
               color: color == null ? primaryColor : color,
               fontWeight: FontWeight.w400),
         ),
@@ -993,18 +993,19 @@ containerLoader({double height = 20, double width = 50, double radius = 10}){
 }
 
 
-labeledTitle({CrossAxisAlignment crossAxisAlignment,String title, String label}){
+labeledTitle({CrossAxisAlignment crossAxisAlignment,String title, String label, FontWeight fontWeight = FontWeight.normal}){
   return Column(
     crossAxisAlignment: crossAxisAlignment,
     children: [
       Text(title,
           style: TextStyle(
               color: primaryColor,
-              fontSize: 14,
-              fontWeight: FontWeight.normal)),
+              fontSize: 16,
+              fontWeight: fontWeight)),
+      SizedBox(height: 3,),
       Text(label,
           style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               color: Colors.black38,
               fontWeight: FontWeight.normal)),
     ],
