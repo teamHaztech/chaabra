@@ -1,3 +1,4 @@
+import 'package:chaabra/screens/EditProfile.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -39,7 +40,9 @@ class Profile extends StatelessWidget {
             Text('Ali Ahmed',style: TextStyle(fontSize: 20),)
         ],),
           SizedBox(height: 40,),
-          tile(title: "Edit my profile", subTitle: 'Change name, email ID, phone number',isFirst: true),
+          tile(title: "Edit my profile", subTitle: 'Change name, email ID, phone number',isFirst: true,onTap: (){
+            navPush(context, EditProfile());
+          }),
           tile(title: "My orders", subTitle: 'Check my orders',isFirst: true),
           tile(title: "History", subTitle: 'Order history',isFirst: true),
           tile(title: "Help center", subTitle: 'Help regrading your recent purchase',isLast: true,isFirst: true),

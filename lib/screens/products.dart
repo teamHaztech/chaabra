@@ -22,7 +22,6 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -479,7 +478,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget filterContainer(CategoryProvider categoryProvider) {
     return AnimatedContainer(
-      height: categoryProvider.isFilterShown == true ? 211 : 0,
+      height: categoryProvider.isFilterShown == true ? 287 : 0,
       curve: Curves.easeIn,
       duration: Duration(milliseconds: 500),
       child: Padding(
@@ -511,7 +510,42 @@ class _ProductsPageState extends State<ProductsPage> {
                     )
                   ],
                 ),
-              )
+              ),
+              filterLabel("Option"),
+              verticalSpace(height: 8),
+              GestureDetector(
+                onTap: (){
+                  categoryProvider.showOptionDropdown(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: borderRadius(radius: 5),
+                      color: Color(0xffF0F2F5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14.0),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            categoryProvider.selectedOption == null ? "Select Option" : categoryProvider.selectedOption,
+                            style: TextStyle(
+                                color: Color(0xff979CA3), fontSize: 16),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 23,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

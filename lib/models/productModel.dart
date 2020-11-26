@@ -1,3 +1,5 @@
+import 'ProductOptions.dart';
+
 class Product {
     final int id;
     final String image;
@@ -6,16 +8,20 @@ class Product {
     final double price;
     final String model;
     final int rating;
-    Product({this.id,this.rating,this.image, this.price, this.productDetails, this.model,this.type});
+    final List<Option> options;
+    Product({this.id,this.rating,this.image, this.price, this.productDetails, this.model,this.type,this.options});
     
     factory Product.fromJson(Map<String , dynamic>json){
+        var optionList = json['options'] as List;
+        List<Option> option = optionList != null ? optionList.map((e) => Option.fromJson(e)).toList() : [];
         return Product(
             id: int.parse(json['product_id'].toString()),
             image: json['image'],
             model: json['model'],
             price: json['price'] == null ? 0.0 : double.parse(json['price']),
             productDetails: ProductDetails.fromJson(json['details']),
-            rating: json['review_count'] == null ? null : int.parse(json['review_count'])
+            rating: json['review_count'] == null ? null : int.parse(json['review_count']),
+            options: option
         );
     }
 
@@ -26,7 +32,6 @@ class Product {
         "price": product.price.toString(),
         "details": ProductDetails().toJson(product.productDetails)
     };
-
 }
 
 
