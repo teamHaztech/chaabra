@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:chaabra/api/callApi.dart';
@@ -9,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
 class LogProvider extends ChangeNotifier {
-  final email = TextEditingController(text: "manthansutar99@gmail.com");
-  final password = TextEditingController(text: "12345678");
+  LogProvider() {
+    fetchUserDetails();
+  }
+  final email = TextEditingController();
+  final password = TextEditingController();
   final confirmPassword = TextEditingController();
   final firstName = TextEditingController();
   final lastName = TextEditingController();
@@ -31,6 +35,20 @@ class LogProvider extends ChangeNotifier {
 
   //Shared preference
   SharedPref sharedPref = SharedPref();
+
+  //Updating controllers;
+  var firstNameUpdate = TextEditingController();
+  var lastNameUpdate = TextEditingController();
+  var emailUpdate = TextEditingController();
+  var phoneUpdate = TextEditingController();
+
+  setUserDetailsInUpdateFields() {
+    firstNameUpdate = TextEditingController(text: user.firstName);
+    lastNameUpdate = TextEditingController(text: user.lastName);
+    emailUpdate = TextEditingController(text: user.email);
+    phoneUpdate = TextEditingController(text: user.phone);
+    notifyListeners();
+  }
 
   clearInput() {
     email.clear();
@@ -60,8 +78,22 @@ class LogProvider extends ChangeNotifier {
     }
   }
 
+  User user;
+
+  fetchUserDetails() async {
+    user = await User().localUserData();
+    setUserDetailsInUpdateFields();
+    notifyListeners();
+  }
+
   isPasswordMatched() {
     return password.text == confirmPassword.text ? true : false;
+  }
+
+  validatePassword() {
+    password.text.isNotEmpty
+        ? passwordError = null
+        : passwordError = "Password cannot be empty";
   }
 
   validateEmptyFields() {
@@ -90,6 +122,140 @@ class LogProvider extends ChangeNotifier {
     logError = message;
     navPop(context);
     notifyListeners();
+  }
+
+  bool isUpdateButtonEnabled = true;
+
+  clearUpdateState(){
+    isUpdateButtonEnabled = false;
+    notifyListeners();
+  }
+
+  final isDetailsChanged = LinkedHashMap();
+
+  checkIfAllFieldsAreChanged() {
+    user.firstName != firstNameUpdate.text
+        ? isDetailsChanged[user.firstName] = 1
+        : isDetailsChanged[user.firstName] = 0;
+    user.lastName != lastNameUpdate.text
+        ? isDetailsChanged[user.lastName] = 1
+        : isDetailsChanged[user.lastName] = 0;
+    user.email != emailUpdate.text
+        ? isDetailsChanged[user.email] = 1
+        : isDetailsChanged[user.email] = 0;
+    user.phone != phoneUpdate.text
+        ? isDetailsChanged[user.phone] = 1
+        : isDetailsChanged[user.phone] = 0;
+    bool changed = false;
+    isDetailsChanged.forEach((key, value) {
+      if (value == 1) {
+        changed = true;
+        notifyListeners();
+      }
+    });
+    if (changed == true) {
+      isUpdateButtonEnabled = false;
+      notifyListeners();
+    } else {
+      isUpdateButtonEnabled = true;
+      notifyListeners();
+    }
+  }
+
+  passwordVerification(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      label(
+                          title: "Password Verification",
+                          padding: EdgeInsets.symmetric(horizontal: 1)),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      input(
+                          controller: password,
+                          label: "Password",
+                          hint: "Password",
+                          keyboardType: TextInputType.text,
+                          errorText: passwordError,
+                          obscureText: true,
+                          onChanged: (e) {
+                            validatePassword();
+                          }),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      fullWidthButton(context, title: "Verify", onTap: () {
+                        update(context, changeWithPassword: true);
+                      }),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+  updateUserDetailsLocally(context,Map<String, dynamic> userData) async{
+    sharedPref.save(localUserDataKey, jsonEncode(userData).toString());
+    User userDataTemp = await User().localUserData();
+    user = userDataTemp;
+    isUpdateButtonEnabled = false;
+    navPop(context);
+    notifyListeners();
+  }
+
+  bool isUpdating = false;
+
+  update(context, {bool changeWithPassword = false}) async {
+    final updateData = {
+      "changeWithPassword": changeWithPassword.toString(),
+      "customer_id": user.id.toString(),
+      "firstName": firstNameUpdate.text,
+      "lastName": lastNameUpdate.text,
+      "email": emailUpdate.text,
+      "telephone": phoneUpdate.text,
+      "password": password.text
+    };
+
+    showCircularProgressIndicator(context);
+
+    final res = await callApi.postWithConnectionCheck(context,
+        apiUrl: "user/update", data: updateData);
+    final jsonRes = jsonDecode(res.body);
+    final response = jsonRes['response'];
+    if (response == "AUTHENTICATED") {
+      updateUserDetailsLocally(context,jsonRes['user_data']);
+      popOutMultipleTimes(context, numberOfTimes: 2);
+      showToast("Updated");
+    }
+    if (response == "INCORRECT_PASSWORD") {
+      showToast("Incorrect password");
+      navPop(context);
+      notifyListeners();
+    }
+    if (response == "UPDATED_NAME") {
+      updateUserDetailsLocally(context,jsonRes['user_data']);
+      navPop(context);
+    }
+  }
+
+  checkUpdateType(context) async {
+    if (isDetailsChanged[user.phone] == 1 ||
+        isDetailsChanged[user.email] == 1) {
+      passwordVerification(context);
+    } else {
+      update(context);
+    }
   }
 
   signIn(context) async {

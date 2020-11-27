@@ -1,11 +1,14 @@
+import 'package:chaabra/providers/LogProvider.dart';
 import 'package:chaabra/screens/EditProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'constants.dart';
 
 class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final log = Provider.of<LogProvider>(context);
     return Column(
       children: [
         Container(
@@ -37,7 +40,7 @@ class Profile extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10,),
-            Text('Ali Ahmed',style: TextStyle(fontSize: 20),)
+            Text('${log.user == null ? "" : log.user.firstName} ${log.user == null ? "" : log.user.lastName}',style: TextStyle(fontSize: 20),)
         ],),
           SizedBox(height: 40,),
           tile(title: "Edit my profile", subTitle: 'Change name, email ID, phone number',isFirst: true,onTap: (){

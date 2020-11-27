@@ -214,6 +214,7 @@ Widget dropDown(BuildContext context,
 fullWidthButton(context,
     {Function onTap,
     String title,
+      bool enableButton = false,
       TextStyle style = const TextStyle(
         fontFamily: 'Roboto',
         fontSize: 14,
@@ -222,20 +223,23 @@ fullWidthButton(context,
       ),
       double height = 40,
     Color backgroundColor = const Color(0xff90C042)}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      width: screenHeight(context),
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: backgroundColor,
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: style,
-          textAlign: TextAlign.left,
+  return AbsorbPointer(
+    absorbing: enableButton == true ? true : false,
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: screenHeight(context),
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0),
+          color: enableButton == true ? Colors.grey : backgroundColor,
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: style,
+            textAlign: TextAlign.left,
+          ),
         ),
       ),
     ),
