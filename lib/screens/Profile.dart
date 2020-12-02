@@ -1,5 +1,6 @@
 import 'package:chaabra/providers/LogProvider.dart';
 import 'package:chaabra/screens/EditProfile.dart';
+import 'package:chaabra/screens/OrdersPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,9 @@ class Profile extends StatelessWidget {
           tile(title: "Edit my profile", subTitle: 'Change name, email ID, phone number',isFirst: true,onTap: (){
             navPush(context, EditProfile());
           }),
-          tile(title: "My orders", subTitle: 'Check my orders',isFirst: true),
+          tile(title: "Order History", subTitle: 'Check my orders',isFirst: true,onTap: (){
+            navPush(context, OrdersPage());
+          }),
           tile(title: "History", subTitle: 'Order history',isFirst: true),
           tile(title: "Help center", subTitle: 'Help regrading your recent purchase',isLast: true,isFirst: true),
       ],

@@ -71,18 +71,13 @@ class OrderProvider extends ChangeNotifier{
       "zone_id" : zone.zoneId.toString(),
     };
 
-
-    print(data);
-
     showCircularProgressIndicator(context);
-
     final res = await callApi.postWithConnectionCheck(context,apiUrl: "shipping/address",data: data);
     final jsonRes = jsonDecode(res.body);
     if(jsonRes['response'] == "success"){
-      deliveryAddress.add(DeliveryAddress.fromJson(jsonRes['address']));
+      fetchUserShippingAddress(context);
       notifyListeners();
-      navPop(context);
-      navPop(context);
+      popOutMultipleTimes(context,numberOfTimes: 2);
     }
   }
 

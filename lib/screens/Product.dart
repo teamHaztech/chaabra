@@ -189,7 +189,7 @@ class _ProductPageState extends State<ProductPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    wishlistProvider.addThisProductInWishlist(Wishlist(product: widget.product));
+                                    wishlistProvider.addWishlistDb(context,widget.product.id);
                                   },
                                   child: Container(
                                     width: 40.0,

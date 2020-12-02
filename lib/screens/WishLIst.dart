@@ -1,5 +1,4 @@
 import 'package:chaabra/models/Cart.dart';
-import 'package:chaabra/models/WishList.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +12,7 @@ class WishlistPage extends StatelessWidget {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Column(
       children: [
-        verticalSpace(),
-        Text(
-          "Wishlist",
-          style: TextStyle(fontSize: 18),
-        ),
-        SizedBox(height: 10),
-        ListView.builder(
+        wishlistProvider.isWishlistLoading == true ? circularProgressIndicator() : wishlistProvider.wishlist.isEmpty ? Center(child: Text("Wishlist is empty")) : ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemCount: wishlistProvider.wishlist.length,
@@ -105,7 +98,7 @@ class WishlistPage extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: (){
-                                    wishlistProvider.removeThisProductFromWishlist(cartItem);
+                                    wishlistProvider.removeWishlistFromDb(context, product.id);
                                   },
                                   child: Icon(
                                     Icons.close,
