@@ -47,7 +47,7 @@ class _CategoryPageState extends State<CategoryPage> {
               title: category.name,
               image: '$assetsPath${category.image}' ,
               bgColor: backColors,
-              right: 10,
+              right: category.id == 60 ? -40 : 10,
               onTap: (){
                 navPush(context, ProductsPage(category: category));
               }

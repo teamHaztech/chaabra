@@ -42,6 +42,7 @@ class _ProductsPageState extends State<ProductsPage> {
         navPop(context);
         if (categoryProvider.isFilterShown == true) {
           categoryProvider.toggleFilter();
+          categoryProvider.clearFilterAndSort();
         }
         return;
       },

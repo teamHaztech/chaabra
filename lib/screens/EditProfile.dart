@@ -1,10 +1,5 @@
-import 'package:chaabra/models/Cart.dart';
-import 'package:chaabra/models/WishList.dart';
-import 'package:chaabra/models/productModel.dart';
+
 import 'package:chaabra/providers/LogProvider.dart';
-import 'package:chaabra/providers/cartProvider.dart';
-import 'package:chaabra/providers/productProvider.dart';
-import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
