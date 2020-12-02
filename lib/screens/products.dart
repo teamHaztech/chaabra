@@ -280,8 +280,9 @@ class _ProductsPageState extends State<ProductsPage> {
                   key: _scaffoldKey,
                   popButton: true,
                   title: widget.category.name, onPop: () {
-                if (categoryProvider.isFilterShown == true) {
+                if (categoryProvider.isFilterShown == true || categoryProvider.isSortShown == true) {
                   categoryProvider.toggleFilter();
+                  categoryProvider.clearFilterAndSort();
                 }
                 navPop(context);
               }),

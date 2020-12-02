@@ -500,7 +500,10 @@ cartDrawer(context) {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    ListView.builder(
+                    cartProvider.isCartLoading == true ? circularProgressIndicator() : cartProvider.cart.isEmpty ? Center(child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Image.asset('assets/images/cart_empty.png',width: screenWidth(context) * 0.9,),
+                    )) : ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: cartProvider.cart.length,

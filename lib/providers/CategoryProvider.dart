@@ -36,6 +36,8 @@ class CategoryProvider extends ChangeNotifier {
   clearFilterAndSort() {
     selectedOption = null;
     selectedSortType = null;
+    isFilterShown = false;
+    isSortShown = false;
     notifyListeners();
   }
 
@@ -98,8 +100,11 @@ class CategoryProvider extends ChangeNotifier {
 
   String selectedOption;
 
-  onChangeOption(context, sort) {
-    selectedOption = sort;
+  onChangeOption(context, option) {
+    selectedOption = option;
+    if(option == "Default"){
+      selectedOption = null;
+    }
     notifyListeners();
     navPop(context);
   }
@@ -126,13 +131,13 @@ class CategoryProvider extends ChangeNotifier {
                   child: ListView.builder(
                       itemCount: options.length,
                       itemBuilder: (context, i) {
-                        final sort = options[i];
+                        final option = options[i];
                         return ListTile(
                           onTap: () {
-                            onChangeOption(context, sort);
+                            onChangeOption(context, option);
                           },
                           title: Text(
-                            sort,
+                            option,
                             style: TextStyle(
                                 color: Color(0xff979CA3), fontSize: 16),
                           ),
@@ -365,7 +370,7 @@ class CategoryProvider extends ChangeNotifier {
     if (selectedSortType != null) {
       sortProducts(selectedSortType.id);
     }
-    if(selectedOption != null){
+    if(selectedOption != null || selectedOption == "Default"){
       filterWithOption();
     }
     isCategoryProductsLoading = false;

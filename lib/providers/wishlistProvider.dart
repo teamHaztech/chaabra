@@ -10,15 +10,9 @@ import 'package:path/path.dart';
 class WishlistProvider extends ChangeNotifier{
     final List<Wishlist> wishlist = [];
 
-    WishlistProvider(){
-        fetchWishlistData(context);
-    }
     Wishlist wishlistModel = Wishlist();
 
-
     CallApi callApi = CallApi();
-
-
 
     addWishlistDb(context,int productId)async{
         showCircularProgressIndicator(context);

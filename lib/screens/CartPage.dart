@@ -28,7 +28,10 @@ class CartPage extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                        ListView.builder(
+                        cartProvider.isCartLoading == true ? circularProgressIndicator() : cartProvider.cart.isEmpty ? Center(child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Image.asset('assets/images/cart_empty.png',width: screenWidth(context) * 0.9,),
+                        )) : ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: cartProvider.cart.length,
@@ -180,45 +183,45 @@ class CartPage extends StatelessWidget {
                             SizedBox(
                                 height: 5,
                             ),
-                          Container(
-                              padding:  EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          cartProvider.cart.isNotEmpty ? Container(
+                            padding:  EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                             child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                  Text("Offers",style: (TextStyle(
-                                      fontSize: 16,
-                                  )),),
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svg/offer.svg',
-                                                height: 23,
-                                            ),
-                                              SizedBox(width: 8),
-                                              Text('Select your promo code',style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: blueC
-                                              ),)
-                                          ],
-                                        ),
-                                      ),
-                                          Text('View offers',style: TextStyle(
+                                Text("Offers",style: (TextStyle(
+                                  fontSize: 16,
+                                )),),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svg/offer.svg',
+                                            height: 23,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text('Select your promo code',style: TextStyle(
                                               fontSize: 14,
-                                              color: Color(0xffE96631)
+                                              color: blueC
                                           ),)
+                                        ],
+                                      ),
+                                    ),
+                                    Text('View offers',style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color(0xffE96631)
+                                    ),)
                                   ],)
                               ],
                             ),
-                              height: 90,
-                              width: screenWidth(context),
-                              color: Color(0xffE1F5FD),
-                          ),
+                            height: 90,
+                            width: screenWidth(context),
+                            color: Color(0xffE1F5FD),
+                          ) : SizedBox(),
                           SizedBox(
                             height: 5,
                           )

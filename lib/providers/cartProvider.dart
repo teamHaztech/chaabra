@@ -130,9 +130,10 @@ class CartProvider extends ChangeNotifier {
         final res = await callApi.postWithConnectionCheck(context,data: data, apiUrl: "cart");
         final jsonRes = jsonDecode(res.body);
         if(jsonRes['response'] == "SUCCESS"){
-          final cartData = jsonRes["cartData"];
-          addThisProductInCartLocally(Cart.fromJson(cartData));
+          fetchCartData(context);
           layout.closeCustomDialog();
+          selectedOptionsMap.clear();
+          selectedOptionJson.clear();
           navPop(context);
           notifyListeners();
         }
@@ -172,7 +173,7 @@ class CartProvider extends ChangeNotifier {
 
     removeThisProductFromCartLocally(Cart cartItem){
       cart.removeWhere((element) => element.product.id == cartItem.product.id);
-      showToast('${cartItem.product.productDetails} is removed from cart');
+      showToast('${cartItem.product.productDetails.name} is removed from cart');
       refreshTotal();
       notifyListeners();
     }
@@ -210,14 +211,10 @@ class CartProvider extends ChangeNotifier {
        }
     }
 
-
-
     removeNonNumericCh(String weight){
         final w = weight.split(" ");
         return w[0];
-
     }
-
 
     refreshTotal(){
         subTotal = 0.0;

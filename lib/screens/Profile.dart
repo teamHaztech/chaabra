@@ -50,7 +50,6 @@ class Profile extends StatelessWidget {
           tile(title: "Order History", subTitle: 'Check my orders',isFirst: true,onTap: (){
             navPush(context, OrdersPage());
           }),
-          tile(title: "History", subTitle: 'Order history',isFirst: true),
           tile(title: "Help center", subTitle: 'Help regrading your recent purchase',isLast: true,isFirst: true),
       ],
     );

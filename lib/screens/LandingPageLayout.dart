@@ -90,7 +90,7 @@ class LandingPageLayout extends StatelessWidget {
                                 SizedBox(width: 14,),
                                 GestureDetector(
                                   onTap: () {
-//                                    wishlistProvider.addThisProductInWishlist(Wishlist(product: widget.product));
+                                   layout.closeCustomDialog();
                                   },
                                   child: Container(
                                     width: 40.0,

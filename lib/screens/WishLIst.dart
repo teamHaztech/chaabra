@@ -5,14 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
 
-class WishlistPage extends StatelessWidget {
+class WishlistPage extends StatefulWidget {
+  @override
+  _WishlistPageState createState() => _WishlistPageState();
+}
+
+class _WishlistPageState extends State<WishlistPage> {
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<WishlistProvider>(context,listen: false).fetchWishlistData(context);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Column(
       children: [
-        wishlistProvider.isWishlistLoading == true ? circularProgressIndicator() : wishlistProvider.wishlist.isEmpty ? Center(child: Text("Wishlist is empty")) : ListView.builder(
+        wishlistProvider.isWishlistLoading == true ? circularProgressIndicator() : wishlistProvider.wishlist.isEmpty ? Center(child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Image.asset('assets/images/wishlist_empty.png',width: screenWidth(context) * 0.9,),
+        )) : ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemCount: wishlistProvider.wishlist.length,
