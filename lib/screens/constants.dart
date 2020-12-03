@@ -1,6 +1,7 @@
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/Cart.dart';
 import 'package:chaabra/models/productModel.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
 import 'package:chaabra/screens/CartPage.dart';
@@ -18,9 +19,6 @@ import 'package:intl/intl.dart';
 
 import '../config.dart';
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 String localUserDataKey = "user_data_key";
@@ -30,14 +28,14 @@ String assetsPath = "http://chaabra.com/image/";
 final primaryColor = Color(0xff3A4754);
 
 Cart dummyCartData(int index) => Cart(
-  product: Product(
-    id: index,
-    model: 'Thailand',
-    image:
-        'https://www.smartkitchen.com/assets/images/resources/large/1281488063Baby%20Thai%20Eggplant.jpg',
-    price: 1.50,
-  ),
-);
+      product: Product(
+        id: index,
+        model: 'Thailand',
+        image:
+            'https://www.smartkitchen.com/assets/images/resources/large/1281488063Baby%20Thai%20Eggplant.jpg',
+        price: 1.50,
+      ),
+    );
 
 navPush(BuildContext context, Widget page) {
   Navigator.of(context)
@@ -50,7 +48,6 @@ navPop(BuildContext context) {
 
 final orangeC = Color(0xffE96631);
 final blueC = Color(0xff0d52d6);
-
 
 Map<int, Color> colorCodesBlueC = {
   50: Color.fromRGBO(13, 82, 214, .1),
@@ -75,21 +72,20 @@ screenWidth(context) {
   return MediaQuery.of(context).size.width;
 }
 
-showSnackBar(context,{String message}){
+showSnackBar(context, {String message}) {
   final snackBar = SnackBar(content: Text(message));
-  
+
   Scaffold.of(context).showSnackBar(snackBar);
 }
 
 input(
     {TextEditingController controller,
     String label,
-      TextInputType keyboardType,
+    TextInputType keyboardType,
     String hint,
-      String errorText,
-      Function onChanged,
+    String errorText,
+    Function onChanged,
     bool obscureText = false}) {
-
   return Stack(
     children: [
       Padding(
@@ -118,14 +114,17 @@ input(
       Positioned(
           bottom: 15,
           left: 12,
-          child: Text(errorText == null ? '' : errorText,style: TextStyle(fontSize: 12,color: Colors.red[300]),))
+          child: Text(
+            errorText == null ? '' : errorText,
+            style: TextStyle(fontSize: 12, color: Colors.red[300]),
+          ))
     ],
   );
 }
 
-showProgressIndicator(context,{String loadingText = "Loading.."}){
+showProgressIndicator(context, {String loadingText = "Loading.."}) {
   showDialog(
-    barrierColor: Colors.black12,
+      barrierColor: Colors.black12,
       barrierDismissible: false,
       context: context,
       builder: (context) {
@@ -135,17 +134,25 @@ showProgressIndicator(context,{String loadingText = "Loading.."}){
               elevation: 6,
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
-                child: JumpingText(loadingText,style: TextStyle(fontWeight: FontWeight.w500,color: Colors.black54,fontSize: 15,letterSpacing: 1),),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: JumpingText(
+                  loadingText,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black54,
+                      fontSize: 15,
+                      letterSpacing: 1),
+                ),
               )),
         );
       });
 }
 
-popOutMultipleTimes(context,{int numberOfTimes}){
-    for(var i = 0; i<numberOfTimes; i++){
-        navPop(context);
-    }
+popOutMultipleTimes(context, {int numberOfTimes}) {
+  for (var i = 0; i < numberOfTimes; i++) {
+    navPop(context);
+  }
 }
 
 button({Function onTap, String title}) {
@@ -177,12 +184,12 @@ button({Function onTap, String title}) {
 Widget dropDown(BuildContext context,
     {String hint, List items, Function onChange, String value, double width}) {
   return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    padding: const EdgeInsets.symmetric(vertical: 8),
     child: Container(
-        height: 50,
+      height: 50,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12),
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        border: Border.all(color: Colors.black12),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
         color: Colors.transparent,
       ),
       padding: EdgeInsets.symmetric(vertical: 8),
@@ -193,7 +200,8 @@ Widget dropDown(BuildContext context,
           child: DropdownButton<String>(
             dropdownColor: Color(0xffffffff),
             hint: Text(
-              hint,style: TextStyle(fontSize: 14),
+              hint,
+              style: TextStyle(fontSize: 14),
             ),
             underline: Container(
               height: 2,
@@ -214,14 +222,14 @@ Widget dropDown(BuildContext context,
 fullWidthButton(context,
     {Function onTap,
     String title,
-      bool enableButton = false,
-      TextStyle style = const TextStyle(
-        fontFamily: 'Roboto',
-        fontSize: 14,
-        color: const Color(0xffffffff),
-        fontWeight: FontWeight.w500,
-      ),
-      double height = 40,
+    bool enableButton = false,
+    TextStyle style = const TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      color: const Color(0xffffffff),
+      fontWeight: FontWeight.w500,
+    ),
+    double height = 40,
     Color backgroundColor = const Color(0xff90C042)}) {
   return AbsorbPointer(
     absorbing: enableButton == true ? true : false,
@@ -246,7 +254,7 @@ fullWidthButton(context,
   );
 }
 
-showCircularProgressIndicator(context){
+showCircularProgressIndicator(context) {
   showDialog(
       barrierColor: Colors.black12,
       barrierDismissible: false,
@@ -259,7 +267,9 @@ showCircularProgressIndicator(context){
               child: SizedBox(
                   height: 20,
                   width: 20,
-                  child: CircularProgressIndicator(strokeWidth: 1.5,))),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.5,
+                  ))),
         );
       });
 }
@@ -313,7 +323,12 @@ borderRadiusOn(
       topRight: Radius.circular(topRight));
 }
 
-label({String title,bool disableUnderline = false,Color color, EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16),double fontSize = 20}) {
+label(
+    {String title,
+    bool disableUnderline = false,
+    Color color,
+    EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16),
+    double fontSize = 20}) {
   return Padding(
     padding: padding,
     child: Column(
@@ -327,21 +342,23 @@ label({String title,bool disableUnderline = false,Color color, EdgeInsets paddin
               color: color == null ? primaryColor : color,
               fontWeight: FontWeight.w400),
         ),
-       disableUnderline == false ? Column(
-         mainAxisAlignment: MainAxisAlignment.start,
-         crossAxisAlignment: CrossAxisAlignment.start,
-         children: [
-           SizedBox(
-             height: 5,
-           ),
-           Container(
-             height: 2,
-             width: 40,
-             decoration: BoxDecoration(
-                 color: orangeC, borderRadius: borderRadius(radius: 10)),
-           )
-         ],)
-           : SizedBox()
+        disableUnderline == false
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    height: 2,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: orangeC, borderRadius: borderRadius(radius: 10)),
+                  )
+                ],
+              )
+            : SizedBox()
       ],
     ),
   );
@@ -353,7 +370,7 @@ verticalSpace({double height = 15}) {
   );
 }
 
-drawerTile({String title, Color color = Colors.white,Function onTap}) {
+drawerTile({String title, Color color = Colors.white, Function onTap}) {
   return GestureDetector(
     onTap: onTap,
     child: Padding(
@@ -382,10 +399,12 @@ showToast(message) {
       fontSize: 12.0);
 }
 
-
-
 header(context,
-    {GlobalKey<ScaffoldState> key, bool popButton = false, String title = '', leadingButtonsHidden = false,Function onPop}) {
+    {GlobalKey<ScaffoldState> key,
+    bool popButton = false,
+    String title = '',
+    leadingButtonsHidden = false,
+    Function onPop}) {
   final _scaffoldKey = key;
   final cartProvider = Provider.of<CartProvider>(context);
   return Material(
@@ -404,9 +423,11 @@ header(context,
               children: [
                 popButton == true
                     ? GestureDetector(
-                        onTap: onPop == null ? (){
-                          navPop(context);
-                        } : onPop,
+                        onTap: onPop == null
+                            ? () {
+                                navPop(context);
+                              }
+                            : onPop,
                         child: Icon(
                           Icons.arrow_back_ios,
                           size: 23,
@@ -427,58 +448,62 @@ header(context,
             ),
           ),
           Container(
-            child: leadingButtonsHidden == true ? SizedBox() : Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    navPush(context, SearchPage());
-                  },
-                  child: SvgPicture.asset(
-                    'assets/svg/search.svg',
-                    height: 23,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _scaffoldKey.currentState.openEndDrawer();
-                  },
-                  child: Stack(
-                    overflow: Overflow.visible,
+            child: leadingButtonsHidden == true
+                ? SizedBox()
+                : Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/svg/cart.svg',
-                        height: 23,
-                        color: Colors.black,
-                      ),
-                      cartProvider.cart.length == 0
-                          ? SizedBox()
-                          : Positioned(
-                        right: 0,
-                        top: -2,
-                        child: Container(
-                          height: 15,
-                          width: 15,
-                          decoration: BoxDecoration(
-                            color: orangeC,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                              child: Text(
-                                  cartProvider.cart.length.toString(),
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.w600))),
+                      GestureDetector(
+                        onTap: () {
+                          navPush(context, SearchPage());
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svg/search.svg',
+                          height: 23,
+                          color: Colors.black,
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _scaffoldKey.currentState.openEndDrawer();
+                        },
+                        child: Stack(
+                          overflow: Overflow.visible,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/cart.svg',
+                              height: 23,
+                              color: Colors.black,
+                            ),
+                            cartProvider.cart.length == 0
+                                ? SizedBox()
+                                : Positioned(
+                                    right: 0,
+                                    top: -2,
+                                    child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                        color: orangeC,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                              cartProvider.cart.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  fontWeight:
+                                                      FontWeight.w600))),
+                                    ),
+                                  )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
           )
         ],
       ),
@@ -500,143 +525,189 @@ cartDrawer(context) {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    cartProvider.isCartLoading == true ? circularProgressIndicator() : cartProvider.cart.isEmpty ? Center(child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Image.asset('assets/images/cart_empty.png',width: screenWidth(context) * 0.9,),
-                    )) : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: cartProvider.cart.length,
-                      itemBuilder: (context, i) {
-                        final product = cartProvider.cart[i].product;
-                        final cartItem = cartProvider.cart[i];
-                        return Padding(
-                          padding: cartProvider.cart.length == i
-                              ? EdgeInsets.only(
-                                  top: 4, right: 3, left: 4, bottom: 3)
-                              : EdgeInsets.only(
-                                  top: 4, right: 3, left: 4, bottom: 0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.80,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 85,
-                                  width: drawerWidth * 30 / 100,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            offset: Offset(0, 0),
-                                            color: Colors.black12,
-                                            blurRadius: 1)
-                                      ],
-                                      borderRadius: borderRadius(radius: 5),
-                                      color: Colors.black12),
-                                  child: ClipRRect(
-                                    borderRadius: borderRadius(radius: 5),
-                                    child: Image.network(
-                                      '$assetsPath${product.image}',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                    cartProvider.isCartLoading == true
+                        ? circularProgressIndicator()
+                        : cartProvider.cart.isEmpty
+                            ? Center(
+                                child: Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Image.asset(
+                                  'assets/images/cart_empty.png',
+                                  width: screenWidth(context) * 0.9,
                                 ),
-                                SizedBox(
-                                  width: drawerWidth * 1 / 100,
-                                ),
-                                Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            offset: Offset(0, 0),
-                                            color: Colors.black12,
-                                            blurRadius: 1),
-                                      ],
-                                      color: Colors.white,
-                                      borderRadius: borderRadius(radius: 5),
-                                    ),
-                                    height: 85,
-                                    width: drawerWidth * 66 / 100,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(product.productDetails.name,
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
-                                                Text(product.model,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.black38,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
-                                              ],
-                                            ),
-                                            cartItem.isRemoving == true ? SizedBox(
-                                                height: 18,
-                                                width: 18,
-                                                child: CircularProgressIndicator(strokeWidth: 2)) : GestureDetector(
-                                              onTap: (){
-                                                cartProvider.removeThisProductFromServerCart(context,cartItem);
-                                              },
-                                              child: Icon(
-                                                Icons.close,
-                                                size: 18,
-                                                color: Color(0xffE96631),
+                              ))
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: cartProvider.cart.length,
+                                itemBuilder: (context, i) {
+                                  final product = cartProvider.cart[i].product;
+                                  final cartItem = cartProvider.cart[i];
+                                  return Padding(
+                                    padding: cartProvider.cart.length == i
+                                        ? EdgeInsets.only(
+                                            top: 4,
+                                            right: 3,
+                                            left: 4,
+                                            bottom: 3)
+                                        : EdgeInsets.only(
+                                            top: 4,
+                                            right: 3,
+                                            left: 4,
+                                            bottom: 0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.80,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 85,
+                                            width: drawerWidth * 30 / 100,
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      offset: Offset(0, 0),
+                                                      color: Colors.black12,
+                                                      blurRadius: 1)
+                                                ],
+                                                borderRadius:
+                                                    borderRadius(radius: 5),
+                                                color: Colors.black12),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  borderRadius(radius: 5),
+                                              child: Image.network(
+                                                '$assetsPath${product.image}',
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text("${cartProvider.getProductTotalInCart(product.id)} BD",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
-                                                Text('Unit Total',
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.black38,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 4,)
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: drawerWidth * 1 / 100,
+                                          ),
+                                          Container(
+                                              padding: EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      offset: Offset(0, 0),
+                                                      color: Colors.black12,
+                                                      blurRadius: 1),
+                                                ],
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    borderRadius(radius: 5),
+                                              ),
+                                              height: 85,
+                                              width: drawerWidth * 66 / 100,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              product
+                                                                  .productDetails
+                                                                  .name,
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal)),
+                                                          Text(product.model,
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black38,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal)),
+                                                        ],
+                                                      ),
+                                                      cartItem.isRemoving ==
+                                                              true
+                                                          ? SizedBox(
+                                                              height: 18,
+                                                              width: 18,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                      strokeWidth:
+                                                                          2))
+                                                          : GestureDetector(
+                                                              onTap: () {
+                                                                cartProvider
+                                                                    .removeThisProductFromServerCart(
+                                                                        context,
+                                                                        cartItem);
+                                                              },
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                size: 18,
+                                                                color: Color(
+                                                                    0xffE96631),
+                                                              ),
+                                                            )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                              "${cartProvider.getProductTotalInCart(product.id)} BD",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal)),
+                                                          Text('Unit Total',
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black38,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                    SizedBox(
+                      height: 4,
+                    )
                   ],
                 ),
               ),
@@ -667,7 +738,9 @@ cartDrawer(context) {
               child: Material(
                 elevation: 6,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 14,),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 14,
+                  ),
                   height: 140,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -710,7 +783,11 @@ cartDrawer(context) {
                       SizedBox(
                         height: 5,
                       ),
-                      Container(height: 1,width: screenWidth(context),color: Color(0xffE7E7E7),),
+                      Container(
+                        height: 1,
+                        width: screenWidth(context),
+                        color: Color(0xffE7E7E7),
+                      ),
                       SizedBox(
                         height: 5,
                       ),
@@ -734,17 +811,15 @@ cartDrawer(context) {
                         height: 5,
                       ),
                       Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 14),
+                        padding: EdgeInsets.symmetric(horizontal: 14),
                         child: Row(
                           children: [
                             Expanded(
                               child: fullWidthButton(context,
                                   title: "View cart",
-                                  backgroundColor: blueC,
-                                  onTap: (){
-                                    navPush(context, CartPage());
-                                  }
-                              ),
+                                  backgroundColor: blueC, onTap: () {
+                                navPush(context, CartPage());
+                              }),
                             ),
                             SizedBox(
                               width: 10,
@@ -770,6 +845,7 @@ cartDrawer(context) {
 }
 
 drawer(context) {
+  final lang = Provider.of<LanguageHandler>(context);
   return SizedBox(
     width: MediaQuery.of(context).size.width * 0.80,
     child: SafeArea(
@@ -783,14 +859,15 @@ drawer(context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "MENU",
-                        style:
-                            TextStyle(fontSize: 18, color: Color(0xff90C042)),
+                      Image.asset(
+                        'assets/images/ChabraLogo copy.png',
+                        height: 40,
                       ),
                       GestureDetector(
                           onTap: () {
@@ -800,7 +877,6 @@ drawer(context) {
                     ],
                   ),
                 ),
-                verticalSpace(),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.80,
                   color: Color(0xff3A4754),
@@ -811,9 +887,11 @@ drawer(context) {
                         height: 10,
                       ),
                       drawerTile(title: "My account"),
-                      drawerTile(title: "Order history",onTap: (){
-                        navPush(context, OrdersPage());
-                      }),
+                      drawerTile(
+                          title: "Order history",
+                          onTap: () {
+                            navPush(context, OrdersPage());
+                          }),
                       drawerTile(title: "About us"),
                       drawerTile(title: "Returns"),
                       drawerTile(title: "Contact"),
@@ -833,28 +911,68 @@ drawer(context) {
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
-                    child: Text(
-                      'Privacy Policy',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
+                  drawerTile(title: "Privacy Policy", color: Colors.black87),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      drawerTile(
+                        title: "Language",
+                        color: Colors.black87,
+                        onTap: () {
+                            lang.showLanguageDropdown();
+                        },
+                      ),
+                      lang.isLanguageDropdownShown == true ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: GestureDetector(
+                          onTap: (){
+                            lang.hideLanguageDropdown();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: borderRadius(radius: 50),
+                              ),
+                              child: Icon(Icons.keyboard_arrow_up,color: Colors.black45,)),
+                        ),
+                      ) : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: GestureDetector(
+                          onTap: (){
+                            lang.showLanguageDropdown();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: borderRadius(radius: 50),
+                              ),
+                              child: Icon(Icons.keyboard_arrow_down,color: Colors.black45,)),
+                        ),
+                      )
+                    ],
+                  ),
+                  AnimatedContainer(
+                    height: lang.isLanguageDropdownShown == true ? 45 : 0,
+                    duration: Duration(milliseconds: 100),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          languageButton(title: "English",borderColor: lang.isLanguageEnglish() ? Colors.blue : Colors.black26,onTap: (){
+                            lang.changeLanguageToEnglish();
+                          }),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          languageButton(title: "Arabic",borderColor: lang.isLanguageEnglish() ? Colors.black26 : Colors.blue,onTap: (){
+                          lang.changeLanguageToArabic();
+                          },)
+                        ],
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
-                    child: Text(
-                      'Terms and conditions',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                  drawerTile(
+                      title: "Terms and conditions", color: Colors.black87),
                   SizedBox(
                     height: 10,
                   ),
@@ -864,6 +982,27 @@ drawer(context) {
           ],
         ),
       )),
+    ),
+  );
+}
+
+Widget languageButton({String title, Color borderColor = Colors.black26,Function onTap}) {
+  return Expanded(
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius(radius: 10),
+          border: Border.all(width: 2, color: borderColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(title)],
+          ),
+        ),
+      ),
     ),
   );
 }
@@ -901,8 +1040,7 @@ navBar(context) {
   );
 }
 
-
-void exitDialog(context){
+void exitDialog(context) {
   showDialog(
       context: context,
       builder: (context) {
@@ -937,12 +1075,11 @@ progressIndicator({double height = 50, bool circularLoader = false}) {
     Track("1").add(Duration(seconds: 1),
         ColorTween(begin: Colors.black12, end: Colors.transparent)),
     Track("2").add(Duration(seconds: 1),
-        ColorTween(begin: Colors.transparent, end:  Colors.black12)),
+        ColorTween(begin: Colors.transparent, end: Colors.black12)),
     Track("3").add(Duration(seconds: 1),
         ColorTween(begin: Colors.black12, end: Colors.transparent)),
     Track("4").add(Duration(seconds: 1),
         ColorTween(begin: Colors.transparent, end: Colors.black12)),
-  
   ]);
   return ControlledAnimation(
     playback: Playback.MIRROR,
@@ -951,18 +1088,23 @@ progressIndicator({double height = 50, bool circularLoader = false}) {
     builder: (context, animation) {
       return Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [animation["1"], animation["2"] , animation["3"], animation["4"]],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight),
+          gradient: LinearGradient(colors: [
+            animation["1"],
+            animation["2"],
+            animation["3"],
+            animation["4"]
+          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
         ),
         height: height,
-        child: Center(child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Visibility(
-                visible: circularLoader,
-                child: CircularProgressIndicator(strokeWidth: 2,)))),
+        child: Center(
+            child: SizedBox(
+                height: 40,
+                width: 40,
+                child: Visibility(
+                    visible: circularLoader,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    )))),
       );
     },
   );
@@ -974,42 +1116,48 @@ String daynameMonthDayYear(DateTime date) {
   return formatted;
 }
 
-circularProgressIndicator(){
+circularProgressIndicator() {
   return Padding(
     padding: const EdgeInsets.all(16.0),
-    child: Center(child: SizedBox(
-        height: 30,
-        width: 30,
-        child: CircularProgressIndicator(strokeWidth: 1,))),
+    child: Center(
+        child: SizedBox(
+            height: 30,
+            width: 30,
+            child: CircularProgressIndicator(
+              strokeWidth: 1,
+            ))),
   );
 }
 
-
-containerLoader({double height = 20, double width = 50, double radius = 10}){
+containerLoader({double height = 20, double width = 50, double radius = 10}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 3),
     child: Container(
-      decoration: BoxDecoration(
-        borderRadius: borderRadius(radius: radius)
-      ),
-      height: height,width: width,child: ClipRRect(
+      decoration: BoxDecoration(borderRadius: borderRadius(radius: radius)),
+      height: height,
+      width: width,
+      child: ClipRRect(
         borderRadius: borderRadius(radius: radius),
-      child: progressIndicator(),
-    ),),
+        child: progressIndicator(),
+      ),
+    ),
   );
 }
 
-
-labeledTitle({CrossAxisAlignment crossAxisAlignment,String title, String label, FontWeight fontWeight = FontWeight.normal}){
+labeledTitle(
+    {CrossAxisAlignment crossAxisAlignment,
+    String title,
+    String label,
+    FontWeight fontWeight = FontWeight.normal}) {
   return Column(
     crossAxisAlignment: crossAxisAlignment,
     children: [
       Text(title,
           style: TextStyle(
-              color: primaryColor,
-              fontSize: 16,
-              fontWeight: fontWeight)),
-      SizedBox(height: 3,),
+              color: primaryColor, fontSize: 16, fontWeight: fontWeight)),
+      SizedBox(
+        height: 3,
+      ),
       Text(label,
           style: TextStyle(
               fontSize: 14,

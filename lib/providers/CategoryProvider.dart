@@ -14,7 +14,9 @@ class SortType {
 
 class CategoryProvider extends ChangeNotifier {
   final List<CategoryModel> categories = [];
-
+  CategoryProvider() {
+    print(selectedOption);
+  }
   SortType selectedSortType;
 
   List<SortType> sortTypes = [
@@ -41,18 +43,15 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  filterWithOption(){
+  filterWithOption() {
     List<CategoryProduct> tempCategory = [];
+    final tempCat = new LinkedHashMap();
     categoryProducts.forEach((categoryProduct) {
       categoryProduct.product.options.forEach((option) {
-        option.optionValue.forEach((optionValue) {
-          if(optionValue.name == selectedOption){
-            tempCategory.add(categoryProduct);
-          }
-        });
+        option.optionValue.forEach((optionValue) {});
       });
     });
-    categoryProducts = tempCategory;
+    // categoryProducts = tempCategory;
     notifyListeners();
   }
 
@@ -102,7 +101,7 @@ class CategoryProvider extends ChangeNotifier {
 
   onChangeOption(context, option) {
     selectedOption = option;
-    if(option == "Default"){
+    if (option == "Default") {
       selectedOption = null;
     }
     notifyListeners();
@@ -224,7 +223,6 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-
   fetchCategoryProduct(CategoryModel category) async {
     categoryProducts.clear();
     notifyListeners();
@@ -243,9 +241,6 @@ class CategoryProvider extends ChangeNotifier {
       selectedRangeMax = Price().getMaxPrice(categoryProductsTemp);
       if (selectedSortType != null) {
         sortProducts(selectedSortType.id);
-      }
-      if(selectedOption != null){
-        filterWithOption();
       }
       collectOptions();
       notifyListeners();
@@ -333,6 +328,7 @@ class CategoryProvider extends ChangeNotifier {
         });
       });
     });
+
     options.clear();
     options.add("Default");
     filterOptions.forEach((key, value) {
@@ -345,6 +341,7 @@ class CategoryProvider extends ChangeNotifier {
   applyFilter(context, int categoryId) async {
     final minPrice = selectedRangeMin.round();
     final maxPrice = selectedRangeMax.round();
+
     final priceRange = {
       "minPrice": minPrice.toString(),
       "maxPrice": maxPrice.toString()
@@ -354,6 +351,9 @@ class CategoryProvider extends ChangeNotifier {
       "priceRange": jsonEncode(priceRange),
       "categoryId": categoryId.toString(),
       "isInStock": isInStock.toString(),
+      "filterOption": selectedOption == null
+          ? ""
+          : selectedOption == "Default" ? null : selectedOption
     };
 
     isCategoryProductsLoading = true;
@@ -364,15 +364,15 @@ class CategoryProvider extends ChangeNotifier {
     final json = jsonDecode(res.body) as List;
     categoryProducts.clear();
     notifyListeners();
+
     for (Map i in json) {
       categoryProducts.add(CategoryProduct.fromJson(i));
     }
+
     if (selectedSortType != null) {
       sortProducts(selectedSortType.id);
     }
-    if(selectedOption != null || selectedOption == "Default"){
-      filterWithOption();
-    }
+
     isCategoryProductsLoading = false;
     collectOptions();
     notifyListeners();

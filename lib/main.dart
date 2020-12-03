@@ -1,5 +1,6 @@
 import 'package:chaabra/providers/CategoryProvider.dart';
 import 'package:chaabra/providers/HomePageProvider.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/LogProvider.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/landingPageProvider.dart';
@@ -30,6 +31,7 @@ class Chaabra extends StatelessWidget {
         ChangeNotifierProvider<CategoryProvider>.value(value: CategoryProvider()),
         ChangeNotifierProvider<ProductProvider>.value(value: ProductProvider()),
         ChangeNotifierProvider<OrderProvider>.value(value: OrderProvider()),
+        ChangeNotifierProvider<LanguageHandler>.value(value: LanguageHandler()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

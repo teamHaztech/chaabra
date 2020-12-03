@@ -35,12 +35,14 @@ class OptionValue{
   final String name;
   final int productOptionId;
   final int productOptionValueId;
-  OptionValue({this.name,this.productOptionValueId,this.productOptionId});
+  final int quantity;
+  OptionValue({this.name,this.productOptionValueId,this.productOptionId,this.quantity});
   factory OptionValue.fromJson(Map<String, dynamic> json){
     return OptionValue(
         productOptionId: int.parse(json['product_option_id']),
         productOptionValueId: json['product_option_value_id'],
-        name: json['option_value_description']['name']
+        name: json['option_value_description']['name'],
+        quantity: int.parse(json['quantity'])
     );
   }
 }
