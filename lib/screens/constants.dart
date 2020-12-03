@@ -919,36 +919,46 @@ drawer(context) {
                         title: "Language",
                         color: Colors.black87,
                         onTap: () {
-                            lang.showLanguageDropdown();
+                          lang.showLanguageDropdown();
                         },
                       ),
-                      lang.isLanguageDropdownShown == true ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: GestureDetector(
-                          onTap: (){
-                            lang.hideLanguageDropdown();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: borderRadius(radius: 50),
+                      lang.isLanguageDropdownShown == true
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: GestureDetector(
+                                onTap: () {
+                                  lang.hideLanguageDropdown();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: borderRadius(radius: 50),
+                                    ),
+                                    child: Icon(
+                                      Icons.keyboard_arrow_up,
+                                      color: Colors.black45,
+                                    )),
                               ),
-                              child: Icon(Icons.keyboard_arrow_up,color: Colors.black45,)),
-                        ),
-                      ) : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: GestureDetector(
-                          onTap: (){
-                            lang.showLanguageDropdown();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: borderRadius(radius: 50),
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: GestureDetector(
+                                onTap: () {
+                                  lang.showLanguageDropdown();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: borderRadius(radius: 50),
+                                    ),
+                                    child: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.black45,
+                                    )),
                               ),
-                              child: Icon(Icons.keyboard_arrow_down,color: Colors.black45,)),
-                        ),
-                      )
+                            )
                     ],
                   ),
                   AnimatedContainer(
@@ -958,15 +968,28 @@ drawer(context) {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
-                          languageButton(title: "English",borderColor: lang.isLanguageEnglish() ? Colors.blue : Colors.black26,onTap: (){
-                            lang.changeLanguageToEnglish();
-                          }),
+                          languageButton(
+                            svgPath: 'assets/svg/united-kingdom.svg',
+                              title: "English",
+                              borderColor: lang.isLanguageEnglish()
+                                  ? Colors.blue
+                                  : Colors.black26,
+                              onTap: () {
+                                lang.changeLanguageToEnglish();
+                              }),
                           SizedBox(
                             width: 16,
                           ),
-                          languageButton(title: "Arabic",borderColor: lang.isLanguageEnglish() ? Colors.black26 : Colors.blue,onTap: (){
-                          lang.changeLanguageToArabic();
-                          },)
+                          languageButton(
+                            svgPath: 'assets/svg/united-arab-emirates.svg',
+                            title: "Arabic",
+                            borderColor: lang.isLanguageEnglish()
+                                ? Colors.black26
+                                : Colors.blue,
+                            onTap: () {
+                              lang.changeLanguageToArabic();
+                            },
+                          )
                         ],
                       ),
                     ),
@@ -986,7 +1009,8 @@ drawer(context) {
   );
 }
 
-Widget languageButton({String title, Color borderColor = Colors.black26,Function onTap}) {
+Widget languageButton(
+    {String title, Color borderColor = Colors.black26, Function onTap,String svgPath}) {
   return Expanded(
     child: GestureDetector(
       onTap: onTap,
@@ -999,7 +1023,14 @@ Widget languageButton({String title, Color borderColor = Colors.black26,Function
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(title)],
+            children: [
+              SvgPicture.asset(
+                svgPath,
+                height: 23,
+              ),
+              SizedBox(width: 10,),
+              Text(title),
+            ],
           ),
         ),
       ),

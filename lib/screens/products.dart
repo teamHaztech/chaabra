@@ -198,22 +198,11 @@ class _ProductsPageState extends State<ProductsPage> {
                                                               product:
                                                                   product));
                                                 },
-                                                child: Container(
-                                                  width: 30.0,
-                                                  height: 30.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                    color:
-                                                        const Color(0xffE96631),
-                                                  ),
-                                                  child: Center(
-                                                    child: Icon(
-                                                      Icons.favorite_border,
-                                                      color: Colors.white,
-                                                      size: 18,
-                                                    ),
+                                                child: Center(
+                                                  child: Icon(
+                                                    Icons.favorite_border,
+                                                    color: Colors.white,
+                                                    size: 18,
                                                   ),
                                                 ),
                                               ),

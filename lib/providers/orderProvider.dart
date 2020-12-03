@@ -30,10 +30,7 @@ class Country {
 
 class OrderProvider extends ChangeNotifier{
   OrderProvider(){
-    fetchUserShippingAddress(context);
-    setNameInAddressForm();
     getZones();
-    fetchOrderHistory(context);
   }
 
   CallApi callApi = CallApi();
