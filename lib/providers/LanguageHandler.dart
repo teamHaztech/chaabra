@@ -13,7 +13,6 @@ class LanguageHandler extends ChangeNotifier{
 
   CallApi callApi = CallApi();
 
-
   LanguageHandler(){
     fetchLanguages();
     setDefaultLanguage();
@@ -31,6 +30,7 @@ class LanguageHandler extends ChangeNotifier{
     }
     print(languages.length);
   }
+
 
   setDefaultLanguage()async{
     final lang = await sharedPref.read(languageId);

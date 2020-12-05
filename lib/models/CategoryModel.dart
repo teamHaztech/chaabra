@@ -18,11 +18,13 @@ class CategoryModel{
 
 
 class CategoryProduct {
+  final int id;
   final Product product;
-  CategoryProduct({this.product});
+  CategoryProduct({this.product,this.id});
 
   factory CategoryProduct.fromJson(Map<String, dynamic> json){
     return CategoryProduct(
+      id: int.parse(json['id']),
         product : Product.fromJson(json['product']),
     );
   }

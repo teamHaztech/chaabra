@@ -4,6 +4,7 @@ import 'package:chaabra/providers/orderProvider.dart';
 import 'package:chaabra/screens/SingleOrderPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,9 +21,11 @@ class _OrdersPageState extends State<OrdersPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<OrderProvider>(context, listen: false).fetchOrderHistory(context);
+      Provider.of<OrderProvider>(context, listen: false)
+          .fetchOrderHistory(context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -34,82 +37,132 @@ class _OrdersPageState extends State<OrdersPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 53),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    orderProvider.isOrderHistoryLoading == true
-                        ? circularProgressIndicator()
-                        : Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: orderProvider.orders.length,
-                              itemBuilder: (context, i) {
-                                final order = orderProvider.orders[i];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
-                                  child: Container(
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(0, 0),
-                                              color: Colors.black12,
-                                              blurRadius: 1),
-                                        ],
-                                        color: Colors.white,
-                                        borderRadius: borderRadius(radius: 5),
-                                      ),
-                                      height: 85,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                        Column(
+              child: LazyLoadScrollView(
+                isLoading: orderProvider.loadingMoreOrderHistory,
+                onEndOfPage: () =>
+                    orderProvider.fetchOrderHistory(context, lazyLoading: true),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      orderProvider.isOrderHistoryLoading == true
+                          ? circularProgressIndicator()
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: orderProvider.orders.length,
+                                itemBuilder: (context, i) {
+                                  final order = orderProvider.orders[i];
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 8),
+                                    child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: Offset(0, 0),
+                                                color: Colors.black12,
+                                                blurRadius: 1),
+                                          ],
+                                          color: Colors.white,
+                                          borderRadius: borderRadius(radius: 5),
+                                        ),
+                                        height: 85,
+                                        child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                          label(title: "Order id #${order.id}",padding: EdgeInsets.all(0)),
-                                            labeledTitle(crossAxisAlignment: CrossAxisAlignment.start,title: daynameMonthDayYear(order.dateAdded),label: "Ordered on",fontWeight: FontWeight.w600),
-                                        ],),
-                                          Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: (){
-                                                  navPush(context, SingleOrdersPage(order: order,));
-                                                },
-                                                child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black12,
-                                                      borderRadius: borderRadius(radius: 5)
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                                                      child: Row(
-                                                        children: [
-                                                          Text("View",style: TextStyle(fontSize: 16,color: Colors.black45),),
-                                                          SizedBox(width: 5,),
-                                                          Icon(Icons.remove_red_eye,color: Colors.black45,),
-                                                        ],
-                                                      ),
-                                                    )),
-                                              ),
-                                              labeledTitle(crossAxisAlignment: CrossAxisAlignment.end,title: order.status.name,label: "Order status"),
-                                            ],)
-                                      ],)),
-                                );
-                              },
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                label(
+                                                    title:
+                                                        "Order id #${order.id}",
+                                                    padding: EdgeInsets.all(0)),
+                                                labeledTitle(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    title: daynameMonthDayYear(
+                                                        order.dateAdded),
+                                                    label: "Ordered on",
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ],
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    navPush(
+                                                        context,
+                                                        SingleOrdersPage(
+                                                          order: order,
+                                                        ));
+                                                  },
+                                                  child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black12,
+                                                          borderRadius:
+                                                              borderRadius(
+                                                                  radius: 5)),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 4),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              "View",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  color: Colors
+                                                                      .black45),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Icon(
+                                                              Icons
+                                                                  .remove_red_eye,
+                                                              color: Colors
+                                                                  .black45,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )),
+                                                ),
+                                                labeledTitle(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    title: order.status.name,
+                                                    label: "Order status"),
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                  );
+                                },
+                              ),
                             ),
-                        ),
-                    SizedBox(
-                      height: 5,
-                    )
-                  ],
+                      orderProvider.loadingMoreOrderHistory == true
+                          ? circularProgressIndicator()
+                          : SizedBox(),
+                    ],
+                  ),
                 ),
               ),
             ),

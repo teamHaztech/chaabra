@@ -29,6 +29,20 @@ class CategoryProvider extends ChangeNotifier {
     SortType(id: 6, name: "Rating (Lowest)"),
   ];
 
+
+  ScrollController categoryProductsScrollController = new ScrollController();
+
+  bool handleScrollNotification(context,ScrollNotification notification,{int categoryId}) {
+    if (notification is ScrollEndNotification) {
+      if (categoryProductsScrollController.position.extentAfter == 0) {
+        applyFilter(context, categoryId,lazyLoading: true);
+        categoryProductsScrollController.position.animateTo(0,duration: Duration(milliseconds: 400));
+        notifyListeners();
+      }
+    }
+    return false;
+  }
+
   onChangeSort(context, SortType sort) {
     selectedSortType = sort;
     notifyListeners();
@@ -176,9 +190,26 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
+
+
+
   List<CategoryProduct> categoryProducts = [];
   List<CategoryProduct> categoryProductsTemp = [];
   bool isCategoryProductsLoading = false;
+
+
+  int currentCategoryId;
+
+
+  clear(id){
+     categoryProducts.clear();
+     categoryProductsTemp.clear();
+     notifyListeners();
+  }
+
+  storeCategoryId(int id){
+    currentCategoryId = id;
+  }
 
   SortProduct sortProduct = SortProduct.getInstance();
 
@@ -223,31 +254,53 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-  fetchCategoryProduct(CategoryModel category) async {
-    categoryProducts.clear();
-    notifyListeners();
-    isCategoryProductsLoading = true;
-    notifyListeners();
-    final res = await callApi.get('category/product/${category.id}');
-    final data = jsonDecode(res.body) as List;
-    if (data.length != categoryProducts.length) {
-      categoryProducts.clear();
-      for (Map i in data) {
-        categoryProducts.add(CategoryProduct.fromJson(i));
-        categoryProductsTemp.add(CategoryProduct.fromJson(i));
-      }
-      isCategoryProductsLoading = false;
-      selectedRangeMin = Price().getMinPrice(categoryProductsTemp);
-      selectedRangeMax = Price().getMaxPrice(categoryProductsTemp);
-      if (selectedSortType != null) {
-        sortProducts(selectedSortType.id);
-      }
-      collectOptions();
+
+  bool isFilterApplied = false;
+
+  setCategoryId(id){
+    currentCategoryId = id;
+  }
+
+
+  bool loadingMoreProducts = false;
+
+  int lastId;
+
+  fetchCategoryProduct(context,CategoryModel category,{lazyLoading = false}) async {
+    if(lazyLoading == true){
+      loadingMoreProducts = true;
       notifyListeners();
-    } else {
+    }else{
+      isCategoryProductsLoading = true;
+      notifyListeners();
+    }
+    final data = {
+      "categoryId": category.id.toString(),
+      "lastId": categoryProducts.isEmpty ? "" : categoryProducts.last.id.toString()
+    };
+
+    final res = await callApi.postWithConnectionCheck(context,apiUrl: 'category/products',data: data);
+    print(res.body);
+    final jsonData = jsonDecode(res.body) as List;
+    print(jsonData.length);
+
+    for (Map i in jsonData) {
+      categoryProducts.add(CategoryProduct.fromJson(i));
+    }
+
+    if(lazyLoading == true){
+      loadingMoreProducts = false;
+      notifyListeners();
+    }else{
       isCategoryProductsLoading = false;
       notifyListeners();
     }
+
+    if (selectedSortType != null) {
+      sortProducts(selectedSortType.id);
+    }
+    collectOptions();
+    notifyListeners();
   }
 
   double rangeMin = 0;
@@ -338,7 +391,7 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  applyFilter(context, int categoryId) async {
+  applyFilter(context, int categoryId,{bool lazyLoading = false}) async {
     final minPrice = selectedRangeMin.round();
     final maxPrice = selectedRangeMax.round();
 
@@ -356,24 +409,34 @@ class CategoryProvider extends ChangeNotifier {
           : selectedOption == "Default" ? null : selectedOption
     };
 
-    isCategoryProductsLoading = true;
-    notifyListeners();
+    if(lazyLoading == true){
+      loadingMoreProducts = true;
+      notifyListeners();
+    }else {
+      isCategoryProductsLoading = true;
+      notifyListeners();
+    }
+
     final res = await callApi.postWithConnectionCheck(context,
         data: data, apiUrl: "products/filter");
     print(res.body);
     final json = jsonDecode(res.body) as List;
     categoryProducts.clear();
     notifyListeners();
-
     for (Map i in json) {
       categoryProducts.add(CategoryProduct.fromJson(i));
     }
-
     if (selectedSortType != null) {
       sortProducts(selectedSortType.id);
     }
 
-    isCategoryProductsLoading = false;
+    if(lazyLoading == true){
+      loadingMoreProducts = false;
+      notifyListeners();
+    }else{
+      isCategoryProductsLoading = false;
+      notifyListeners();
+    }
     collectOptions();
     notifyListeners();
   }

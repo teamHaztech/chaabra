@@ -49,6 +49,7 @@ class _CategoryPageState extends State<CategoryPage> {
               bgColor: backColors,
               right: category.id == 60 ? -40 : 10,
               onTap: (){
+                categoryProvider.setCategoryId(category.id);
                 navPush(context, ProductsPage(category: category));
               }
           );
