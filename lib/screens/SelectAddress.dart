@@ -14,6 +14,17 @@ class SelectAddressPage extends StatefulWidget {
 }
 
 class _SelectAddressPageState extends State<SelectAddressPage> {
+  
+  
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+      Provider.of<OrderProvider>(context,listen: false).fetchUserShippingAddress(context);
+    });
+  }
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
