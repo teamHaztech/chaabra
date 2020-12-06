@@ -28,12 +28,11 @@ class _ProductsPageState extends State<ProductsPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CategoryProvider>(context, listen: false).clear(widget.category.id);
+      Provider.of<CategoryProvider>(context, listen: false).clear();
       Provider.of<CategoryProvider>(context, listen: false).fetchCategoryProduct(context,widget.category);
     });
   }
-
-
+  
   @override
   Widget build(BuildContext context) {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
@@ -47,6 +46,7 @@ class _ProductsPageState extends State<ProductsPage> {
           categoryProvider.clearFilterAndSort();
         }
         categoryProvider.setCategoryId(widget.category.id);
+        categoryProvider.clearPriceRange();
         return;
       },
       child: Scaffold(
@@ -276,6 +276,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                 categoryProvider.loadingMoreProducts == true
                                     ? circularProgressIndicator()
                                     : SizedBox(),
+                                categoryProvider.loadedAllData == true ? Text("Fetched All data") : SizedBox(),
                               ],
                             )
                       ],
@@ -291,6 +292,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   categoryProvider.toggleFilter();
                   categoryProvider.clearFilterAndSort();
                 }
+                categoryProvider.clearPriceRange();
                 navPop(context);
               }),
             ],
@@ -335,7 +337,9 @@ class _ProductsPageState extends State<ProductsPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: (){
-                                    categoryProvider.sortProducts(categoryProvider.selectedSortType.id);
+                                    categoryProvider.clear();
+                                    categoryProvider.clearOptions();
+                                    categoryProvider.fetchCategoryProduct(context, widget.category);
                                   },
                                   child: Container(
                                     color: blueC,
@@ -421,8 +425,9 @@ class _ProductsPageState extends State<ProductsPage> {
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          categoryProvider.applyFilter(
-                                              context, widget.category.id);
+                                          categoryProvider.clear();
+                                          categoryProvider.clearOptions();
+                                          categoryProvider.fetchCategoryProduct(context, widget.category);
                                         },
                                         child: Container(
                                           color: blueC,
@@ -489,7 +494,7 @@ class _ProductsPageState extends State<ProductsPage> {
     return AnimatedContainer(
       height: categoryProvider.isFilterShown == true ? 287 : 0,
       curve: Curves.easeIn,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 200),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Center(
@@ -566,7 +571,7 @@ class _ProductsPageState extends State<ProductsPage> {
     return AnimatedContainer(
       height: categoryProvider.isSortShown == true ? 120 : 0,
       curve: Curves.easeIn,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 200),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Column(
@@ -618,14 +623,10 @@ class _ProductsPageState extends State<ProductsPage> {
     return Column(
       children: [
         frs.RangeSlider(
-          lowerValue: categoryProvider.selectedRangeMin,
-          upperValue: categoryProvider.selectedRangeMax,
-          min: categoryProvider.categoryProductsTemp.isEmpty
-              ? 0
-              : Price().getMinPrice(categoryProvider.categoryProductsTemp),
-          max: categoryProvider.categoryProductsTemp.isEmpty
-              ? 10
-              : Price().getMaxPrice(categoryProvider.categoryProductsTemp),
+          lowerValue: categoryProvider.selectedRangeMin == null ? 0 : categoryProvider.selectedRangeMin,
+          upperValue: categoryProvider.selectedRangeMax == null ? 10 :  categoryProvider.selectedRangeMax,
+          min: categoryProvider.rangeMin == null ? 0 : categoryProvider.rangeMin,
+          max: categoryProvider.rangeMin == null ? 10 : categoryProvider.rangeMax,
           onChanged: (min, max) {
             categoryProvider.onChangePriceRange(min, max);
           },
@@ -634,21 +635,22 @@ class _ProductsPageState extends State<ProductsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "BHD ${categoryProvider.selectedRangeMin.toStringAsFixed(2)}",
+              "BHD ${categoryProvider.selectedRangeMin == null ? "" : categoryProvider.selectedRangeMin.toStringAsFixed(2)}",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            Text("BHD ${categoryProvider.selectedRangeMax.toStringAsFixed(2)}",
+            Text("BHD ${categoryProvider.selectedRangeMax == null ? "" : categoryProvider.selectedRangeMax.toStringAsFixed(2)}",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
           ],
         )
       ],
     );
   }
-
+  
   Text filterLabel(String text) {
     return Text(
       text,
       style: TextStyle(fontSize: 16, color: blueC, fontWeight: FontWeight.bold),
     );
   }
+  
 }

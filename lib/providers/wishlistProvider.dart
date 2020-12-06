@@ -68,6 +68,7 @@ class WishlistProvider extends ChangeNotifier{
         wishlist.length == 0 ? isWishlistLoading = true : isWishlistLoading = false;
         notifyListeners();
         final res = await callApi.getWithConnectionCheck("wishlist/${user.id}", context);
+        print(res.body);
         final data = jsonDecode(res.body) as List;
         if (data.length != wishlist.length) {
             isWishlistLoading = true;

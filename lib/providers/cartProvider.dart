@@ -16,6 +16,7 @@ class CartProvider extends ChangeNotifier {
     CartProvider(){
         countTotal(null);
         fetchCartData(context);
+        fetchProductOptions(82);
     }
 
     clearProductData(){
@@ -90,6 +91,7 @@ class CartProvider extends ChangeNotifier {
       final productJson = jsonDecode(res.body);
       productOption = ProductOption.fromJson(productJson);
       notifyListeners();
+      print(productOption.product.productDetails.description);
     }
 
     ProductOption productOption;
@@ -97,14 +99,11 @@ class CartProvider extends ChangeNotifier {
         'Bahrain',
         'India'
     ];
-
     List<String> states = [
         'Goa',
         'Manama',
         'Isa town'
     ];
-
-
     double total = 0.0;
     double subTotal = 0.0;
     double delivery = 0.0;
@@ -210,7 +209,7 @@ class CartProvider extends ChangeNotifier {
            });
        }
     }
-
+    
     removeNonNumericCh(String weight){
         final w = weight.split(" ");
         return w[0];

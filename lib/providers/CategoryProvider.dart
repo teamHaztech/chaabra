@@ -5,6 +5,7 @@ import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/CategoryModel.dart';
 import 'package:chaabra/screens/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class SortType {
   final int id;
@@ -13,12 +14,15 @@ class SortType {
 }
 
 class CategoryProvider extends ChangeNotifier {
+  
   final List<CategoryModel> categories = [];
+  
   CategoryProvider() {
-    print(selectedOption);
+    fetchCategoryProduct(context, CategoryModel(id: 65));
   }
+  
   SortType selectedSortType;
-
+  
   List<SortType> sortTypes = [
     SortType(id: 0, name: "Default"),
     SortType(id: 1, name: "Name (A-Z)"),
@@ -28,21 +32,7 @@ class CategoryProvider extends ChangeNotifier {
     SortType(id: 5, name: "Rating (Highest)"),
     SortType(id: 6, name: "Rating (Lowest)"),
   ];
-
-
-  ScrollController categoryProductsScrollController = new ScrollController();
-
-  bool handleScrollNotification(context,ScrollNotification notification,{int categoryId}) {
-    if (notification is ScrollEndNotification) {
-      if (categoryProductsScrollController.position.extentAfter == 0) {
-        applyFilter(context, categoryId,lazyLoading: true);
-        categoryProductsScrollController.position.animateTo(0,duration: Duration(milliseconds: 400));
-        notifyListeners();
-      }
-    }
-    return false;
-  }
-
+  
   onChangeSort(context, SortType sort) {
     selectedSortType = sort;
     notifyListeners();
@@ -113,10 +103,11 @@ class CategoryProvider extends ChangeNotifier {
 
   String selectedOption;
 
-  onChangeOption(context, option) {
-    selectedOption = option;
-    if (option == "Default") {
+  onChangeOption(context,Weight option) {
+    if (option.type == "Default") {
       selectedOption = null;
+    }else{
+      selectedOption = "${option.value} ${option.type}";
     }
     notifyListeners();
     navPop(context);
@@ -150,7 +141,7 @@ class CategoryProvider extends ChangeNotifier {
                             onChangeOption(context, option);
                           },
                           title: Text(
-                            option,
+                            '${option.value.toString()} ${option.type}',
                             style: TextStyle(
                                 color: Color(0xff979CA3), fontSize: 16),
                           ),
@@ -190,18 +181,15 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-
-
-
+  
   List<CategoryProduct> categoryProducts = [];
   List<CategoryProduct> categoryProductsTemp = [];
   bool isCategoryProductsLoading = false;
 
-
   int currentCategoryId;
 
 
-  clear(id){
+  clear(){
      categoryProducts.clear();
      categoryProductsTemp.clear();
      notifyListeners();
@@ -260,13 +248,19 @@ class CategoryProvider extends ChangeNotifier {
   setCategoryId(id){
     currentCategoryId = id;
   }
-
-
+  
+  Filter filterData;
+  
   bool loadingMoreProducts = false;
 
   int lastId;
-
-  fetchCategoryProduct(context,CategoryModel category,{lazyLoading = false}) async {
+  
+  bool loadedAllData = false;
+  
+  fetchCategoryProduct(context,CategoryModel category,{lazyLoading = false,bool filtering = false}) async {
+    loadedAllData = false;
+    notifyListeners();
+    //if function is ran with lazy loading show lazy lading in the bottom
     if(lazyLoading == true){
       loadingMoreProducts = true;
       notifyListeners();
@@ -274,47 +268,105 @@ class CategoryProvider extends ChangeNotifier {
       isCategoryProductsLoading = true;
       notifyListeners();
     }
+    
+    //Filter data
+    final priceRange = {
+      "min": selectedRangeMin == null ? null : selectedRangeMin.toString(),
+      "max": selectedRangeMax == null ? null : selectedRangeMax.toString(),
+    };
+    
+    final filter = {
+      "priceRange": selectedRangeMin == null ? null : jsonEncode(priceRange),
+      "inStock": isInStock.toString(),
+      "option": selectedOption == null ? null : selectedOption == "Default" ? null : selectedOption,
+      "sortId": selectedSortType == null ? 0 : selectedSortType.id.toString()
+    };
+    
+    final sort = {
+    
+    };
+    
     final data = {
       "categoryId": category.id.toString(),
-      "lastId": categoryProducts.isEmpty ? "" : categoryProducts.last.id.toString()
+      "lastId": categoryProducts.isEmpty ? "" : categoryProducts.last.id.toString(),
+      "filter": jsonEncode(filter),
     };
-
+    
     final res = await callApi.postWithConnectionCheck(context,apiUrl: 'category/products',data: data);
     print(res.body);
-    final jsonData = jsonDecode(res.body) as List;
-    print(jsonData.length);
-
-    for (Map i in jsonData) {
+    final jsonData = jsonDecode(res.body);
+    
+    //if function is ran with "Apple filter" button clear the previous data
+    if(filtering == true){
+      categoryProducts.clear();
+    }
+    //price range
+    final fixedPriceRange = jsonDecode(jsonData['priceRange']);
+    //selected price range
+    final selectedPriceRange = jsonData['selectedPriceRange'];
+    //json data of products
+    final products = jsonData['data'] as List;
+    
+    for (Map i in products) {
       categoryProducts.add(CategoryProduct.fromJson(i));
     }
-
+    print(categoryProducts.length);
     if(lazyLoading == true){
       loadingMoreProducts = false;
+      //if all data is loaded with lazy loading show a message
+        if(products.length == 0){
+          loadedAllData = true;
+          notifyListeners();
+        }
       notifyListeners();
     }else{
       isCategoryProductsLoading = false;
       notifyListeners();
     }
-
-    if (selectedSortType != null) {
-      sortProducts(selectedSortType.id);
-    }
+    
+    initializePriceRangeSlider(fixedPriceRange['min'], fixedPriceRange['max']);
+    
+    updatePrizeSliderRange(selectedPriceRange['min'], selectedPriceRange['max']);
+    
+    //collects options from the json data
     collectOptions();
     notifyListeners();
   }
 
-  double rangeMin = 0;
-  double rangeMax = 3;
-
-  double selectedRangeMin = 1;
-  double selectedRangeMax = 3;
-
+  double rangeMin;
+  double rangeMax;
+  double selectedRangeMin;
+  double selectedRangeMax;
+  
   bool isFilterShown = false;
   bool isSortShown = false;
-
-  onChangePriceRange(min, max) {
-    selectedRangeMax = max;
+  
+  
+  updatePrizeSliderRange(min,max){
+    selectedRangeMin = double.parse(min);
+    selectedRangeMax = double.parse(max);
+    notifyListeners();
+  }
+  
+  clearPriceRange(){
+     rangeMin = null;
+     rangeMax = null;
+     selectedRangeMin = null;
+     selectedRangeMax = null;
+     notifyListeners();
+  }
+  
+  initializePriceRangeSlider(double min,double max){
+    rangeMin = min;
+    rangeMax = max;
     selectedRangeMin = min;
+    selectedRangeMax = max;
+    notifyListeners();
+  }
+  
+  onChangePriceRange(min, max) {
+    selectedRangeMin = min;
+    selectedRangeMax = max;
     notifyListeners();
   }
 
@@ -371,23 +423,27 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   var filterOptions = new LinkedHashMap();
-  List<String> options = [];
+  
+  List<Weight> options = [];
 
+  clearOptions(){
+    options.clear();
+  }
+  
   collectOptions() {
     categoryProducts.forEach((categoryProduct) {
       categoryProduct.product.options.forEach((option) {
         option.optionValue.forEach((optionValue) {
-          filterOptions[optionValue.name] = optionValue.name;
+          final split = optionValue.name.split(" ");
+          filterOptions[split[0]] = split[1];
         });
       });
     });
-
     options.clear();
-    options.add("Default");
-    filterOptions.forEach((key, value) {
-      options.add(value);
+    options.add(Weight(type: "Default",value: ""));
+    filterOptions.forEach((value, type) {
+      options.add(Weight(value: value,type: type));
     });
-    options.sort();
     notifyListeners();
   }
 
@@ -500,4 +556,26 @@ class SortProduct {
   highToLowRating(List<CategoryProduct> sortingList) {
     sortingList.sort((a, b) => b.product.rating.compareTo(a.product.rating));
   }
+}
+
+
+class Filter{
+  PriceRange priceRange;
+  bool inStock;
+  String kg;
+  
+  Filter({this.priceRange,this.inStock,this.kg});
+}
+
+class PriceRange{
+  int start;
+  int end;
+  PriceRange({this.end,this.start});
+}
+
+class Weight{
+  String value;
+  String type;
+  
+  Weight({this.value,this.type});
 }

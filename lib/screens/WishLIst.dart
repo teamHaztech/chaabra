@@ -141,7 +141,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                     ),
                                     backgroundColor: blueC,
                                     onTap: (){
-                                      cartProvider.addThisProductInCartLocally(Cart(product: product,));
+                                      cartProvider.addCartDialog(context,productId: product.id);
                                     }
                                 )),
                                 SizedBox(width: screenWidth(context) * 30 / 100,),
