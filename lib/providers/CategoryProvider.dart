@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/CategoryModel.dart';
 import 'package:chaabra/screens/constants.dart';
@@ -14,9 +13,9 @@ class SortType {
 }
 
 class CategoryProvider extends ChangeNotifier {
-  
+
   final List<CategoryModel> categories = [];
-  
+
   CategoryProvider() {
     fetchCategoryProduct(context, CategoryModel(id: 65));
   }
@@ -38,6 +37,8 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
     navPop(context);
   }
+
+
 
   clearFilterAndSort() {
     selectedOption = null;
@@ -189,9 +190,11 @@ class CategoryProvider extends ChangeNotifier {
   int currentCategoryId;
 
 
-  clear(){
+  clearCategoryProducts(){
      categoryProducts.clear();
      categoryProductsTemp.clear();
+     options.clear();
+     categoryProductOffset = 0;
      notifyListeners();
   }
 
@@ -256,81 +259,88 @@ class CategoryProvider extends ChangeNotifier {
   int lastId;
   
   bool loadedAllData = false;
-  
-  fetchCategoryProduct(context,CategoryModel category,{lazyLoading = false,bool filtering = false}) async {
-    loadedAllData = false;
-    notifyListeners();
-    //if function is ran with lazy loading show lazy lading in the bottom
-    if(lazyLoading == true){
-      loadingMoreProducts = true;
-      notifyListeners();
+
+  int categoryProductOffset = 0;
+
+  fetchCategoryProduct(context,CategoryModel category,{lazyLoading = false,bool filtering = false,bool clearAndFetch = false}) async {
+    if(loadedAllData == true){
+
     }else{
-      isCategoryProductsLoading = true;
+      if(clearAndFetch == true){
+        clearCategoryProducts();
+      }
+      loadedAllData = false;
       notifyListeners();
-    }
-    
-    //Filter data
-    final priceRange = {
-      "min": selectedRangeMin == null ? null : selectedRangeMin.toString(),
-      "max": selectedRangeMax == null ? null : selectedRangeMax.toString(),
-    };
-    
-    final filter = {
-      "priceRange": selectedRangeMin == null ? null : jsonEncode(priceRange),
-      "inStock": isInStock.toString(),
-      "option": selectedOption == null ? null : selectedOption == "Default" ? null : selectedOption,
-      "sortId": selectedSortType == null ? 0 : selectedSortType.id.toString()
-    };
-    
-    final sort = {
-    
-    };
-    
-    final data = {
-      "categoryId": category.id.toString(),
-      "lastId": categoryProducts.isEmpty ? "" : categoryProducts.last.id.toString(),
-      "filter": jsonEncode(filter),
-    };
-    
-    final res = await callApi.postWithConnectionCheck(context,apiUrl: 'category/products',data: data);
-    print(res.body);
-    final jsonData = jsonDecode(res.body);
-    
-    //if function is ran with "Apple filter" button clear the previous data
-    if(filtering == true){
-      categoryProducts.clear();
-    }
-    //price range
-    final fixedPriceRange = jsonDecode(jsonData['priceRange']);
-    //selected price range
-    final selectedPriceRange = jsonData['selectedPriceRange'];
-    //json data of products
-    final products = jsonData['data'] as List;
-    
-    for (Map i in products) {
-      categoryProducts.add(CategoryProduct.fromJson(i));
-    }
-    print(categoryProducts.length);
-    if(lazyLoading == true){
-      loadingMoreProducts = false;
-      //if all data is loaded with lazy loading show a message
+      //if function is ran with lazy loading show lazy lading in the bottom
+      if(lazyLoading == true){
+        loadingMoreProducts = true;
+        notifyListeners();
+      }else{
+        isCategoryProductsLoading = true;
+        notifyListeners();
+      }
+
+      //Filter data
+      final priceRange = {
+        "min": selectedRangeMin == null ? null : selectedRangeMin.toString(),
+        "max": selectedRangeMax == null ? null : selectedRangeMax.toString(),
+      };
+
+      final filter = {
+        "priceRange": selectedRangeMin == null ? null : jsonEncode(priceRange),
+        "inStock": isInStock.toString(),
+        "option": selectedOption == null ? null : selectedOption == "Default" ? null : selectedOption,
+        "sortId": selectedSortType == null ? 0 : selectedSortType.id.toString()
+      };
+
+      final data = {
+        "offset": categoryProductOffset.toString(),
+        "categoryId": category.id.toString(),
+        "filter": jsonEncode(filter),
+      };
+
+      final res = await callApi.postWithConnectionCheck(context,apiUrl: 'category/products',data: data);
+      print(res.body);
+      final jsonData = jsonDecode(res.body);
+
+      //if function is ran with "Apple filter" button clear the previous data
+      if(filtering == true){
+        categoryProducts.clear();
+      }
+      //price range
+      final fixedPriceRange = jsonDecode(jsonData['priceRange']);
+      //selected price range
+      final selectedPriceRange = jsonData['selectedPriceRange'];
+      //json data of products
+      final products = jsonData['data'] as List;
+
+      for (Map i in products) {
+        categoryProducts.add(CategoryProduct.fromJson(i));
+      }
+
+      categoryProductOffset = categoryProductOffset + 8;
+
+      if(lazyLoading == true){
+        loadingMoreProducts = false;
+        //if all data is loaded with lazy loading show a message
         if(products.length == 0){
           loadedAllData = true;
           notifyListeners();
         }
-      notifyListeners();
-    }else{
-      isCategoryProductsLoading = false;
+        notifyListeners();
+      }else{
+        isCategoryProductsLoading = false;
+        notifyListeners();
+      }
+
+      initializePriceRangeSlider(fixedPriceRange['min'], fixedPriceRange['max']);
+
+      updatePrizeSliderRange(selectedPriceRange['min'], selectedPriceRange['max']);
+
+      //collects options from the json data
+      collectOptions();
       notifyListeners();
     }
-    
-    initializePriceRangeSlider(fixedPriceRange['min'], fixedPriceRange['max']);
-    
-    updatePrizeSliderRange(selectedPriceRange['min'], selectedPriceRange['max']);
-    
-    //collects options from the json data
-    collectOptions();
-    notifyListeners();
   }
 
   double rangeMin;
@@ -426,9 +436,6 @@ class CategoryProvider extends ChangeNotifier {
   
   List<Weight> options = [];
 
-  clearOptions(){
-    options.clear();
-  }
   
   collectOptions() {
     categoryProducts.forEach((categoryProduct) {

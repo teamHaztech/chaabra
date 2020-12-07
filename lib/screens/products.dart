@@ -28,7 +28,7 @@ class _ProductsPageState extends State<ProductsPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CategoryProvider>(context, listen: false).clear();
+      Provider.of<CategoryProvider>(context, listen: false).clearCategoryProducts();
       Provider.of<CategoryProvider>(context, listen: false).fetchCategoryProduct(context,widget.category);
     });
   }
@@ -276,7 +276,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                 categoryProvider.loadingMoreProducts == true
                                     ? circularProgressIndicator()
                                     : SizedBox(),
-                                categoryProvider.loadedAllData == true ? Text("Fetched All data") : SizedBox(),
                               ],
                             )
                       ],
@@ -337,9 +336,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: (){
-                                    categoryProvider.clear();
-                                    categoryProvider.clearOptions();
-                                    categoryProvider.fetchCategoryProduct(context, widget.category);
+                                    categoryProvider.fetchCategoryProduct(context, widget.category,clearAndFetch: true);
                                   },
                                   child: Container(
                                     color: blueC,
@@ -425,9 +422,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          categoryProvider.clear();
-                                          categoryProvider.clearOptions();
-                                          categoryProvider.fetchCategoryProduct(context, widget.category);
+                                          categoryProvider.fetchCategoryProduct(context, widget.category,clearAndFetch: true);
                                         },
                                         child: Container(
                                           color: blueC,
