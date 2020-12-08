@@ -49,7 +49,7 @@ navPop(BuildContext context) {
 final orangeC = Color(0xffE96631);
 final blueC = Color(0xff0d52d6);
 
-Map<int, Color> colorCodesBlueC = {
+Map<int, Color> materialBlueC = {
   50: Color.fromRGBO(13, 82, 214, .1),
   100: Color.fromRGBO(13, 82, 214, .2),
   200: Color.fromRGBO(13, 82, 214, .3),
@@ -62,7 +62,7 @@ Map<int, Color> colorCodesBlueC = {
   900: Color.fromRGBO(13, 82, 214, 1),
 };
 // Green color code: FF93cd48
-MaterialColor materialBlue = MaterialColor(0xFF0d50d0, colorCodesBlueC);
+MaterialColor materialBlue = MaterialColor(0xFF0d50d0, materialBlueC);
 
 screenHeight(context) {
   return MediaQuery.of(context).size.height;

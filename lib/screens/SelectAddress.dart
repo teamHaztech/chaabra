@@ -14,17 +14,16 @@ class SelectAddressPage extends StatefulWidget {
 }
 
 class _SelectAddressPageState extends State<SelectAddressPage> {
-  
-  
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
-      Provider.of<OrderProvider>(context,listen: false).fetchUserShippingAddress(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<OrderProvider>(context, listen: false)
+          .fetchUserShippingAddress(context);
     });
   }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -84,15 +83,29 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
-                                  child: Text(
-                                    'Saved addresses',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: primaryColor,
-                                    ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Saved addresses',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: primaryColor,
+                                        ),
+                                      ),
+                                      orderProvider.selectedAddressId != null
+                                          ? Text(
+                                              "Edit",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: blueC,
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                    ],
                                   ),
                                 ),
-                                verticalSpace(),
                                 orderProvider.isShippingAddressLoading == true
                                     ? ListView.builder(
                                         shrinkWrap: true,
@@ -150,103 +163,81 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
                                                   deliveryAddress);
                                             },
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8, left: 8, bottom: 0),
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    width:
-                                                        screenWidth(context),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: deliveryAddress.selectState == true ? Border.all(width: 1,color: Colors.black12) : Border.all(width: 1,color: Colors.transparent),
-                                                      borderRadius:
-                                                          borderRadiusOn(
-                                                              topLeft: 8,
-                                                              bottomLeft: 8),
-                                                    ),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      16),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                "${deliveryAddress.firstName} ${deliveryAddress.lastName}",
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xff3A4754),
-                                                                    fontSize:
-                                                                        14),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                  deliveryAddress
-                                                                      .address1,
-                                                                  style: TextStyle(
-                                                                      color: Color(
-                                                                          0xffC6C6C6),
-                                                                      fontSize:
-                                                                          14)),
-                                                              SizedBox(
-                                                                height: 3,
-                                                              ),
-                                                              Text(
-                                                                  deliveryAddress
-                                                                      .address2,
-                                                                  style: TextStyle(
-                                                                      color: Color(
-                                                                          0xffC6C6C6),
-                                                                      fontSize:
-                                                                          14)),
-                                                              SizedBox(
-                                                                height: 8,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Container(
+                                                width: screenWidth(context),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: deliveryAddress
+                                                              .selectState ==
+                                                          true
+                                                      ? Border.all(
+                                                          width: 1,
+                                                          color: blueC)
+                                                      : Border.all(
+                                                          width: 1,
+                                                          color: Colors
+                                                              .transparent),
+                                                  borderRadius:
+                                                      borderRadius(radius: 8),
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                  children: [
+                                                    Padding(
                                                       padding:
-                                                          const EdgeInsets.only(
-                                                              top: 8, right: 8),
-                                                      child: GestureDetector(
-                                                        child: Icon(
-                                                          Icons.delete,
-                                                          color:
-                                                              Colors.redAccent,
-                                                        ),
-                                                        onTap: () {
-                                                          orderProvider
-                                                              .deleteAddress(
-                                                                  context,
-                                                                  deliveryAddress
-                                                                      .id);
-                                                        },
+                                                          const EdgeInsets
+                                                                  .symmetric(
+                                                              horizontal:
+                                                                  16),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            "${deliveryAddress.firstName} ${deliveryAddress.lastName}",
+                                                            style: TextStyle(
+                                                                color: Color(
+                                                                    0xff3A4754),
+                                                                fontSize:
+                                                                    14),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                              deliveryAddress
+                                                                  .address1,
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xffC6C6C6),
+                                                                  fontSize:
+                                                                      14)),
+                                                          SizedBox(
+                                                            height: 3,
+                                                          ),
+                                                          Text(
+                                                              deliveryAddress
+                                                                  .address2,
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xffC6C6C6),
+                                                                  fontSize:
+                                                                      14)),
+                                                          SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  )
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );
@@ -406,7 +397,7 @@ class _AddAddressState extends State<AddAddress> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<OrderProvider>(context,listen: false).getZones();
+      Provider.of<OrderProvider>(context, listen: false).getZones();
     });
   }
 
@@ -453,56 +444,65 @@ class _AddAddressState extends State<AddAddress> {
                         label: "Postal address",
                         hint: "Postal address",
                       ),
-                      orderProvider.isZoneLoading == true ? GestureDetector(
-                        onTap: (){
-                          orderProvider.showZoneList(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: borderRadius(radius: 8),
-                              border: Border.all(color: Colors.black12),
-                              color: Colors.white,
-                            ),
-                            child: Opacity(opacity: 0.5,child: progressIndicator(),),
-                          ),
-                        ),
-                      )
-                      : GestureDetector(
-                        onTap: (){
-                          orderProvider.showZoneList(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: borderRadius(radius: 8),
-                              border: Border.all(color: Colors.black12),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 14),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    orderProvider.zone == null ? "zone/state" : orderProvider.zone.name,
-                                    style: TextStyle(fontSize: 14),
+                      orderProvider.isZoneLoading == true
+                          ? GestureDetector(
+                              onTap: () {
+                                orderProvider.showZoneList(context);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: borderRadius(radius: 8),
+                                    border: Border.all(color: Colors.black12),
+                                    color: Colors.white,
                                   ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    size: 23,
-                                  )
-                                ],
+                                  child: Opacity(
+                                    opacity: 0.5,
+                                    child: progressIndicator(),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                orderProvider.showZoneList(context);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: borderRadius(radius: 8),
+                                    border: Border.all(color: Colors.black12),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 3, horizontal: 14),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          orderProvider.zone == null
+                                              ? "zone/state"
+                                              : orderProvider.zone.name,
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                        Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 23,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
                       verticalSpace(),
                       fullWidthButton(context, title: "Add address", onTap: () {
                         orderProvider.addThisAddress(context);

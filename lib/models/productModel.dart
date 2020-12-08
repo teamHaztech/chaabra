@@ -1,3 +1,6 @@
+import 'package:chaabra/providers/LanguageHandler.dart';
+import 'package:provider/provider.dart';
+
 import 'ProductOptions.dart';
 
 class Product {
@@ -10,7 +13,9 @@ class Product {
     final int rating;
     final List<Option> options;
     Product({this.id,this.rating,this.image, this.price, this.productDetails, this.model,this.type,this.options});
-    
+
+
+
     factory Product.fromJson(Map<String , dynamic>json){
         var optionList = json['options'] as List;
         List<Option> option = optionList != null ? optionList.map((e) => Option.fromJson(e)).toList() : [];
@@ -34,6 +39,7 @@ class Product {
         'image': product.image,
         "model": product.model,
         "price": product.price.toString(),
+        "details": ProductDetails().toJson(product.productDetails[0])
     };
 
 }

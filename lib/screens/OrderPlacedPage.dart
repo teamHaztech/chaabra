@@ -1,6 +1,7 @@
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/screens/OrdersPage.dart';
 import 'package:chaabra/screens/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,13 +26,16 @@ class OrderPlacedPage extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       'assets/svg/orderPlaced.svg',
-                      width: screenWidth(context) + 230,
+                      width: screenWidth(context) + 240,
                     ),
                     verticalSpace(),
-                    verticalSpace(),
-                    Text(
-                      'Your order has been placed!!',
-                      style: TextStyle(fontSize: 32, color: primaryColor),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      child: Text(
+                        'Your order has been \nplaced!!',
+                        style: TextStyle(fontSize: 25, color: primaryColor),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     verticalSpace(),
                     Container(
@@ -41,7 +45,7 @@ class OrderPlacedPage extends StatelessWidget {
                         child: Text(
                           'Delivery may take 20-30 minutes depending on your store distance',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             color: Color(0xffC6C6C6),
                           ),
                           textAlign: TextAlign.center,
