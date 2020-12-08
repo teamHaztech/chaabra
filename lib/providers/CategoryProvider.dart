@@ -196,7 +196,6 @@ class CategoryProvider extends ChangeNotifier {
      options.clear();
      categoryProductOffset = 0;
      loadedAllData = false;
-     clearPriceRange();
      notifyListeners();
   }
 
@@ -217,6 +216,11 @@ class CategoryProvider extends ChangeNotifier {
   int lastId;
   
   bool loadedAllData = false;
+
+  clearLazyLoader(){
+    loadedAllData = false;
+    notifyListeners();
+  }
 
   int categoryProductOffset = 0;
 
@@ -294,7 +298,6 @@ class CategoryProvider extends ChangeNotifier {
       initializePriceRangeSlider(fixedPriceRange['min'], fixedPriceRange['max']);
 
       updatePrizeSliderRange(selectedPriceRange['min'], selectedPriceRange['max']);
-
       //collects options from the json data
       collectOptions();
       notifyListeners();

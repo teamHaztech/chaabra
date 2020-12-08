@@ -33,7 +33,7 @@ class _ProductsPageState extends State<ProductsPage> {
       Provider.of<CategoryProvider>(context, listen: false).fetchCategoryProduct(context,widget.category);
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
@@ -53,6 +53,7 @@ class _ProductsPageState extends State<ProductsPage> {
         return;
       },
       child: Scaffold(
+        endDrawer: cartDrawer(context),
         key: _scaffoldKey,
         body: SafeArea(
           child: Stack(
