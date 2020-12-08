@@ -28,8 +28,6 @@ class CategoryProvider extends ChangeNotifier {
     SortType(id: 2, name: "Name (Z-A)"),
     SortType(id: 3, name: "Price (Low > High)"),
     SortType(id: 4, name: "Price (High > Low)"),
-    SortType(id: 5, name: "Rating (Highest)"),
-    SortType(id: 6, name: "Rating (Lowest)"),
   ];
   
   onChangeSort(context, SortType sort) {

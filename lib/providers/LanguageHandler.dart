@@ -74,7 +74,6 @@ class LanguageHandler extends ChangeNotifier{
     }
   }
 
-
   ProductDetails checkLanguageAndGetProductDetails(List<ProductDetails> productDetailsList){
       ProductDetails productDetails;
       productDetailsList.forEach((element) {
