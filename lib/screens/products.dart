@@ -241,7 +241,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                                                   FontWeight.normal)),
                                                       Text(product.model,
                                                           style: TextStyle(
-                                                              fontSize: 12,
+                                                              fontSize: 11,
                                                               color: Colors.black38,
                                                               fontWeight:
                                                                   FontWeight.normal)),
@@ -259,7 +259,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                                                   FontWeight.normal)),
                                                       Text('Per Kg',
                                                           style: TextStyle(
-                                                              fontSize: 12,
+                                                              fontSize: 11,
                                                               color: Colors.black38,
                                                               fontWeight:
                                                                   FontWeight.normal)),
@@ -337,6 +337,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: (){
+                                    categoryProvider.clearLazyLoader();
                                     categoryProvider.fetchCategoryProduct(context, widget.category,clearAndFetch: true);
                                   },
                                   child: Container(
@@ -423,6 +424,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
+                                          categoryProvider.clearLazyLoader();
                                           categoryProvider.fetchCategoryProduct(context, widget.category,clearAndFetch: true);
                                         },
                                         child: Container(
