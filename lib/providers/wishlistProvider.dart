@@ -53,10 +53,10 @@ class WishlistProvider extends ChangeNotifier{
 
     addThisProductInWishlist(Wishlist product){
         if(wishlistModel.wishlistHasThisProduct(cartItem: product, cartList: wishlist)){
-            showToast('${product.product.productDetails.name} is already there in wishlist');
+            showToast('Product is already there in Wishlist');
         }else{
             wishlist.add(product);
-            showToast('${product.product.productDetails.name} added to wishlist');
+            showToast('Product added in Wishlist');
             notifyListeners();
         }
     }

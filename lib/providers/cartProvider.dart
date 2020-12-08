@@ -16,19 +16,14 @@ class CartProvider extends ChangeNotifier {
     CartProvider(){
         countTotal(null);
         fetchCartData(context);
-        fetchProductOptions(82);
     }
 
     clearProductData(){
       productOption = null;
       selectedOptionsMap.clear();
     }
-
-    //asdasd
     CallApi callApi = CallApi();
     int productIdTemp;
-
-
 
     getProductTotalInCart(int productId){
       double total = 0;
@@ -91,7 +86,6 @@ class CartProvider extends ChangeNotifier {
       final productJson = jsonDecode(res.body);
       productOption = ProductOption.fromJson(productJson);
       notifyListeners();
-      print(productOption.product.productDetails.description);
     }
 
     ProductOption productOption;
@@ -161,18 +155,18 @@ class CartProvider extends ChangeNotifier {
 
     addThisProductInCartLocally(Cart cartItem) {
       if (_cartModel.cartHasThisProduct(cartItem: cartItem, cartList: cart)) {
-        showToast('${cartItem.product.productDetails.name} already added in cart');
+        showToast('Product already added in cart');
       } else {
         cart.add(cartItem);
         refreshTotal();
-        showToast('${cartItem.product.productDetails.name} added in cart');
+        showToast('Added in cart');
         notifyListeners();
       }
     }
 
     removeThisProductFromCartLocally(Cart cartItem){
       cart.removeWhere((element) => element.product.id == cartItem.product.id);
-      showToast('${cartItem.product.productDetails.name} is removed from cart');
+      showToast('Product is removed from cart');
       refreshTotal();
       notifyListeners();
     }

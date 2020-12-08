@@ -328,7 +328,7 @@ label(
     bool disableUnderline = false,
     Color color,
     EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 16),
-    double fontSize = 20}) {
+    double fontSize = 18}) {
   return Padding(
     padding: padding,
     child: Column(
@@ -513,6 +513,7 @@ header(context,
 
 cartDrawer(context) {
   final cartProvider = Provider.of<CartProvider>(context);
+  final lang = Provider.of<LanguageHandler>(context);
   final drawerWidth = MediaQuery.of(context).size.width * 0.85;
   return SizedBox(
     width: drawerWidth,
@@ -624,9 +625,7 @@ cartDrawer(context) {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                              product
-                                                                  .productDetails
-                                                                  .name,
+                                                              lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   fontWeight:
@@ -975,7 +974,7 @@ drawer(context) {
                                   ? Colors.blue
                                   : Colors.black26,
                               onTap: () {
-                                lang.changeLanguageToEnglish();
+                                lang.changeLanguageToEnglish(1);
                               }),
                           SizedBox(
                             width: 16,
@@ -987,7 +986,7 @@ drawer(context) {
                                 ? Colors.black26
                                 : Colors.blue,
                             onTap: () {
-                              lang.changeLanguageToArabic();
+                              lang.changeLanguageToArabic(2);
                             },
                           )
                         ],
@@ -1185,13 +1184,13 @@ labeledTitle(
     children: [
       Text(title,
           style: TextStyle(
-              color: primaryColor, fontSize: 16, fontWeight: fontWeight)),
+              color: primaryColor, fontSize: 15, fontWeight: fontWeight)),
       SizedBox(
-        height: 3,
+        height: 2,
       ),
       Text(label,
           style: TextStyle(
-              fontSize: 14,
+              fontSize: 13,
               color: Colors.black38,
               fontWeight: FontWeight.normal)),
     ],

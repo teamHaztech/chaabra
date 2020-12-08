@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:chaabra/api/callApi.dart';
 import 'package:chaabra/models/Language.dart';
 import 'package:chaabra/models/SharedPred.dart';
+import 'package:chaabra/models/productModel.dart';
 import 'package:flutter/material.dart';
 
 class LanguageHandler extends ChangeNotifier{
   bool isLanguageDropdownShown = false;
-  String languageId = "current_language";
-  String language;
+  String languageIdKey = "current_language";
+  int languageId;
   SharedPref sharedPref = SharedPref();
 
   CallApi callApi = CallApi();
@@ -33,11 +34,11 @@ class LanguageHandler extends ChangeNotifier{
 
 
   setDefaultLanguage()async{
-    final lang = await sharedPref.read(languageId);
+    final lang = await sharedPref.read(languageIdKey);
     if(lang == null){
-      sharedPref.save(languageId, "en");
+      sharedPref.save(languageIdKey, "en");
     }else{
-      lang == "ar" ? changeLanguageToArabic() : changeLanguageToEnglish();
+      lang == "ar" ? changeLanguageToArabic(2) : changeLanguageToEnglish(1);
     }
     print(lang);
   }
@@ -52,24 +53,35 @@ class LanguageHandler extends ChangeNotifier{
     notifyListeners();
   }
 
-  changeLanguageToEnglish(){
-      language = "en";
-      sharedPref.save(languageId, "en");
+  changeLanguageToEnglish(int id){
+      languageId = id;
+      sharedPref.save(languageIdKey, id.toString());
       notifyListeners();
   }
 
-  changeLanguageToArabic(){
-    language = "ar";
-    sharedPref.save(languageId, "ar");
+  changeLanguageToArabic(int id){
+    languageId = id;
+    sharedPref.save(languageIdKey, id.toString());
+
     notifyListeners();
   }
 
   isLanguageEnglish(){
-    if(language == null || language == "en"){
+    if(languageId == null || languageId == 1){
       return true;
     }else{
       return false;
     }
   }
 
+
+  ProductDetails checkLanguageAndGetProductDetails(List<ProductDetails> productDetailsList){
+      ProductDetails productDetails;
+      productDetailsList.forEach((element) {
+        if(element.languageId == languageId){
+          productDetails = element;
+        }
+      });
+      return productDetails;
+  }
 }

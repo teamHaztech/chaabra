@@ -121,8 +121,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                                         padding:
                                                             const EdgeInsets
                                                                     .symmetric(
-                                                                horizontal: 8,
-                                                                vertical: 4),
+                                                                horizontal: 6,
+                                                                vertical: 3),
                                                         child: Row(
                                                           children: [
                                                             Text(

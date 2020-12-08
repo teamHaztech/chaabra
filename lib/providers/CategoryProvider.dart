@@ -195,56 +195,14 @@ class CategoryProvider extends ChangeNotifier {
      categoryProductsTemp.clear();
      options.clear();
      categoryProductOffset = 0;
+     loadedAllData = false;
+     clearPriceRange();
      notifyListeners();
   }
 
   storeCategoryId(int id){
     currentCategoryId = id;
   }
-
-  SortProduct sortProduct = SortProduct.getInstance();
-
-  sortProducts(sortId) {
-    switch (sortId) {
-      case 1:
-        {
-          sortProduct.aToZ(categoryProducts);
-          notifyListeners();
-        }
-        break;
-      case 2:
-        {
-          sortProduct.zToA(categoryProducts);
-          notifyListeners();
-        }
-        break;
-      case 3:
-        {
-          sortProduct.lowToHighPrice(categoryProducts);
-          notifyListeners();
-        }
-        break;
-      case 4:
-        {
-          sortProduct.highToLowPrice(categoryProducts);
-          notifyListeners();
-        }
-        break;
-      case 5:
-        {
-          sortProduct.highToLowRating(categoryProducts);
-          notifyListeners();
-        }
-        break;
-      case 6:
-        {
-          sortProduct.highToLowRating(categoryProducts);
-          notifyListeners();
-        }
-        break;
-    }
-  }
-
 
   bool isFilterApplied = false;
 
@@ -454,56 +412,6 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  applyFilter(context, int categoryId,{bool lazyLoading = false}) async {
-    final minPrice = selectedRangeMin.round();
-    final maxPrice = selectedRangeMax.round();
-
-    final priceRange = {
-      "minPrice": minPrice.toString(),
-      "maxPrice": maxPrice.toString()
-    };
-
-    final data = {
-      "priceRange": jsonEncode(priceRange),
-      "categoryId": categoryId.toString(),
-      "isInStock": isInStock.toString(),
-      "filterOption": selectedOption == null
-          ? ""
-          : selectedOption == "Default" ? null : selectedOption
-    };
-
-    if(lazyLoading == true){
-      loadingMoreProducts = true;
-      notifyListeners();
-    }else {
-      isCategoryProductsLoading = true;
-      notifyListeners();
-    }
-
-    final res = await callApi.postWithConnectionCheck(context,
-        data: data, apiUrl: "products/filter");
-    print(res.body);
-    final json = jsonDecode(res.body) as List;
-    categoryProducts.clear();
-    notifyListeners();
-    for (Map i in json) {
-      categoryProducts.add(CategoryProduct.fromJson(i));
-    }
-    if (selectedSortType != null) {
-      sortProducts(selectedSortType.id);
-    }
-
-    if(lazyLoading == true){
-      loadingMoreProducts = false;
-      notifyListeners();
-    }else{
-      isCategoryProductsLoading = false;
-      notifyListeners();
-    }
-    collectOptions();
-    notifyListeners();
-  }
-
   bool isInStock = false;
 
   toggleAvailability() {
@@ -531,40 +439,6 @@ class Price {
     return price.first;
   }
 }
-
-class SortProduct {
-  static SortProduct _instance;
-  static SortProduct getInstance() => _instance ??= SortProduct();
-
-  aToZ(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => a.product.productDetails.name
-        .toString()
-        .compareTo(b.product.productDetails.name.toString()));
-  }
-
-  zToA(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => b.product.productDetails.name
-        .toString()
-        .compareTo(a.product.productDetails.name.toString()));
-  }
-
-  lowToHighPrice(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => a.product.price.compareTo(b.product.price));
-  }
-
-  highToLowPrice(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => b.product.price.compareTo(a.product.price));
-  }
-
-  lowToHighRating(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => a.product.rating.compareTo(b.product.rating));
-  }
-
-  highToLowRating(List<CategoryProduct> sortingList) {
-    sortingList.sort((a, b) => b.product.rating.compareTo(a.product.rating));
-  }
-}
-
 
 class Filter{
   PriceRange priceRange;

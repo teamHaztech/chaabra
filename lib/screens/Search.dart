@@ -1,4 +1,5 @@
 import 'package:chaabra/models/WishList.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/productsProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/HomePage.dart';
@@ -14,6 +15,7 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final search = Provider.of<ProductsProvider>(context);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     return Scaffold(
       key: _scaffoldKey,
       body: WillPopScope(
@@ -158,7 +160,7 @@ class SearchPage extends StatelessWidget {
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         children: [
-                                          Text(product.productDetails.name,
+                                          Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                               style: TextStyle(
                                                   color: primaryColor,
                                                   fontSize: 12,
@@ -358,9 +360,7 @@ class SearchPage extends StatelessWidget {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                              product
-                                                                  .productDetails
-                                                                  .name,
+                                                              lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                               style: TextStyle(
                                                                   color:
                                                                       primaryColor,

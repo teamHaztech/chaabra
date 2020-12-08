@@ -1,6 +1,7 @@
 import 'package:chaabra/models/CategoryModel.dart';
 import 'package:chaabra/models/WishList.dart';
 import 'package:chaabra/providers/CategoryProvider.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:chaabra/screens/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     final categoryProvider = Provider.of<CategoryProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     return WillPopScope(
       onWillPop: () {
         Future.value(true);
@@ -47,6 +49,7 @@ class _ProductsPageState extends State<ProductsPage> {
         }
         categoryProvider.setCategoryId(widget.category.id);
         categoryProvider.clearPriceRange();
+        categoryProvider.clearCategoryProducts();
         return;
       },
       child: Scaffold(
@@ -180,22 +183,18 @@ class _ProductsPageState extends State<ProductsPage> {
                                                       decoration: BoxDecoration(
                                                           borderRadius: borderRadius(
                                                               radius: 3)),
-                                                      child: Hero(
-                                                        tag:
-                                                            'productImage${product.id}',
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              borderRadius(radius: 3),
-                                                          child: product.image == null
-                                                              ? Image.asset(
-                                                                  'assets/images/no-image.jpg',
-                                                                  fit: BoxFit.cover,
-                                                                )
-                                                              : Image.network(
-                                                                  '$assetsPath${product.image}',
-                                                                  fit: BoxFit.cover,
-                                                                ),
-                                                        ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            borderRadius(radius: 3),
+                                                        child: product.image == null
+                                                            ? Image.asset(
+                                                                'assets/images/no-image.jpg',
+                                                                fit: BoxFit.cover,
+                                                              )
+                                                            : Image.network(
+                                                                '$assetsPath${product.image}',
+                                                                fit: BoxFit.cover,
+                                                              ),
                                                       ),
                                                     ),
                                                   ),
@@ -233,7 +232,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                                         CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                          product.productDetails.name,
+                                                          lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                           style: TextStyle(
                                                               color: primaryColor,
                                                               fontSize: 12,
@@ -292,6 +291,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   categoryProvider.clearFilterAndSort();
                 }
                 categoryProvider.clearPriceRange();
+                categoryProvider.clearCategoryProducts();
                 navPop(context);
               }),
             ],
@@ -325,7 +325,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                   Text(
                                     'Sort',
                                     style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
+                                        fontSize: 16, color: Colors.white),
                                   )
                                 ],
                               ),
@@ -353,7 +353,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                         Text(
                                           'Apply Sort',
                                           style: TextStyle(
-                                              fontSize: 18, color: Colors.white),
+                                              fontSize: 16, color: Colors.white),
                                         )
                                       ],
                                     ),
@@ -409,7 +409,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                         Text(
                                           'Filter',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               color: Colors.white),
                                         )
                                       ],
@@ -443,14 +443,14 @@ class _ProductsPageState extends State<ProductsPage> {
                                                   ? JumpingText(
                                                       "Apply Filter",
                                                       style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 16,
                                                           color:
                                                               Colors.white),
                                                     )
                                                   : Text(
                                                       'Apply Filter',
                                                       style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 16,
                                                           color:
                                                               Colors.white),
                                                     )
@@ -487,7 +487,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget filterContainer(CategoryProvider categoryProvider) {
     return AnimatedContainer(
-      height: categoryProvider.isFilterShown == true ? 287 : 0,
+      height: categoryProvider.isFilterShown == true ? 295 : 0,
       curve: Curves.easeIn,
       duration: Duration(milliseconds: 200),
       child: Padding(
@@ -515,7 +515,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     },),
                     Text(
                       "In Stock",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -543,7 +543,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           Text(
                             categoryProvider.selectedOption == null ? "Select Option" : categoryProvider.selectedOption,
                             style: TextStyle(
-                                color: Color(0xff979CA3), fontSize: 16),
+                                color: Color(0xff979CA3), fontSize: 14),
                           ),
                           Icon(
                             Icons.keyboard_arrow_down,
@@ -564,7 +564,7 @@ class _ProductsPageState extends State<ProductsPage> {
   
   Widget sortContainer(CategoryProvider categoryProvider) {
     return AnimatedContainer(
-      height: categoryProvider.isSortShown == true ? 120 : 0,
+      height: categoryProvider.isSortShown == true ? 123 : 0,
       curve: Curves.easeIn,
       duration: Duration(milliseconds: 200),
       child: Padding(
@@ -596,7 +596,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     Text(
                       categoryProvider.selectedSortType == null ? categoryProvider.sortTypes[0].name : categoryProvider.selectedSortType.name,
                       style: TextStyle(
-                          color: Color(0xff979CA3), fontSize: 16),
+                          color: Color(0xff979CA3), fontSize: 14),
                     ),
                     Icon(
                       Icons.keyboard_arrow_down,
@@ -631,10 +631,10 @@ class _ProductsPageState extends State<ProductsPage> {
           children: [
             Text(
               "BHD ${categoryProvider.selectedRangeMin == null ? "" : categoryProvider.selectedRangeMin.toStringAsFixed(2)}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             Text("BHD ${categoryProvider.selectedRangeMax == null ? "" : categoryProvider.selectedRangeMax.toStringAsFixed(2)}",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
           ],
         )
       ],
@@ -644,7 +644,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Text filterLabel(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 16, color: blueC, fontWeight: FontWeight.bold),
+      style: TextStyle(fontSize: 14, color: blueC, fontWeight: FontWeight.bold),
     );
   }
   

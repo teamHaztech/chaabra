@@ -1,4 +1,5 @@
 import 'package:chaabra/models/productModel.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _ProductPageState extends State<ProductPage> {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     final product = cartProvider.productOption == null ? null : cartProvider.productOption.product;
     final productOptions = cartProvider.productOption == null ? null : cartProvider.productOption.option;
+    final lang = Provider.of<LanguageHandler>(context);
     return WillPopScope(
       onWillPop: (){
         Future.value(true);
@@ -83,7 +85,7 @@ class _ProductPageState extends State<ProductPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(product.productDetails.name,
+                                Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                     style: TextStyle(
                                         color: primaryColor,
                                         fontSize: 25,

@@ -78,7 +78,7 @@ categoryItem(context,
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   title,
-                  style: TextStyle(fontSize: 25, color: Color(0xff3A4754)),
+                  style: TextStyle(fontSize: 22, color: Color(0xff3A4754)),
                 ),
               )
             ],

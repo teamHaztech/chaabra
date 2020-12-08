@@ -1,4 +1,5 @@
 import 'package:chaabra/models/order.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/orderProvider.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,8 +28,7 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
-    final orderProvider = Provider.of<OrderProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     final order = widget.order;
     var addressStyle = TextStyle(color: Colors.black54);
     return Scaffold(
@@ -56,7 +56,7 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                             color: Colors.white,
                             borderRadius: borderRadius(radius: 5),
                           ),
-                          height: 85,
+                          height: 90,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -232,7 +232,7 @@ class _SingleOrdersPageState extends State<SingleOrdersPage> {
                                                 label(
                                                   disableUnderline: true,
                                                   title:
-                                                  "${product.productDetails.name}",
+                                                  "${lang.checkLanguageAndGetProductDetails(product.productDetails).name}",
                                                   padding: EdgeInsets.all(0),
                                                 ),
                                                 labeledTitle(

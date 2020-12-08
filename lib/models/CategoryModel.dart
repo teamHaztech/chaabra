@@ -24,7 +24,7 @@ class CategoryProduct {
 
   factory CategoryProduct.fromJson(Map<String, dynamic> json){
     return CategoryProduct(
-      id: int.parse(json['id']),
+        id: int.parse(json['category_id']),
         product : Product.fromJson(json['product']),
     );
   }

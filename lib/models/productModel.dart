@@ -4,7 +4,7 @@ class Product {
     final int id;
     final String image;
     final String type;
-    final ProductDetails productDetails;
+    final List<ProductDetails> productDetails;
     final double price;
     final String model;
     final int rating;
@@ -14,12 +14,16 @@ class Product {
     factory Product.fromJson(Map<String , dynamic>json){
         var optionList = json['options'] as List;
         List<Option> option = optionList != null ? optionList.map((e) => Option.fromJson(e)).toList() : [];
+
+        var productDetailsList = json['details'] as List;
+        List<ProductDetails> details = productDetailsList != null ? productDetailsList.map((e) => ProductDetails.fromJson(e)).toList() : [] ;
+
         return Product(
             id: int.parse(json['product_id'].toString()),
             image: json['image'],
             model: json['model'],
             price: json['price'] == null ? 0.0 : double.parse(json['price']),
-            productDetails: ProductDetails.fromJson(json['details']),
+            productDetails: details,
             rating: json['review_count'] == null ? null : int.parse(json['review_count']),
             options: option
         );
@@ -30,20 +34,23 @@ class Product {
         'image': product.image,
         "model": product.model,
         "price": product.price.toString(),
-        "details": ProductDetails().toJson(product.productDetails)
     };
+
 }
 
 
 class ProductDetails{
     final String name;
     final String description;
-    ProductDetails({this.name,this.description});
+    final int languageId;
+
+    ProductDetails({this.name,this.description,this.languageId});
 
     factory ProductDetails.fromJson(Map<String, dynamic>json){
         return ProductDetails(
-          name: json['name'],
-          description: json['description']
+            name: json['name'],
+            languageId: json['language_id'] == null ? null : int.parse(json['language_id']) ,
+            description: json['description']
         );
     }
 
@@ -73,4 +80,3 @@ class MostViewed{
         );
     }
 }
-

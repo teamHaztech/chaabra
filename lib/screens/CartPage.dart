@@ -1,4 +1,5 @@
 import 'package:chaabra/models/productModel.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/screens/SelectAddress.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
@@ -109,7 +111,7 @@ class CartPage extends StatelessWidget {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(product.productDetails.name,
+                                                      Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               fontWeight:

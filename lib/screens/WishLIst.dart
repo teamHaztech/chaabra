@@ -1,4 +1,5 @@
 import 'package:chaabra/models/Cart.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/providers/wishlistProvider.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _WishlistPageState extends State<WishlistPage> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     return Column(
       children: [
         wishlistProvider.isWishlistLoading == true ? circularProgressIndicator() : wishlistProvider.wishlist.isEmpty ? Center(child: Padding(
@@ -101,7 +103,7 @@ class _WishlistPageState extends State<WishlistPage> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.start,
                                   children: [
-                                    Text(product.productDetails.name,
+                                    Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight:

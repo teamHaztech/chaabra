@@ -1,6 +1,7 @@
 import 'package:chaabra/models/Cart.dart';
 import 'package:chaabra/models/productModel.dart';
 import 'package:chaabra/providers/HomePageProvider.dart';
+import 'package:chaabra/providers/LanguageHandler.dart';
 import 'package:chaabra/providers/cartProvider.dart';
 import 'package:chaabra/screens/Product.dart';
 import 'package:chaabra/screens/constants.dart';
@@ -32,7 +33,6 @@ class _HomePageState extends State<HomePage> {
         title: "Manama vegies"),
   ];
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final lang = Provider.of<LanguageHandler>(context);
     final homeProvider = Provider.of<HomePageProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -233,7 +234,7 @@ class _HomePageState extends State<HomePage> {
           label(title: "Best sellers"),
           verticalSpace(),
           Container(
-            height: screenHeight(context) * 30 / 100,
+            height: screenHeight(context) * 31 / 100,
             child: homeProvider.isBestSellerLoading == true ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
@@ -342,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                                                         crossAxisAlignment:
                                                         CrossAxisAlignment.start,
                                                         children: [
-                                                            Text(product.productDetails.name,
+                                                            Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                                 style: TextStyle(
                                                                     color: primaryColor,
                                                                     fontSize: 16,
@@ -417,7 +418,7 @@ class _HomePageState extends State<HomePage> {
                 label(title: 'Most viewed', color: Colors.white),
                 verticalSpace(),
                 Container(
-                  height: screenHeight(context) * 30 / 100,
+                  height: screenHeight(context) * 31 / 100,
                   child: homeProvider.isMostViewedLoading == true ? ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -528,7 +529,7 @@ class _HomePageState extends State<HomePage> {
                                                               crossAxisAlignment:
                                                               CrossAxisAlignment.start,
                                                               children: [
-                                                                  Text(product.productDetails.name,
+                                                                  Text(lang.checkLanguageAndGetProductDetails(product.productDetails).name,
                                                                       style: TextStyle(
                                                                           color: Colors.white,
                                                                           fontSize: 16,
