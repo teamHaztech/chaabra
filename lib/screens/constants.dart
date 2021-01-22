@@ -442,8 +442,8 @@ header(context,
                           color: Colors.black,
                         ),
                       ),
-                SizedBox(width: 4),
-                Text(title, style: TextStyle(fontSize: 18)),
+                SizedBox(width: 8),
+                Text(title, style: TextStyle(fontSize: 16)),
               ],
             ),
           ),
@@ -531,7 +531,7 @@ cartDrawer(context) {
                         : cartProvider.cart.isEmpty
                             ? Center(
                                 child: Padding(
-                                padding: const EdgeInsets.only(top: 20),
+                                padding: const EdgeInsets.only(top: 100),
                                 child: Image.asset(
                                   'assets/images/cart_empty.png',
                                   width: screenWidth(context) * 0.9,
@@ -740,7 +740,7 @@ cartDrawer(context) {
                   padding: EdgeInsets.symmetric(
                     vertical: 14,
                   ),
-                  height: 140,
+                  height: 145,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -797,17 +797,17 @@ cartDrawer(context) {
                           children: [
                             Text(
                               "Total",
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 18),
                             ),
                             Text(
                               "${cartProvider.total} BD",
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 18),
                             )
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 14),
